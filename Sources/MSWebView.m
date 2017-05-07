@@ -70,11 +70,11 @@ static BOOL canUseWkWebView = NO;
     }
     [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
     self.scalesPageToFit = YES;
-    
+
     [self.realWebView setFrame:self.bounds];
     [self.realWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview:self.realWebView];
-    
+
     self.njkWebProgressView = [[MS_NJKWebViewProgressView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 2)];
     self.njkWebProgressView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
     [self addSubview:self.njkWebProgressView];
@@ -107,18 +107,18 @@ static BOOL canUseWkWebView = NO;
 - (void)initWKWebView {
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     configuration.userContentController = [[WKUserContentController alloc] init];
-    
+
     WKPreferences *preferences = [[WKPreferences alloc] init];
     preferences.javaScriptCanOpenWindowsAutomatically = YES;
     configuration.preferences = preferences;
-    
+
     WKWebView *webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:configuration];
     webView.UIDelegate = self;
     webView.navigationDelegate = self;
-    
+
     webView.backgroundColor = [UIColor clearColor];
     webView.opaque = NO;
-    
+
     webView.allowsBackForwardNavigationGestures = YES;
     SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
     if ([webView respondsToSelector:linkPreviewSelector]) {
@@ -127,7 +127,7 @@ static BOOL canUseWkWebView = NO;
         [webView performSelector:linkPreviewSelector withObject:@(YES)];
 #pragma clang diagnostic pop
     }
-    
+
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
     _realWebView = webView;
@@ -149,7 +149,7 @@ static BOOL canUseWkWebView = NO;
     webView.backgroundColor = [UIColor clearColor];
     webView.allowsInlineMediaPlayback = YES;
     webView.mediaPlaybackRequiresUserAction = NO;
-    
+
     webView.opaque = NO;
     for (UIView *subview in [webView.scrollView subviews]) {
         if ([subview isKindOfClass:[UIImageView class]]) {
@@ -157,12 +157,12 @@ static BOOL canUseWkWebView = NO;
             subview.backgroundColor = [UIColor clearColor];
         }
     }
-    
+
     self.njkWebViewProgress = [[MS_NJKWebViewProgress alloc] init];
     webView.delegate = _njkWebViewProgress;
     _njkWebViewProgress.webViewProxyDelegate = self;
     _njkWebViewProgress.progressDelegate = self;
-    
+
     _realWebView = webView;
 }
 
@@ -219,15 +219,17 @@ static BOOL canUseWkWebView = NO;
     }
     return nil;
 }
+
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
 - (void)webViewDidClose:(WKWebView *)webView {
 }
 #endif
+
 - (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
     // Get host name of url.
     NSString *host = webView.URL.host;
     // Init the alert view controller.
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:host?:NSLocalizedString(@"messages", nil) message:message preferredStyle: UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:host ?: NSLocalizedString(@"messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
     // Init the cancel action.
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel") style:UIAlertActionStyleCancel handler:NULL];
     // Init the ok action.
@@ -239,11 +241,12 @@ static BOOL canUseWkWebView = NO;
     [alert addAction:cancelAction];
     [alert addAction:okAction];
 }
+
 - (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler {
     // Get the host name.
     NSString *host = webView.URL.host;
     // Initialize alert view controller.
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:host?:NSLocalizedString(@"messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:host ?: NSLocalizedString(@"messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
     // Initialize cancel action.
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
         [alert dismissViewControllerAnimated:YES completion:NULL];
@@ -258,14 +261,15 @@ static BOOL canUseWkWebView = NO;
     [alert addAction:cancelAction];
     [alert addAction:okAction];
 }
-- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * __nullable result))completionHandler {
+
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString *__nullable result))completionHandler {
     // Get the host of url.
     NSString *host = webView.URL.host;
     // Initialize alert view controller.
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:prompt?:NSLocalizedString(@"messages", nil) message:host preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:prompt ?: NSLocalizedString(@"messages", nil) message:host preferredStyle:UIAlertControllerStyleAlert];
     // Add text field.
-    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
-        textField.placeholder = defaultText?:NSLocalizedString(@"input", nil);
+    [alert addTextFieldWithConfigurationHandler:^(UITextField *_Nonnull textField) {
+        textField.placeholder = defaultText ?: NSLocalizedString(@"input", nil);
         textField.font = [UIFont systemFontOfSize:12];
     }];
     // Initialize cancel action.
@@ -273,14 +277,14 @@ static BOOL canUseWkWebView = NO;
         [alert dismissViewControllerAnimated:YES completion:NULL];
         // Get inputed string.
         NSString *string = [alert.textFields firstObject].text;
-        completionHandler(string?:defaultText);
+        completionHandler(string ?: defaultText);
     }];
     // Initialize ok action.
     UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
         [alert dismissViewControllerAnimated:YES completion:NULL];
         // Get inputed string.
         NSString *string = [alert.textFields firstObject].text;
-        completionHandler(string?:defaultText);
+        completionHandler(string ?: defaultText);
     }];
     // Add actions.
     [alert addAction:cancelAction];
@@ -292,12 +296,12 @@ static BOOL canUseWkWebView = NO;
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     BOOL resultBOOL = [self callback_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
     BOOL isLoadingDisableScheme = [self isLoadingWKWebViewDisableScheme:navigationAction.request.URL];
-    
+
     // Disable all the '_blank' target in page's target.
     if (!navigationAction.targetFrame.isMainFrame) {
         [webView evaluateJavaScript:@"var a = document.getElementsByTagName('a');for(var i=0;i<a.length;i++){a[i].setAttribute('target','');}" completionHandler:nil];
     }
-    
+
     // Resolve URL. Fixs the issue: https://github.com/devedbox/AXWebViewController/issues/7
     NSURLComponents *components = [[NSURLComponents alloc] initWithString:webView.URL.absoluteString];
     if (!resultBOOL || isLoadingDisableScheme) {
@@ -355,7 +359,7 @@ static BOOL canUseWkWebView = NO;
     if (self.showProgressView) {
         [self.njkWebProgressView setProgress:1.0 animated:YES];
     }
-    
+
     if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.delegate webViewDidFinishLoad:self];
     }
@@ -365,7 +369,7 @@ static BOOL canUseWkWebView = NO;
     if (self.showProgressView) {
         [self.njkWebProgressView setProgress:0.1 animated:NO];
     }
-    
+
     if ([self.delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
         [self.delegate webViewDidStartLoad:self];
     }
@@ -393,7 +397,7 @@ static BOOL canUseWkWebView = NO;
 ///判断当前加载的url是否是WKWebView不能打开的协议类型
 - (BOOL)isLoadingWKWebViewDisableScheme:(NSURL *)url {
     BOOL retValue = NO;
-    
+
     //判断是否正在加载WKWebview不能识别的协议类型：phone numbers, email address, maps, etc.
     if ([url.scheme isEqual:@"tel"]) {
         UIApplication *app = [UIApplication sharedApplication];
@@ -402,7 +406,7 @@ static BOOL canUseWkWebView = NO;
             retValue = YES;
         }
     }
-    
+
     return retValue;
 }
 
@@ -413,7 +417,7 @@ static BOOL canUseWkWebView = NO;
 - (id)loadRequest:(NSURLRequest *)request {
     self.originRequest = request;
     self.currentRequest = request;
-    
+
     if (_usingUIWebView) {
         [(UIWebView *) self.realWebView loadRequest:request];
         return nil;
@@ -523,7 +527,7 @@ static BOOL canUseWkWebView = NO;
             result = obj;
             isExecuted = YES;
         }];
-        
+
         while (isExecuted == NO) {
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         }
@@ -533,7 +537,7 @@ static BOOL canUseWkWebView = NO;
 
 - (void)setProgressColor:(UIColor *)progressColor {
     _progressColor = progressColor;
-    [(UIView *)[self.njkWebProgressView valueForKey:@"_progressBarView"] setBackgroundColor:progressColor];
+    [self.njkWebProgressView.progressBarView setBackgroundColor:progressColor];
 }
 
 - (void)setScalesPageToFit:(BOOL)scalesPageToFit {
@@ -544,9 +548,9 @@ static BOOL canUseWkWebView = NO;
         if (_scalesPageToFit == scalesPageToFit) {
             return;
         }
-        
+
         WKWebView *webView = _realWebView;
-        
+
         NSString *jScript = [NSString stringWithFormat:@"var head = document.getElementsByTagName('head')[0];\
                              var hasViewPort = 0;\
                              var metas = head.getElementsByTagName('meta');\
@@ -563,7 +567,7 @@ static BOOL canUseWkWebView = NO;
                              meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'; \
                              head.appendChild(meta);\
                              }"];
-        
+
         WKUserContentController *userContentController = webView.configuration.userContentController;
         NSMutableArray<WKUserScript *> *array = [userContentController.userScripts mutableCopy];
         WKUserScript *fitWKUScript = nil;
@@ -603,7 +607,7 @@ static BOOL canUseWkWebView = NO;
 - (NSInteger)countOfHistory {
     if (_usingUIWebView) {
         UIWebView *webView = self.realWebView;
-        
+
         int count = [[webView stringByEvaluatingJavaScriptFromString:@"window.history.length"] intValue];
         if (count) {
             return count;
@@ -619,13 +623,13 @@ static BOOL canUseWkWebView = NO;
 - (void)gobackWithStep:(NSInteger)step {
     if (self.canGoBack == NO)
         return;
-    
+
     if (step > 0) {
         NSInteger historyCount = self.countOfHistory;
         if (step >= historyCount) {
             step = historyCount - 1;
         }
-        
+
         if (_usingUIWebView) {
             UIWebView *webView = self.realWebView;
             [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.history.go(-%ld)", (long) step]];
@@ -682,7 +686,7 @@ static BOOL canUseWkWebView = NO;
         WKWebView *webView = _realWebView;
         webView.UIDelegate = nil;
         webView.navigationDelegate = nil;
-        
+
         [webView removeObserver:self forKeyPath:@"estimatedProgress"];
         [webView removeObserver:self forKeyPath:@"title"];
     }

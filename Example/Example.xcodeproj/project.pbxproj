@@ -23,6 +23,7 @@
 		CFCC8A311EBF716700DFB42A /* MS_NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */; };
 		CFCC8A341EBF74AB00DFB42A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A331EBF74AB00DFB42A /* WebKit.framework */; };
 		CFCC8A361EBF74DF00DFB42A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */; };
+		CFCC8A391EBF874100DFB42A /* MSWebActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A381EBF874100DFB42A /* MSWebActivityController.m */; };
 		F0E81F3B6ED9A4B61046648A /* Pods_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A533021B86C8F119A8434BFA /* Pods_ExampleUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -77,6 +78,8 @@
 		CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgressView.m; sourceTree = "<group>"; };
 		CFCC8A331EBF74AB00DFB42A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		CFCC8A371EBF874100DFB42A /* MSWebActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivityController.h; sourceTree = "<group>"; };
+		CFCC8A381EBF874100DFB42A /* MSWebActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivityController.m; sourceTree = "<group>"; };
 		D40782981139D2598C0B9FC6 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleTests/Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE2EBD327772BB1EABF549FF /* Pods_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -208,6 +211,8 @@
 				CFCC8A241EBF716700DFB42A /* MSWebController.m */,
 				CFCC8A251EBF716700DFB42A /* MSWebView.h */,
 				CFCC8A261EBF716700DFB42A /* MSWebView.m */,
+				CFCC8A371EBF874100DFB42A /* MSWebActivityController.h */,
+				CFCC8A381EBF874100DFB42A /* MSWebActivityController.m */,
 				CFCC8A271EBF716700DFB42A /* NJKWebViewProgress */,
 			);
 			name = Sources;
@@ -510,6 +515,7 @@
 				CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */,
 				CFCC8A311EBF716700DFB42A /* MS_NJKWebViewProgressView.m in Sources */,
 				CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */,
+				CFCC8A391EBF874100DFB42A /* MSWebActivityController.m in Sources */,
 				CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */,
 				CF3779831EBD5F5E0038F868 /* main.m in Sources */,
 			);
