@@ -9,13 +9,13 @@
 #import <UIKit/UIKit.h>
 
 @interface MS_NJKWebViewProgressView : UIView
-@property (nonatomic) float progress;
+@property (nonatomic) CGFloat progress;
 
 @property (nonatomic) UIView *progressBarView;
 @property (nonatomic) NSTimeInterval barAnimationDuration; // default 0.1
 @property (nonatomic) NSTimeInterval fadeAnimationDuration; // default 0.27
 @property (nonatomic) NSTimeInterval fadeOutDelay; // default 0.1
 
-- (void)setProgress:(float)progress animated:(BOOL)animated;
+- (void)setProgress:(CGFloat)progress animated:(BOOL)animated;
 
 @end

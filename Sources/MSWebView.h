@@ -39,7 +39,7 @@
 ///是否正在使用 UIWebView
 @property (nonatomic, readonly) BOOL usingUIWebView;
 ///预估网页加载进度
-@property (nonatomic, readonly) double estimatedProgress;
+@property (nonatomic, readonly) CGFloat estimatedProgress;
 
 @property (nonatomic, readonly) NSURLRequest *originRequest;
 
@@ -68,6 +68,8 @@
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
 @property (nonatomic, readonly) BOOL canGoBack;
 @property (nonatomic, readonly) BOOL canGoForward;
+
+@property (nonatomic, assign) BOOL showProgressView;
 
 - (id)goBack;
 

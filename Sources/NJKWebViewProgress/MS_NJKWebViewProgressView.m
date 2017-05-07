@@ -39,11 +39,11 @@
     _fadeOutDelay = 0.1f;
 }
 
-- (void)setProgress:(float)progress {
+- (void)setProgress:(CGFloat)progress {
     [self setProgress:progress animated:NO];
 }
 
-- (void)setProgress:(float)progress animated:(BOOL)animated {
+- (void)setProgress:(CGFloat)progress animated:(BOOL)animated {
     BOOL isGrowing = progress > 0.0;
     [UIView animateWithDuration:(isGrowing && animated) ? _barAnimationDuration : 0.0 delay:0 options:UIViewAnimationOptionCurveEaseInOut animations:^{
         CGRect frame = _progressBarView.frame;

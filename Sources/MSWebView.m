@@ -8,6 +8,7 @@
 
 #import "MSWebView.h"
 #import "MS_NJKWebViewProgress.h"
+#import "MS_NJKWebViewProgressView.h"
 #import <WebKit/WebKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
@@ -15,11 +16,12 @@ static BOOL canUseWkWebView = NO;
 
 @interface MSWebView () <UIWebViewDelegate, WKNavigationDelegate, WKUIDelegate, MS_NJKWebViewProgressDelegate>
 
-@property (nonatomic, assign) double estimatedProgress;
+@property (nonatomic, assign) CGFloat estimatedProgress;
 @property (nonatomic, strong) NSURLRequest *originRequest;
 @property (nonatomic, strong) NSURLRequest *currentRequest;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
+@property (nonatomic, strong) MS_NJKWebViewProgressView *njkWebProgressView;
 
 @end
 
@@ -42,7 +44,6 @@ static BOOL canUseWkWebView = NO;
 }
 
 - (instancetype)init {
-    //    return [self initWithFrame:CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height - 64)];
     return [self initWithFrame:CGRectZero];
 }
 
@@ -73,6 +74,11 @@ static BOOL canUseWkWebView = NO;
     [self.realWebView setFrame:self.bounds];
     [self.realWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview:self.realWebView];
+    
+    self.njkWebProgressView = [[MS_NJKWebViewProgressView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 2)];
+    self.njkWebProgressView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+    [self addSubview:self.njkWebProgressView];
+    self.showProgressView = YES;
 }
 
 - (void)setDelegate:(id <MSWebViewDelegate>)delegate {
@@ -87,6 +93,14 @@ static BOOL canUseWkWebView = NO;
         webView.navigationDelegate = nil;
         webView.UIDelegate = self;
         webView.navigationDelegate = self;
+    }
+}
+
+- (void)setEstimatedProgress:(CGFloat)estimatedProgress {
+    _estimatedProgress = estimatedProgress;
+
+    if (self.showProgressView) {
+        [self.njkWebProgressView setProgress:estimatedProgress animated:YES];
     }
 }
 
@@ -230,12 +244,20 @@ static BOOL canUseWkWebView = NO;
 #pragma mark - CALLBACK MSKWebView Delegate
 
 - (void)callback_webViewDidFinishLoad {
+    if (self.showProgressView) {
+        [self.njkWebProgressView setProgress:1.0 animated:YES];
+    }
+    
     if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.delegate webViewDidFinishLoad:self];
     }
 }
 
 - (void)callback_webViewDidStartLoad {
+    if (self.showProgressView) {
+        [self.njkWebProgressView setProgress:0.0 animated:YES];
+    }
+    
     if ([self.delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
         [self.delegate webViewDidStartLoad:self];
     }
@@ -303,7 +325,7 @@ static BOOL canUseWkWebView = NO;
 
 - (NSURLRequest *)currentRequest {
     if (_usingUIWebView) {
-        return [(UIWebView *) self.realWebView request];;
+        return [(UIWebView *) self.realWebView request];
     } else {
         return _currentRequest;
     }
