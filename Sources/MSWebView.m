@@ -73,22 +73,6 @@ static BOOL canUseWkWebView = NO;
     [self.realWebView setFrame:self.bounds];
     [self.realWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview:self.realWebView];
-    
-    // 约束
-    [self addConstraints:
-     @[
-       // 左边
-       [NSLayoutConstraint constraintWithItem:self.realWebView attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeLeft multiplier:1.0 constant:0],
-       
-       // 右边
-       [NSLayoutConstraint constraintWithItem:self.realWebView attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:1.0 constant:0],
-       
-       // 底部
-       [NSLayoutConstraint constraintWithItem:self.realWebView attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:1.0 constant:0],
-       // 顶部
-       [NSLayoutConstraint constraintWithItem:self.realWebView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeTop multiplier:1.0 constant:0]
-       ]
-     ];
 }
 
 - (void)setDelegate:(id <MSWebViewDelegate>)delegate {
@@ -120,6 +104,15 @@ static BOOL canUseWkWebView = NO;
     
     webView.backgroundColor = [UIColor clearColor];
     webView.opaque = NO;
+    
+    webView.allowsBackForwardNavigationGestures = YES;
+    SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
+    if ([webView respondsToSelector:linkPreviewSelector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+        [webView performSelector:linkPreviewSelector withObject:@(YES)];
+#pragma clang diagnostic pop
+    }
     
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
@@ -566,4 +559,5 @@ static BOOL canUseWkWebView = NO;
     [_realWebView removeFromSuperview];
     _realWebView = nil;
 }
+
 @end

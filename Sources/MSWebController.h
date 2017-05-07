@@ -7,6 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "MSWebView.h"
 
 //! Project version number for MSWebController.
 FOUNDATION_EXPORT double MSWebControllerVersionNumber;
@@ -15,5 +16,9 @@ FOUNDATION_EXPORT double MSWebControllerVersionNumber;
 FOUNDATION_EXPORT const unsigned char MSWebControllerVersionString[];
 
 @interface MSWebController : UIViewController
+
+@property (nonatomic, strong, readonly) MSWebView *webView;
+
+@property (nonatomic, assign) BOOL useUIWebView;
 
 @end

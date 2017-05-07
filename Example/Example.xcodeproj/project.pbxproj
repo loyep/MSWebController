@@ -17,6 +17,12 @@
 		CF3779911EBD5F5E0038F868 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37798F1EBD5F5E0038F868 /* LaunchScreen.storyboard */; };
 		CF37799C1EBD5F5F0038F868 /* ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF37799B1EBD5F5F0038F868 /* ExampleTests.m */; };
 		CF3779A71EBD5F5F0038F868 /* ExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3779A61EBD5F5F0038F868 /* ExampleUITests.m */; };
+		CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A241EBF716700DFB42A /* MSWebController.m */; };
+		CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A261EBF716700DFB42A /* MSWebView.m */; };
+		CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */; };
+		CFCC8A311EBF716700DFB42A /* MS_NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */; };
+		CFCC8A341EBF74AB00DFB42A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A331EBF74AB00DFB42A /* WebKit.framework */; };
+		CFCC8A361EBF74DF00DFB42A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */; };
 		F0E81F3B6ED9A4B61046648A /* Pods_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A533021B86C8F119A8434BFA /* Pods_ExampleUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -61,6 +67,16 @@
 		CF3779A21EBD5F5F0038F868 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF3779A61EBD5F5F0038F868 /* ExampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExampleUITests.m; sourceTree = "<group>"; };
 		CF3779A81EBD5F5F0038F868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		CFCC8A231EBF716700DFB42A /* MSWebController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebController.h; sourceTree = "<group>"; };
+		CFCC8A241EBF716700DFB42A /* MSWebController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebController.m; sourceTree = "<group>"; };
+		CFCC8A251EBF716700DFB42A /* MSWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebView.h; sourceTree = "<group>"; };
+		CFCC8A261EBF716700DFB42A /* MSWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebView.m; sourceTree = "<group>"; };
+		CFCC8A281EBF716700DFB42A /* MS_NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgress.h; sourceTree = "<group>"; };
+		CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
+		CFCC8A2A1EBF716700DFB42A /* MS_NJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgressView.h; sourceTree = "<group>"; };
+		CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgressView.m; sourceTree = "<group>"; };
+		CFCC8A331EBF74AB00DFB42A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
+		CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		D40782981139D2598C0B9FC6 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleTests/Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE2EBD327772BB1EABF549FF /* Pods_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -70,6 +86,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFCC8A361EBF74DF00DFB42A /* JavaScriptCore.framework in Frameworks */,
+				CFCC8A341EBF74AB00DFB42A /* WebKit.framework in Frameworks */,
 				1428916930CACEEA69826F60 /* Pods_Example.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -96,6 +114,8 @@
 		951BA72685AE75A1631996B3 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */,
+				CFCC8A331EBF74AB00DFB42A /* WebKit.framework */,
 				7F65C31A6BF2F8BF2E20CABE /* Pods_Example.framework */,
 				EE2EBD327772BB1EABF549FF /* Pods_ExampleTests.framework */,
 				A533021B86C8F119A8434BFA /* Pods_ExampleUITests.framework */,
@@ -141,6 +161,7 @@
 		CF3779801EBD5F5E0038F868 /* Example */ = {
 			isa = PBXGroup;
 			children = (
+				CFCC8A221EBF716700DFB42A /* Sources */,
 				CF3779841EBD5F5E0038F868 /* AppDelegate.h */,
 				CF3779851EBD5F5E0038F868 /* AppDelegate.m */,
 				CF3779871EBD5F5E0038F868 /* ViewController.h */,
@@ -178,6 +199,30 @@
 				CF3779A81EBD5F5F0038F868 /* Info.plist */,
 			);
 			path = ExampleUITests;
+			sourceTree = "<group>";
+		};
+		CFCC8A221EBF716700DFB42A /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				CFCC8A231EBF716700DFB42A /* MSWebController.h */,
+				CFCC8A241EBF716700DFB42A /* MSWebController.m */,
+				CFCC8A251EBF716700DFB42A /* MSWebView.h */,
+				CFCC8A261EBF716700DFB42A /* MSWebView.m */,
+				CFCC8A271EBF716700DFB42A /* NJKWebViewProgress */,
+			);
+			name = Sources;
+			path = ../../Sources;
+			sourceTree = "<group>";
+		};
+		CFCC8A271EBF716700DFB42A /* NJKWebViewProgress */ = {
+			isa = PBXGroup;
+			children = (
+				CFCC8A281EBF716700DFB42A /* MS_NJKWebViewProgress.h */,
+				CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */,
+				CFCC8A2A1EBF716700DFB42A /* MS_NJKWebViewProgressView.h */,
+				CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */,
+			);
+			path = NJKWebViewProgress;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -462,6 +507,10 @@
 			files = (
 				CF3779891EBD5F5E0038F868 /* ViewController.m in Sources */,
 				CF3779861EBD5F5E0038F868 /* AppDelegate.m in Sources */,
+				CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */,
+				CFCC8A311EBF716700DFB42A /* MS_NJKWebViewProgressView.m in Sources */,
+				CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */,
+				CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */,
 				CF3779831EBD5F5E0038F868 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
