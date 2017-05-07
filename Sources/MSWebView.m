@@ -208,20 +208,128 @@ static BOOL canUseWkWebView = NO;
     self.estimatedProgress = progress;
 }
 
+#pragma mark - WKUIDelegate
+
+- (nullable WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
+    WKFrameInfo *frameInfo = navigationAction.targetFrame;
+    if (![frameInfo isMainFrame]) {
+        if (navigationAction.request) {
+            [webView loadRequest:navigationAction.request];
+        }
+    }
+    return nil;
+}
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
+- (void)webViewDidClose:(WKWebView *)webView {
+}
+#endif
+- (void)webView:(WKWebView *)webView runJavaScriptAlertPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(void))completionHandler {
+    // Get host name of url.
+    NSString *host = webView.URL.host;
+    // Init the alert view controller.
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:host?:NSLocalizedString(@"messages", nil) message:message preferredStyle: UIAlertControllerStyleAlert];
+    // Init the cancel action.
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel") style:UIAlertActionStyleCancel handler:NULL];
+    // Init the ok action.
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:NULL];
+        completionHandler();
+    }];
+    // Add actions.
+    [alert addAction:cancelAction];
+    [alert addAction:okAction];
+}
+- (void)webView:(WKWebView *)webView runJavaScriptConfirmPanelWithMessage:(NSString *)message initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(BOOL result))completionHandler {
+    // Get the host name.
+    NSString *host = webView.URL.host;
+    // Initialize alert view controller.
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:host?:NSLocalizedString(@"messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+    // Initialize cancel action.
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:NULL];
+        completionHandler(NO);
+    }];
+    // Initialize ok action.
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:NULL];
+        completionHandler(YES);
+    }];
+    // Add actions.
+    [alert addAction:cancelAction];
+    [alert addAction:okAction];
+}
+- (void)webView:(WKWebView *)webView runJavaScriptTextInputPanelWithPrompt:(NSString *)prompt defaultText:(nullable NSString *)defaultText initiatedByFrame:(WKFrameInfo *)frame completionHandler:(void (^)(NSString * __nullable result))completionHandler {
+    // Get the host of url.
+    NSString *host = webView.URL.host;
+    // Initialize alert view controller.
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:prompt?:NSLocalizedString(@"messages", nil) message:host preferredStyle:UIAlertControllerStyleAlert];
+    // Add text field.
+    [alert addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+        textField.placeholder = defaultText?:NSLocalizedString(@"input", nil);
+        textField.font = [UIFont systemFontOfSize:12];
+    }];
+    // Initialize cancel action.
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:NULL];
+        // Get inputed string.
+        NSString *string = [alert.textFields firstObject].text;
+        completionHandler(string?:defaultText);
+    }];
+    // Initialize ok action.
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alert dismissViewControllerAnimated:YES completion:NULL];
+        // Get inputed string.
+        NSString *string = [alert.textFields firstObject].text;
+        completionHandler(string?:defaultText);
+    }];
+    // Add actions.
+    [alert addAction:cancelAction];
+    [alert addAction:okAction];
+}
+
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     BOOL resultBOOL = [self callback_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
     BOOL isLoadingDisableScheme = [self isLoadingWKWebViewDisableScheme:navigationAction.request.URL];
     
-    if (resultBOOL && !isLoadingDisableScheme) {
+    // Disable all the '_blank' target in page's target.
+    if (!navigationAction.targetFrame.isMainFrame) {
+        [webView evaluateJavaScript:@"var a = document.getElementsByTagName('a');for(var i=0;i<a.length;i++){a[i].setAttribute('target','');}" completionHandler:nil];
+    }
+    
+    // Resolve URL. Fixs the issue: https://github.com/devedbox/AXWebViewController/issues/7
+    NSURLComponents *components = [[NSURLComponents alloc] initWithString:webView.URL.absoluteString];
+    if (!resultBOOL || isLoadingDisableScheme) {
+        // For can deal something.
+        decisionHandler(WKNavigationActionPolicyCancel);
+    } else if ([[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] 'https://itunes.apple.com/cn/app/' OR SELF BEGINSWITH[cd] 'mailto:' OR SELF BEGINSWITH[cd] 'tel:' OR SELF BEGINSWITH[cd] 'telprompt:'"] evaluateWithObject:webView.URL.absoluteString]) {
+        // For appstore.
+        if ([[UIApplication sharedApplication] canOpenURL:webView.URL]) {
+            if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
+                [UIApplication.sharedApplication openURL:webView.URL options:@{} completionHandler:NULL];
+            } else {
+                [[UIApplication sharedApplication] openURL:webView.URL];
+            }
+        }
+        decisionHandler(WKNavigationActionPolicyCancel);
+    } else if (![[NSPredicate predicateWithFormat:@"SELF MATCHES[cd] 'https' OR SELF MATCHES[cd] 'http' OR SELF MATCHES[cd] 'file' OR SELF MATCHES[cd] 'about'"] evaluateWithObject:components.scheme]) {
+        // For any other schema.
+        if ([[UIApplication sharedApplication] canOpenURL:webView.URL]) {
+            if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
+                [UIApplication.sharedApplication openURL:webView.URL options:@{} completionHandler:NULL];
+            } else {
+                [[UIApplication sharedApplication] openURL:webView.URL];
+            }
+        }
+        decisionHandler(WKNavigationActionPolicyCancel);
+    } else {
+        // Call the decision handler to allow to load web page.
         self.currentRequest = navigationAction.request;
         if (navigationAction.targetFrame == nil) {
             [webView loadRequest:navigationAction.request];
         }
         decisionHandler(WKNavigationActionPolicyAllow);
-    } else {
-        decisionHandler(WKNavigationActionPolicyCancel);
     }
 }
 
@@ -255,7 +363,7 @@ static BOOL canUseWkWebView = NO;
 
 - (void)callback_webViewDidStartLoad {
     if (self.showProgressView) {
-        [self.njkWebProgressView setProgress:0.0 animated:YES];
+        [self.njkWebProgressView setProgress:0.1 animated:NO];
     }
     
     if ([self.delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
@@ -421,6 +529,11 @@ static BOOL canUseWkWebView = NO;
         }
         return result;
     }
+}
+
+- (void)setProgressColor:(UIColor *)progressColor {
+    _progressColor = progressColor;
+    [(UIView *)[self.njkWebProgressView valueForKey:@"_progressBarView"] setBackgroundColor:progressColor];
 }
 
 - (void)setScalesPageToFit:(BOOL)scalesPageToFit {

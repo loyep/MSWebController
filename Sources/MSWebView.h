@@ -70,6 +70,7 @@
 @property (nonatomic, readonly) BOOL canGoForward;
 
 @property (nonatomic, assign) BOOL showProgressView;
+@property (nonatomic, strong) UIColor *progressColor;
 
 - (id)goBack;
 
