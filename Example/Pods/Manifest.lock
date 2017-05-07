@@ -1,0 +1,18 @@
+PODS:
+  - MSWebController (1.0.0):
+    - MSWebController/Core (= 1.0.0)
+  - MSWebController/Core (1.0.0)
+
+DEPENDENCIES:
+  - MSWebController (from `../`)
+
+EXTERNAL SOURCES:
+  MSWebController:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  MSWebController: 99cf608ce7d45e1af8a653bdd869bebf84af5146
+
+PODFILE CHECKSUM: 2760ebc944e64106ad3e4cadd7da66dcf163fb4b
+
+COCOAPODS: 1.2.0
