@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol WKScriptMessageHandler;
 @class MSWebView, JSContext;
 
@@ -47,7 +49,7 @@
 @property (nonatomic, readonly) JSContext *jsContext;
 
 ///WKWebView 跟网页进行交互的方法。
-- (void)addScriptMessageHandler:(id <WKScriptMessageHandler>)scriptMessageHandler name:(NSString *)name;
+- (void)addScriptMessageHandler:(id <WKScriptMessageHandler>)scriptMessageHandler name:(NSString * _Nullable)name;
 
 ///back 层数
 - (NSInteger)countOfHistory;
@@ -72,17 +74,17 @@
 @property (nonatomic, assign) BOOL showProgressView;
 @property (nonatomic, strong) UIColor *progressColor;
 
-- (id)goBack;
+- (id _Nullable)goBack;
 
-- (id)goForward;
+- (id _Nullable)goForward;
 
-- (id)reload;
+- (id _Nullable)reload;
 
-- (id)reloadFromOrigin;
+- (id _Nullable)reloadFromOrigin;
 
 - (void)stopLoading;
 
-- (void)evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^)(id, NSError *))completionHandler;
+- (void)evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^ _Nullable)(id, NSError *))completionHandler;
 
 ///不建议使用这个办法  因为会在内部等待webView 的执行结果
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)javaScriptString __deprecated_msg("Method deprecated. Use [evaluateJavaScript:completionHandler:]");
@@ -91,3 +93,5 @@
 @property (nonatomic) BOOL scalesPageToFit;
 
 @end
+
+NS_ASSUME_NONNULL_END

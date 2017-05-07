@@ -586,7 +586,7 @@ static BOOL canUseWkWebView = NO;
             if (fitWKUScript) {
                 [array removeObject:fitWKUScript];
             }
-            ///没法修改数组 只能移除全部 再重新添加
+            /// 没法修改数组 只能移除全部 再重新添加
             [userContentController removeAllUserScripts];
             for (WKUserScript *wkUScript in array) {
                 [userContentController addUserScript:wkUScript];
