@@ -9,7 +9,6 @@
 #import "MSWebView.h"
 #import "MS_NJKWebViewProgress.h"
 #import "MS_NJKWebViewProgressView.h"
-#import <WebKit/WebKit.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
 static BOOL canUseWkWebView = NO;
@@ -22,6 +21,19 @@ static BOOL canUseWkWebView = NO;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
 @property (nonatomic, strong) MS_NJKWebViewProgressView *njkWebProgressView;
+
+/// Array that hold snapshots of pages.
+@property (strong, nonatomic) NSMutableArray *snapshots;
+/// Current snapshotview displaying on screen when start swiping.
+@property (strong, nonatomic) UIView *currentSnapshotView;
+/// Previous snapshotview.
+@property (strong, nonatomic) UIView *previousSnapshotView;
+/// Background alpha black view.
+@property (strong, nonatomic) UIView *swipingBackgoundView;
+/// Left pan ges.
+@property (nonatomic, strong) UIPanGestureRecognizer *swipePanGesture;
+
+@property (nonatomic, assign) BOOL isSwipingBack;
 
 @end
 
@@ -38,7 +50,7 @@ static BOOL canUseWkWebView = NO;
 - (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
-        [self _initMyself];
+        [self initialize];
     }
     return self;
 }
@@ -55,12 +67,12 @@ static BOOL canUseWkWebView = NO;
     self = [super initWithFrame:frame];
     if (self) {
         _usingUIWebView = usingUIWebView;
-        [self _initMyself];
+        [self initialize];
     }
     return self;
 }
 
-- (void)_initMyself {
+- (void)initialize {
     if (canUseWkWebView && self.usingUIWebView == NO) {
         [self initWKWebView];
         _usingUIWebView = NO;
@@ -70,6 +82,9 @@ static BOOL canUseWkWebView = NO;
     }
     [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
     self.scalesPageToFit = YES;
+
+    // Set auto layout enabled.
+    [(UIWebView *) self.realWebView setTranslatesAutoresizingMaskIntoConstraints:NO];
 
     [self.realWebView setFrame:self.bounds];
     [self.realWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
@@ -104,8 +119,163 @@ static BOOL canUseWkWebView = NO;
     }
 }
 
+- (UIPanGestureRecognizer *)swipePanGesture {
+    if (!_swipePanGesture) {
+        _swipePanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipePanGestureHandler:)];
+    }
+    return _swipePanGesture;
+}
+
+- (void)swipePanGestureHandler:(UIPanGestureRecognizer *)panGesture {
+    CGPoint translation = [panGesture translationInView:self.realWebView];
+    CGPoint location = [panGesture locationInView:self.realWebView];
+
+    if (panGesture.state == UIGestureRecognizerStateBegan) {
+        if (location.x <= 50 && translation.x >= 0) {  //开始动画
+            [self startPopSnapshotView];
+        }
+    } else if (panGesture.state == UIGestureRecognizerStateCancelled || panGesture.state == UIGestureRecognizerStateEnded) {
+        [self endPopSnapShotView];
+    } else if (panGesture.state == UIGestureRecognizerStateChanged) {
+        [self popSnapShotViewWithPanGestureDistance:translation.x];
+    }
+}
+
+-(void)pushCurrentSnapshotViewWithRequest:(NSURLRequest*)request{
+    NSURLRequest* lastRequest = (NSURLRequest*)[[self.snapshots lastObject] objectForKey:@"request"];
+    
+    // 如果url是很奇怪的就不push
+    if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
+        return;
+    }
+    
+    //如果url一样就不进行push
+    if ([lastRequest.URL.absoluteString isEqualToString:request.URL.absoluteString]) {
+        return;
+    }
+    
+    UIView* currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
+    [self.snapshots addObject:
+     @{@"request":request,
+       @"snapShotView":currentSnapshotView}
+     ];
+}
+
+- (void)startPopSnapshotView {
+    if (self.isSwipingBack) {
+        return;
+    }
+    if (!((UIWebView *) self.realWebView).canGoBack) {
+        return;
+    }
+
+    self.isSwipingBack = YES;
+    //create a center of scrren
+    CGPoint center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
+
+    self.currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
+
+    //add shadows just like UINavigationController
+    self.currentSnapshotView.layer.shadowColor = [UIColor blackColor].CGColor;
+    self.currentSnapshotView.layer.shadowOffset = CGSizeMake(3, 3);
+    self.currentSnapshotView.layer.shadowRadius = 5;
+    self.currentSnapshotView.layer.shadowOpacity = 0.75;
+
+    //move to center of screen
+    self.currentSnapshotView.center = center;
+
+    self.previousSnapshotView = (UIView *) [[self.snapshots lastObject] objectForKey:@"snapShotView"];
+    center.x -= 60;
+    self.previousSnapshotView.center = center;
+    self.previousSnapshotView.alpha = 1;
+    self.backgroundColor = [UIColor colorWithRed:0.180 green:0.192 blue:0.196 alpha:1.00];
+
+    [self addSubview:self.previousSnapshotView];
+    [self addSubview:self.swipingBackgoundView];
+    [self addSubview:self.currentSnapshotView];
+}
+
+- (void)popSnapShotViewWithPanGestureDistance:(CGFloat)distance {
+    if (!self.isSwipingBack) {
+        return;
+    }
+
+    if (distance <= 0) {
+        return;
+    }
+
+    CGFloat boundsWidth = CGRectGetWidth(self.bounds);
+    CGFloat boundsHeight = CGRectGetHeight(self.bounds);
+
+    CGPoint currentSnapshotViewCenter = CGPointMake(boundsWidth / 2, boundsHeight / 2);
+    currentSnapshotViewCenter.x += distance;
+    CGPoint previousSnapshotViewCenter = CGPointMake(boundsWidth / 2, boundsHeight / 2);
+    previousSnapshotViewCenter.x -= (boundsWidth - distance) * 60 / boundsWidth;
+
+    self.currentSnapshotView.center = currentSnapshotViewCenter;
+    self.previousSnapshotView.center = previousSnapshotViewCenter;
+    self.swipingBackgoundView.alpha = (boundsWidth - distance) / boundsWidth;
+}
+
+- (void)endPopSnapShotView {
+    if (!self.isSwipingBack) {
+        return;
+    }
+
+    //prevent the user touch for now
+    self.userInteractionEnabled = NO;
+
+    CGFloat boundsWidth = CGRectGetWidth(self.bounds);
+    CGFloat boundsHeight = CGRectGetHeight(self.bounds);
+
+    if (self.currentSnapshotView.center.x >= boundsWidth) {
+        // pop success
+        [UIView animateWithDuration:0.2 animations:^{
+            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+
+            self.currentSnapshotView.center = CGPointMake(boundsWidth * 3 / 2, boundsHeight / 2);
+            self.previousSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
+            self.swipingBackgoundView.alpha = 0;
+        }                completion:^(BOOL finished) {
+            [self.previousSnapshotView removeFromSuperview];
+            [self.swipingBackgoundView removeFromSuperview];
+            [self.currentSnapshotView removeFromSuperview];
+            [(UIWebView *) self.realWebView goBack];
+            [self.snapshots removeLastObject];
+            self.userInteractionEnabled = YES;
+
+            self.isSwipingBack = NO;
+        }];
+    } else {
+        //pop fail
+        [UIView animateWithDuration:0.2 animations:^{
+            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+
+            self.currentSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
+            self.previousSnapshotView.center = CGPointMake(boundsWidth / 2 - 60, boundsHeight / 2);
+            self.previousSnapshotView.alpha = 1;
+        }                completion:^(BOOL finished) {
+            [self.previousSnapshotView removeFromSuperview];
+            [self.swipingBackgoundView removeFromSuperview];
+            [self.currentSnapshotView removeFromSuperview];
+            self.userInteractionEnabled = YES;
+
+            self.isSwipingBack = NO;
+        }];
+    }
+}
+
 - (void)initWKWebView {
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+    configuration.preferences.minimumFontSize = 9.0;
+    //#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_9_0
+    if ([configuration respondsToSelector:@selector(setApplicationNameForUserAgent:)]) {
+        [configuration setApplicationNameForUserAgent:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]];
+    }
+    if ([configuration respondsToSelector:@selector(setAllowsInlineMediaPlayback:)]) {
+        [configuration setAllowsInlineMediaPlayback:YES];
+    }
+    //#endif
     configuration.userContentController = [[WKUserContentController alloc] init];
 
     WKPreferences *preferences = [[WKPreferences alloc] init];
@@ -118,6 +288,8 @@ static BOOL canUseWkWebView = NO;
 
     webView.backgroundColor = [UIColor clearColor];
     webView.opaque = NO;
+    // Set auto layout enabled.
+    //    webView.translatesAutoresizingMaskIntoConstraints = NO;
 
     webView.allowsBackForwardNavigationGestures = YES;
     SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
@@ -149,6 +321,9 @@ static BOOL canUseWkWebView = NO;
     webView.backgroundColor = [UIColor clearColor];
     webView.allowsInlineMediaPlayback = YES;
     webView.mediaPlaybackRequiresUserAction = NO;
+    [webView addGestureRecognizer:self.swipePanGesture];
+    
+    self.snapshots = [NSMutableArray array];
 
     webView.opaque = NO;
     for (UIView *subview in [webView.scrollView subviews]) {
@@ -201,6 +376,34 @@ static BOOL canUseWkWebView = NO;
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
     BOOL resultBOOL = [self callback_webViewShouldStartLoadWithRequest:request navigationType:navigationType];
+    if (resultBOOL) {
+        switch (navigationType) {
+            case UIWebViewNavigationTypeLinkClicked: {
+                [self pushCurrentSnapshotViewWithRequest:request];
+                break;
+            }
+            case UIWebViewNavigationTypeFormSubmitted: {
+                [self pushCurrentSnapshotViewWithRequest:request];
+                break;
+            }
+            case UIWebViewNavigationTypeBackForward: {
+                break;
+            }
+            case UIWebViewNavigationTypeReload: {
+                break;
+            }
+            case UIWebViewNavigationTypeFormResubmitted: {
+                break;
+            }
+            case UIWebViewNavigationTypeOther: {
+                [self pushCurrentSnapshotViewWithRequest:request];
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+    }
     return resultBOOL;
 }
 
@@ -302,30 +505,8 @@ static BOOL canUseWkWebView = NO;
         [webView evaluateJavaScript:@"var a = document.getElementsByTagName('a');for(var i=0;i<a.length;i++){a[i].setAttribute('target','');}" completionHandler:nil];
     }
 
-    // Resolve URL. Fixs the issue: https://github.com/devedbox/AXWebViewController/issues/7
-    NSURLComponents *components = [[NSURLComponents alloc] initWithString:webView.URL.absoluteString];
     if (!resultBOOL || isLoadingDisableScheme) {
         // For can deal something.
-        decisionHandler(WKNavigationActionPolicyCancel);
-    } else if ([[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] 'https://itunes.apple.com/cn/app/' OR SELF BEGINSWITH[cd] 'mailto:' OR SELF BEGINSWITH[cd] 'tel:' OR SELF BEGINSWITH[cd] 'telprompt:'"] evaluateWithObject:webView.URL.absoluteString]) {
-        // For appstore.
-        if ([[UIApplication sharedApplication] canOpenURL:webView.URL]) {
-            if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
-                [UIApplication.sharedApplication openURL:webView.URL options:@{} completionHandler:NULL];
-            } else {
-                [[UIApplication sharedApplication] openURL:webView.URL];
-            }
-        }
-        decisionHandler(WKNavigationActionPolicyCancel);
-    } else if (![[NSPredicate predicateWithFormat:@"SELF MATCHES[cd] 'https' OR SELF MATCHES[cd] 'http' OR SELF MATCHES[cd] 'file' OR SELF MATCHES[cd] 'about'"] evaluateWithObject:components.scheme]) {
-        // For any other schema.
-        if ([[UIApplication sharedApplication] canOpenURL:webView.URL]) {
-            if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
-                [UIApplication.sharedApplication openURL:webView.URL options:@{} completionHandler:NULL];
-            } else {
-                [[UIApplication sharedApplication] openURL:webView.URL];
-            }
-        }
         decisionHandler(WKNavigationActionPolicyCancel);
     } else {
         // Call the decision handler to allow to load web page.
@@ -383,11 +564,32 @@ static BOOL canUseWkWebView = NO;
 
 - (BOOL)callback_webViewShouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(NSInteger)navigationType {
     BOOL resultBOOL = YES;
+    NSURLComponents *components = [[NSURLComponents alloc] initWithString:request.URL.absoluteString];
     if ([self.delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {
         if (navigationType == -1) {
             navigationType = UIWebViewNavigationTypeOther;
         }
         resultBOOL = [self.delegate webView:self shouldStartLoadWithRequest:request navigationType:navigationType];
+    } else if ([[NSPredicate predicateWithFormat:@"SELF BEGINSWITH[cd] 'https://itunes.apple.com/cn/app/' OR SELF BEGINSWITH[cd] 'mailto:' OR SELF BEGINSWITH[cd] 'tel:' OR SELF BEGINSWITH[cd] 'telprompt:'"] evaluateWithObject:request.URL.absoluteString]) {
+        // For appstore.
+        if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
+            if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
+                [UIApplication.sharedApplication openURL:request.URL options:@{} completionHandler:NULL];
+            } else {
+                [[UIApplication sharedApplication] openURL:request.URL];
+            }
+        }
+        resultBOOL = NO;
+    } else if (![[NSPredicate predicateWithFormat:@"SELF MATCHES[cd] 'https' OR SELF MATCHES[cd] 'http' OR SELF MATCHES[cd] 'file' OR SELF MATCHES[cd] 'about'"] evaluateWithObject:components.scheme]) {
+        // For any other schema.
+        if ([[UIApplication sharedApplication] canOpenURL:request.URL]) {
+            if (UIDevice.currentDevice.systemVersion.floatValue >= 10.0) {
+                [UIApplication.sharedApplication openURL:request.URL options:@{} completionHandler:NULL];
+            } else {
+                [[UIApplication sharedApplication] openURL:request.URL];
+            }
+        }
+        resultBOOL = NO;
     }
     return resultBOOL;
 }
