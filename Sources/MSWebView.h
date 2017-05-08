@@ -60,6 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///---- UI 或者 WK 的API
 @property (nonatomic, readonly) UIScrollView *scrollView;
 
+@property (nonatomic, assign) BOOL allowsBackForwardNavigationGestures;
+
 - (id)loadRequest:(NSURLRequest *)request;
 
 - (id)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;

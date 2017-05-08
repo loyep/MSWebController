@@ -122,6 +122,7 @@ static BOOL canUseWkWebView = NO;
 - (UIPanGestureRecognizer *)swipePanGesture {
     if (!_swipePanGesture) {
         _swipePanGesture = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(swipePanGestureHandler:)];
+        _swipePanGesture.enabled = self.allowsBackForwardNavigationGestures;
     }
     return _swipePanGesture;
 }
@@ -265,6 +266,16 @@ static BOOL canUseWkWebView = NO;
     }
 }
 
+- (void)setAllowsBackForwardNavigationGestures:(BOOL)allowsBackForwardNavigationGestures {
+    _allowsBackForwardNavigationGestures = allowsBackForwardNavigationGestures;
+    
+    if (_usingUIWebView) {
+        self.swipePanGesture.enabled = self.allowsBackForwardNavigationGestures;
+    } else {
+        [(WKWebView *)self.realWebView setAllowsBackForwardNavigationGestures:self.allowsBackForwardNavigationGestures];
+    }
+}
+
 - (void)initWKWebView {
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     configuration.preferences.minimumFontSize = 9.0;
@@ -291,7 +302,7 @@ static BOOL canUseWkWebView = NO;
     // Set auto layout enabled.
     //    webView.translatesAutoresizingMaskIntoConstraints = NO;
 
-    webView.allowsBackForwardNavigationGestures = YES;
+    webView.allowsBackForwardNavigationGestures = self.allowsBackForwardNavigationGestures;
     SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
     if ([webView respondsToSelector:linkPreviewSelector]) {
 #pragma clang diagnostic push
