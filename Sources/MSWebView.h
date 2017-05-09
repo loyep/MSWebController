@@ -60,6 +60,7 @@ NS_ASSUME_NONNULL_BEGIN
 ///---- UI 或者 WK 的API
 @property (nonatomic, readonly) UIScrollView *scrollView;
 
+/// default YES
 @property (nonatomic, assign) BOOL allowsBackForwardNavigationGestures;
 
 - (id)loadRequest:(NSURLRequest *)request;
@@ -74,8 +75,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL canGoBack;
 @property (nonatomic, readonly) BOOL canGoForward;
 
-@property (nonatomic, assign) BOOL showProgressView;
-@property (nonatomic, strong) UIColor *progressColor;
+@property (nonatomic, assign) BOOL hideProgress;
+@property (nonatomic, readonly) UIProgressView *progressView;
 
 - (id _Nullable)goBack;
 

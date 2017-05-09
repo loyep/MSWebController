@@ -21,4 +21,6 @@ FOUNDATION_EXPORT const unsigned char MSWebControllerVersionString[];
 
 @property (nonatomic, assign) BOOL useUIWebView;
 
+- (void)loadRequest:(NSURLRequest *)request;
+
 @end

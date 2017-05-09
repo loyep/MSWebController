@@ -8,7 +8,6 @@
 
 #import "MSWebView.h"
 #import "MS_NJKWebViewProgress.h"
-#import "MS_NJKWebViewProgressView.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 
 static BOOL canUseWkWebView = NO;
@@ -20,7 +19,7 @@ static BOOL canUseWkWebView = NO;
 @property (nonatomic, strong) NSURLRequest *currentRequest;
 @property (nonatomic, copy) NSString *title;
 @property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
-@property (nonatomic, strong) MS_NJKWebViewProgressView *njkWebProgressView;
+@property (nonatomic, strong, readwrite) UIProgressView *progressView;
 
 /// Array that hold snapshots of pages.
 @property (strong, nonatomic) NSMutableArray *snapshots;
@@ -81,19 +80,19 @@ static BOOL canUseWkWebView = NO;
         _usingUIWebView = YES;
     }
     [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
+    self.allowsBackForwardNavigationGestures = YES;
     self.scalesPageToFit = YES;
-
+    
     // Set auto layout enabled.
     [(UIWebView *) self.realWebView setTranslatesAutoresizingMaskIntoConstraints:NO];
-
+    
     [self.realWebView setFrame:self.bounds];
     [self.realWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview:self.realWebView];
-
-    self.njkWebProgressView = [[MS_NJKWebViewProgressView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 2)];
-    self.njkWebProgressView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-    [self addSubview:self.njkWebProgressView];
-    self.showProgressView = YES;
+    
+    self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 2)];
+    self.progressView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+    [self addSubview:self.progressView];
 }
 
 - (void)setDelegate:(id <MSWebViewDelegate>)delegate {
@@ -112,12 +111,21 @@ static BOOL canUseWkWebView = NO;
 }
 
 - (void)setEstimatedProgress:(CGFloat)estimatedProgress {
+    if (_estimatedProgress == estimatedProgress) {
+        return;
+    }
     _estimatedProgress = estimatedProgress;
-
-    if (self.showProgressView) {
-        [self.njkWebProgressView setProgress:estimatedProgress animated:YES];
+    
+    [self.progressView setProgress:estimatedProgress animated:estimatedProgress > 0.1];
+    CGFloat hideProgress = estimatedProgress >= 0.95f ? 0.0f : 1.0f;
+    if (self.progressView.alpha != hideProgress) {
+        [UIView animateWithDuration:1.0f * estimatedProgress delay:0.5f options:UIViewAnimationOptionCurveEaseOut animations:^{
+            self.progressView.alpha = hideProgress;
+        } completion:nil];
     }
 }
+
+#pragma mark - UIWebView Swipe
 
 - (UIPanGestureRecognizer *)swipePanGesture {
     if (!_swipePanGesture) {
@@ -130,9 +138,10 @@ static BOOL canUseWkWebView = NO;
 - (void)swipePanGestureHandler:(UIPanGestureRecognizer *)panGesture {
     CGPoint translation = [panGesture translationInView:self.realWebView];
     CGPoint location = [panGesture locationInView:self.realWebView];
-
+    
     if (panGesture.state == UIGestureRecognizerStateBegan) {
-        if (location.x <= 50 && translation.x >= 0) {  //开始动画
+        // Begin gesture pop animation
+        if (location.x <= 50 && translation.x >= 0) {
             [self startPopSnapshotView];
         }
     } else if (panGesture.state == UIGestureRecognizerStateCancelled || panGesture.state == UIGestureRecognizerStateEnded) {
@@ -157,7 +166,8 @@ static BOOL canUseWkWebView = NO;
     
     UIView* currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
     [self.snapshots addObject:
-     @{@"request":request,
+     @{
+       @"request":request,
        @"snapShotView":currentSnapshotView}
      ];
 }
@@ -169,28 +179,28 @@ static BOOL canUseWkWebView = NO;
     if (!((UIWebView *) self.realWebView).canGoBack) {
         return;
     }
-
+    
     self.isSwipingBack = YES;
     //create a center of scrren
     CGPoint center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
-
+    
     self.currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
-
+    
     //add shadows just like UINavigationController
     self.currentSnapshotView.layer.shadowColor = [UIColor blackColor].CGColor;
     self.currentSnapshotView.layer.shadowOffset = CGSizeMake(3, 3);
     self.currentSnapshotView.layer.shadowRadius = 5;
     self.currentSnapshotView.layer.shadowOpacity = 0.75;
-
+    
     //move to center of screen
     self.currentSnapshotView.center = center;
-
+    
     self.previousSnapshotView = (UIView *) [[self.snapshots lastObject] objectForKey:@"snapShotView"];
     center.x -= 60;
     self.previousSnapshotView.center = center;
     self.previousSnapshotView.alpha = 1;
     self.backgroundColor = [UIColor colorWithRed:0.180 green:0.192 blue:0.196 alpha:1.00];
-
+    
     [self addSubview:self.previousSnapshotView];
     [self addSubview:self.swipingBackgoundView];
     [self addSubview:self.currentSnapshotView];
@@ -200,19 +210,19 @@ static BOOL canUseWkWebView = NO;
     if (!self.isSwipingBack) {
         return;
     }
-
+    
     if (distance <= 0) {
         return;
     }
-
+    
     CGFloat boundsWidth = CGRectGetWidth(self.bounds);
     CGFloat boundsHeight = CGRectGetHeight(self.bounds);
-
+    
     CGPoint currentSnapshotViewCenter = CGPointMake(boundsWidth / 2, boundsHeight / 2);
     currentSnapshotViewCenter.x += distance;
     CGPoint previousSnapshotViewCenter = CGPointMake(boundsWidth / 2, boundsHeight / 2);
     previousSnapshotViewCenter.x -= (boundsWidth - distance) * 60 / boundsWidth;
-
+    
     self.currentSnapshotView.center = currentSnapshotViewCenter;
     self.previousSnapshotView.center = previousSnapshotViewCenter;
     self.swipingBackgoundView.alpha = (boundsWidth - distance) / boundsWidth;
@@ -222,18 +232,18 @@ static BOOL canUseWkWebView = NO;
     if (!self.isSwipingBack) {
         return;
     }
-
+    
     //prevent the user touch for now
     self.userInteractionEnabled = NO;
-
+    
     CGFloat boundsWidth = CGRectGetWidth(self.bounds);
     CGFloat boundsHeight = CGRectGetHeight(self.bounds);
-
+    
     if (self.currentSnapshotView.center.x >= boundsWidth) {
-        // pop success
+        //When pop success.
         [UIView animateWithDuration:0.2 animations:^{
             [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-
+            
             self.currentSnapshotView.center = CGPointMake(boundsWidth * 3 / 2, boundsHeight / 2);
             self.previousSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
             self.swipingBackgoundView.alpha = 0;
@@ -244,14 +254,14 @@ static BOOL canUseWkWebView = NO;
             [(UIWebView *) self.realWebView goBack];
             [self.snapshots removeLastObject];
             self.userInteractionEnabled = YES;
-
+            
             self.isSwipingBack = NO;
         }];
     } else {
-        //pop fail
+        //If pop fail.
         [UIView animateWithDuration:0.2 animations:^{
             [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-
+            
             self.currentSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
             self.previousSnapshotView.center = CGPointMake(boundsWidth / 2 - 60, boundsHeight / 2);
             self.previousSnapshotView.alpha = 1;
@@ -260,7 +270,7 @@ static BOOL canUseWkWebView = NO;
             [self.swipingBackgoundView removeFromSuperview];
             [self.currentSnapshotView removeFromSuperview];
             self.userInteractionEnabled = YES;
-
+            
             self.isSwipingBack = NO;
         }];
     }
@@ -279,29 +289,27 @@ static BOOL canUseWkWebView = NO;
 - (void)initWKWebView {
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     configuration.preferences.minimumFontSize = 9.0;
-    //#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_9_0
+    
     if ([configuration respondsToSelector:@selector(setApplicationNameForUserAgent:)]) {
         [configuration setApplicationNameForUserAgent:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]];
     }
     if ([configuration respondsToSelector:@selector(setAllowsInlineMediaPlayback:)]) {
         [configuration setAllowsInlineMediaPlayback:YES];
     }
-    //#endif
+    
     configuration.userContentController = [[WKUserContentController alloc] init];
-
+    
     WKPreferences *preferences = [[WKPreferences alloc] init];
     preferences.javaScriptCanOpenWindowsAutomatically = YES;
     configuration.preferences = preferences;
-
+    
     WKWebView *webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:configuration];
     webView.UIDelegate = self;
     webView.navigationDelegate = self;
-
+    
     webView.backgroundColor = [UIColor clearColor];
     webView.opaque = NO;
-    // Set auto layout enabled.
-    //    webView.translatesAutoresizingMaskIntoConstraints = NO;
-
+    
     webView.allowsBackForwardNavigationGestures = self.allowsBackForwardNavigationGestures;
     SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
     if ([webView respondsToSelector:linkPreviewSelector]) {
@@ -310,7 +318,7 @@ static BOOL canUseWkWebView = NO;
         [webView performSelector:linkPreviewSelector withObject:@(YES)];
 #pragma clang diagnostic pop
     }
-
+    
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
     _realWebView = webView;
@@ -328,14 +336,14 @@ static BOOL canUseWkWebView = NO;
 }
 
 - (void)initUIWebView {
+    self.snapshots = [NSMutableArray array];
+    
     UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
     webView.backgroundColor = [UIColor clearColor];
     webView.allowsInlineMediaPlayback = YES;
     webView.mediaPlaybackRequiresUserAction = NO;
     [webView addGestureRecognizer:self.swipePanGesture];
     
-    self.snapshots = [NSMutableArray array];
-
     webView.opaque = NO;
     for (UIView *subview in [webView.scrollView subviews]) {
         if ([subview isKindOfClass:[UIImageView class]]) {
@@ -343,14 +351,16 @@ static BOOL canUseWkWebView = NO;
             subview.backgroundColor = [UIColor clearColor];
         }
     }
-
+    
     self.njkWebViewProgress = [[MS_NJKWebViewProgress alloc] init];
-    webView.delegate = _njkWebViewProgress;
-    _njkWebViewProgress.webViewProxyDelegate = self;
-    _njkWebViewProgress.progressDelegate = self;
-
+    webView.delegate = self.njkWebViewProgress;
+    self.njkWebViewProgress.webViewProxyDelegate = self;
+    self.njkWebViewProgress.progressDelegate = self;
+    
     _realWebView = webView;
 }
+
+#pragma mark - js Core
 
 - (void)addScriptMessageHandler:(id <WKScriptMessageHandler>)scriptMessageHandler name:(NSString *)name {
     if (!_usingUIWebView) {
@@ -389,27 +399,15 @@ static BOOL canUseWkWebView = NO;
     BOOL resultBOOL = [self callback_webViewShouldStartLoadWithRequest:request navigationType:navigationType];
     if (resultBOOL) {
         switch (navigationType) {
-            case UIWebViewNavigationTypeLinkClicked: {
-                [self pushCurrentSnapshotViewWithRequest:request];
-                break;
-            }
-            case UIWebViewNavigationTypeFormSubmitted: {
-                [self pushCurrentSnapshotViewWithRequest:request];
-                break;
-            }
-            case UIWebViewNavigationTypeBackForward: {
-                break;
-            }
-            case UIWebViewNavigationTypeReload: {
-                break;
-            }
-            case UIWebViewNavigationTypeFormResubmitted: {
-                break;
-            }
+            case UIWebViewNavigationTypeLinkClicked:
+            case UIWebViewNavigationTypeFormSubmitted:
             case UIWebViewNavigationTypeOther: {
                 [self pushCurrentSnapshotViewWithRequest:request];
-                break;
             }
+                break;
+            case UIWebViewNavigationTypeBackForward:
+            case UIWebViewNavigationTypeReload:
+            case UIWebViewNavigationTypeFormResubmitted:
             default: {
                 break;
             }
@@ -436,6 +434,7 @@ static BOOL canUseWkWebView = NO;
 
 #if __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_9_0
 - (void)webViewDidClose:(WKWebView *)webView {
+    
 }
 #endif
 
@@ -510,12 +509,12 @@ static BOOL canUseWkWebView = NO;
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     BOOL resultBOOL = [self callback_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
     BOOL isLoadingDisableScheme = [self isLoadingWKWebViewDisableScheme:navigationAction.request.URL];
-
+    
     // Disable all the '_blank' target in page's target.
     if (!navigationAction.targetFrame.isMainFrame) {
         [webView evaluateJavaScript:@"var a = document.getElementsByTagName('a');for(var i=0;i<a.length;i++){a[i].setAttribute('target','');}" completionHandler:nil];
     }
-
+    
     if (!resultBOOL || isLoadingDisableScheme) {
         // For can deal something.
         decisionHandler(WKNavigationActionPolicyCancel);
@@ -548,20 +547,14 @@ static BOOL canUseWkWebView = NO;
 #pragma mark - CALLBACK MSKWebView Delegate
 
 - (void)callback_webViewDidFinishLoad {
-    if (self.showProgressView) {
-        [self.njkWebProgressView setProgress:1.0 animated:YES];
-    }
-
+    self.estimatedProgress = 1.0f;
+    
     if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.delegate webViewDidFinishLoad:self];
     }
 }
 
 - (void)callback_webViewDidStartLoad {
-    if (self.showProgressView) {
-        [self.njkWebProgressView setProgress:0.1 animated:NO];
-    }
-
     if ([self.delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
         [self.delegate webViewDidStartLoad:self];
     }
@@ -610,7 +603,7 @@ static BOOL canUseWkWebView = NO;
 ///判断当前加载的url是否是WKWebView不能打开的协议类型
 - (BOOL)isLoadingWKWebViewDisableScheme:(NSURL *)url {
     BOOL retValue = NO;
-
+    
     //判断是否正在加载WKWebview不能识别的协议类型：phone numbers, email address, maps, etc.
     if ([url.scheme isEqual:@"tel"]) {
         UIApplication *app = [UIApplication sharedApplication];
@@ -619,7 +612,7 @@ static BOOL canUseWkWebView = NO;
             retValue = YES;
         }
     }
-
+    
     return retValue;
 }
 
@@ -630,7 +623,7 @@ static BOOL canUseWkWebView = NO;
 - (id)loadRequest:(NSURLRequest *)request {
     self.originRequest = request;
     self.currentRequest = request;
-
+    
     if (_usingUIWebView) {
         [(UIWebView *) self.realWebView loadRequest:request];
         return nil;
@@ -646,6 +639,11 @@ static BOOL canUseWkWebView = NO;
     } else {
         return [(WKWebView *) self.realWebView loadHTMLString:string baseURL:baseURL];
     }
+}
+
+- (void)setHideProgress:(BOOL)hideProgress {
+    _hideProgress = hideProgress;
+    self.progressView.hidden = hideProgress;
 }
 
 - (NSURLRequest *)currentRequest {
@@ -740,17 +738,12 @@ static BOOL canUseWkWebView = NO;
             result = obj;
             isExecuted = YES;
         }];
-
+        
         while (isExecuted == NO) {
             [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
         }
         return result;
     }
-}
-
-- (void)setProgressColor:(UIColor *)progressColor {
-    _progressColor = progressColor;
-    [self.njkWebProgressView.progressBarView setBackgroundColor:progressColor];
 }
 
 - (void)setScalesPageToFit:(BOOL)scalesPageToFit {
@@ -761,9 +754,9 @@ static BOOL canUseWkWebView = NO;
         if (_scalesPageToFit == scalesPageToFit) {
             return;
         }
-
+        
         WKWebView *webView = _realWebView;
-
+        
         NSString *jScript = [NSString stringWithFormat:@"var head = document.getElementsByTagName('head')[0];\
                              var hasViewPort = 0;\
                              var metas = head.getElementsByTagName('meta');\
@@ -780,7 +773,7 @@ static BOOL canUseWkWebView = NO;
                              meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'; \
                              head.appendChild(meta);\
                              }"];
-
+        
         WKUserContentController *userContentController = webView.configuration.userContentController;
         NSMutableArray<WKUserScript *> *array = [userContentController.userScripts mutableCopy];
         WKUserScript *fitWKUScript = nil;
@@ -820,7 +813,7 @@ static BOOL canUseWkWebView = NO;
 - (NSInteger)countOfHistory {
     if (_usingUIWebView) {
         UIWebView *webView = self.realWebView;
-
+        
         int count = [[webView stringByEvaluatingJavaScriptFromString:@"window.history.length"] intValue];
         if (count) {
             return count;
@@ -836,13 +829,13 @@ static BOOL canUseWkWebView = NO;
 - (void)gobackWithStep:(NSInteger)step {
     if (self.canGoBack == NO)
         return;
-
+    
     if (step > 0) {
         NSInteger historyCount = self.countOfHistory;
         if (step >= historyCount) {
             step = historyCount - 1;
         }
-
+        
         if (_usingUIWebView) {
             UIWebView *webView = self.realWebView;
             [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.history.go(-%ld)", (long) step]];
@@ -899,7 +892,7 @@ static BOOL canUseWkWebView = NO;
         WKWebView *webView = _realWebView;
         webView.UIDelegate = nil;
         webView.navigationDelegate = nil;
-
+        
         [webView removeObserver:self forKeyPath:@"estimatedProgress"];
         [webView removeObserver:self forKeyPath:@"title"];
     }

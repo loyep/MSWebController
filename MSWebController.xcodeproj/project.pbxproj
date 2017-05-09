@@ -17,8 +17,6 @@
 		CFCC8A071EBF47D500DFB42A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A061EBF47D500DFB42A /* JavaScriptCore.framework */; };
 		CFCC8A0D1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = CFCC8A091EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h */; };
 		CFCC8A0E1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A0A1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m */; };
-		CFCC8A0F1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.h in Headers */ = {isa = PBXBuildFile; fileRef = CFCC8A0B1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.h */; };
-		CFCC8A101EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A0C1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,8 +43,6 @@
 		CFCC8A061EBF47D500DFB42A /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		CFCC8A091EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgress.h; sourceTree = "<group>"; };
 		CFCC8A0A1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
-		CFCC8A0B1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgressView.h; sourceTree = "<group>"; };
-		CFCC8A0C1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgressView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -133,8 +129,6 @@
 			children = (
 				CFCC8A091EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h */,
 				CFCC8A0A1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m */,
-				CFCC8A0B1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.h */,
-				CFCC8A0C1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.m */,
 			);
 			path = NJKWebViewProgress;
 			sourceTree = "<group>";
@@ -148,7 +142,6 @@
 			files = (
 				CFCC8A0D1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h in Headers */,
 				CFCC8A011EBF287000DFB42A /* MSWebView.h in Headers */,
-				CFCC8A0F1EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.h in Headers */,
 				CFCC89FD1EBF1F4100DFB42A /* MSWebController.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -254,7 +247,6 @@
 				CFCC89FE1EBF1F4100DFB42A /* MSWebController.m in Sources */,
 				CFCC8A0E1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m in Sources */,
 				CFCC8A021EBF287000DFB42A /* MSWebView.m in Sources */,
-				CFCC8A101EBF4E8B00DFB42A /* MS_NJKWebViewProgressView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

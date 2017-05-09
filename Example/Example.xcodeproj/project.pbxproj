@@ -20,7 +20,6 @@
 		CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A241EBF716700DFB42A /* MSWebController.m */; };
 		CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A261EBF716700DFB42A /* MSWebView.m */; };
 		CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */; };
-		CFCC8A311EBF716700DFB42A /* MS_NJKWebViewProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */; };
 		CFCC8A341EBF74AB00DFB42A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A331EBF74AB00DFB42A /* WebKit.framework */; };
 		CFCC8A361EBF74DF00DFB42A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */; };
 		CFCC8A391EBF874100DFB42A /* MSWebActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A381EBF874100DFB42A /* MSWebActivityController.m */; };
@@ -74,8 +73,6 @@
 		CFCC8A261EBF716700DFB42A /* MSWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebView.m; sourceTree = "<group>"; };
 		CFCC8A281EBF716700DFB42A /* MS_NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgress.h; sourceTree = "<group>"; };
 		CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
-		CFCC8A2A1EBF716700DFB42A /* MS_NJKWebViewProgressView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgressView.h; sourceTree = "<group>"; };
-		CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgressView.m; sourceTree = "<group>"; };
 		CFCC8A331EBF74AB00DFB42A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		CFCC8A371EBF874100DFB42A /* MSWebActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivityController.h; sourceTree = "<group>"; };
@@ -224,8 +221,6 @@
 			children = (
 				CFCC8A281EBF716700DFB42A /* MS_NJKWebViewProgress.h */,
 				CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */,
-				CFCC8A2A1EBF716700DFB42A /* MS_NJKWebViewProgressView.h */,
-				CFCC8A2B1EBF716700DFB42A /* MS_NJKWebViewProgressView.m */,
 			);
 			path = NJKWebViewProgress;
 			sourceTree = "<group>";
@@ -513,7 +508,6 @@
 				CF3779891EBD5F5E0038F868 /* ViewController.m in Sources */,
 				CF3779861EBD5F5E0038F868 /* AppDelegate.m in Sources */,
 				CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */,
-				CFCC8A311EBF716700DFB42A /* MS_NJKWebViewProgressView.m in Sources */,
 				CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */,
 				CFCC8A391EBF874100DFB42A /* MSWebActivityController.m in Sources */,
 				CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */,
@@ -613,7 +607,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -656,7 +650,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.3;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -670,6 +664,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Maxwell.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -682,6 +677,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Example/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = Maxwell.Example;
 				PRODUCT_NAME = "$(TARGET_NAME)";

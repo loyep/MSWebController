@@ -18,21 +18,24 @@
 
 - (void)loadView {
     [super loadView];
-
-    self.webView = [[MSWebView alloc] initWithFrame:self.view.bounds usingUIWebView:self.useUIWebView];
-        self.webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     [self.view addSubview:self.webView];
-    
-//    id topLayoutGuide = self.topLayoutGuide;
-//    id bottomLayoutGuide = self.bottomLayoutGuide;
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_webView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_webView)]];
-//    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide][_webView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_webView, topLayoutGuide, bottomLayoutGuide)]];
+}
+
+- (MSWebView *)webView {
+    if (!_webView) {
+        _webView = [[MSWebView alloc] initWithFrame:self.view.bounds usingUIWebView:self.useUIWebView];
+        _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    }
+    return _webView;
 }
 
 - (void)initialize {
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.extendedLayoutIncludesOpaqueBars = YES;
+}
 
+- (void)loadRequest:(NSURLRequest *)request {
+    [self.webView loadRequest:request];
 }
 
 - (void)viewDidLoad {
@@ -43,7 +46,7 @@
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
     self.webView.frame = self.view.bounds;
-
+    
     UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, 0, 0);
     self.webView.scrollView.contentInset = insets;
     self.webView.scrollView.scrollIndicatorInsets = insets;
