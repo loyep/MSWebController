@@ -34,6 +34,8 @@ static BOOL canUseWkWebView = NO;
 
 @property (nonatomic, assign) BOOL isSwipingBack;
 
+@property (nonatomic, strong, readwrite) UILabel *backgroundLabel;
+
 @end
 
 @implementation MSWebView
@@ -81,8 +83,10 @@ static BOOL canUseWkWebView = NO;
     }
     [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
     self.allowsBackForwardNavigationGestures = YES;
+    self.showsBackgroundLabel = YES;
     self.scalesPageToFit = YES;
     
+    self.translatesAutoresizingMaskIntoConstraints = NO;
     // Set auto layout enabled.
     [(UIWebView *) self.realWebView setTranslatesAutoresizingMaskIntoConstraints:NO];
     
@@ -90,9 +94,39 @@ static BOOL canUseWkWebView = NO;
     [self.realWebView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];
     [self addSubview:self.realWebView];
     
-    self.progressView = [[UIProgressView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, 2)];
+    // Add web view.
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_realWebView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_realWebView)]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_realWebView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_realWebView)]];
+    
+    // Add label and constraints.
+    UIView *contentView = self.scrollView.subviews.firstObject;
+    [contentView addSubview:self.backgroundLabel];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_backgroundLabel(<=width)]" options:0 metrics:@{@"width":@([UIScreen mainScreen].bounds.size.width)} views:NSDictionaryOfVariableBindings(_backgroundLabel)]];
+    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
+    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:-20]];
+    
+    // Add progressView and constraints.
+    self.progressView = [[UIProgressView alloc] init];
     self.progressView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
+    self.progressView.translatesAutoresizingMaskIntoConstraints = NO;
     [self addSubview:self.progressView];
+    
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_progressView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_progressView)]];
+    [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_progressView(==2)]" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_progressView)]];
+}
+
+- (UILabel *)backgroundLabel {
+    if (_backgroundLabel) return _backgroundLabel;
+    _backgroundLabel = [[UILabel alloc] initWithFrame:CGRectZero];
+    _backgroundLabel.textColor = [UIColor colorWithRed:0.322 green:0.322 blue:0.322 alpha:1.00];
+    _backgroundLabel.font = [UIFont systemFontOfSize:12];
+    _backgroundLabel.numberOfLines = 0;
+    _backgroundLabel.textAlignment = NSTextAlignmentCenter;
+    _backgroundLabel.backgroundColor = [UIColor clearColor];
+    _backgroundLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    [_backgroundLabel setContentCompressionResistancePriority:UILayoutPriorityRequired forAxis:UILayoutConstraintAxisVertical];
+    _backgroundLabel.hidden = !self.showsBackgroundLabel;
+    return _backgroundLabel;
 }
 
 - (void)setDelegate:(id <MSWebViewDelegate>)delegate {
@@ -384,19 +418,19 @@ static BOOL canUseWkWebView = NO;
     if (self.originRequest == nil) {
         self.originRequest = webView.request;
     }
-    [self callback_webViewDidFinishLoad];
+    [self ms_webViewDidFinishLoad];
 }
 
 - (void)webViewDidStartLoad:(UIWebView *)webView {
-    [self callback_webViewDidStartLoad];
+    [self ms_webViewDidStartLoad];
 }
 
 - (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error {
-    [self callback_webViewDidFailLoadWithError:error];
+    [self ms_webViewDidFailLoadWithError:error];
 }
 
 - (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType {
-    BOOL resultBOOL = [self callback_webViewShouldStartLoadWithRequest:request navigationType:navigationType];
+    BOOL resultBOOL = [self ms_webViewShouldStartLoadWithRequest:request navigationType:navigationType];
     if (resultBOOL) {
         switch (navigationType) {
             case UIWebViewNavigationTypeLinkClicked:
@@ -507,7 +541,7 @@ static BOOL canUseWkWebView = NO;
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
-    BOOL resultBOOL = [self callback_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
+    BOOL resultBOOL = [self ms_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
     BOOL isLoadingDisableScheme = [self isLoadingWKWebViewDisableScheme:navigationAction.request.URL];
     
     // Disable all the '_blank' target in page's target.
@@ -529,44 +563,47 @@ static BOOL canUseWkWebView = NO;
 }
 
 - (void)webView:(WKWebView *)webView didStartProvisionalNavigation:(WKNavigation *)navigation {
-    [self callback_webViewDidStartLoad];
+    [self ms_webViewDidStartLoad];
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
-    [self callback_webViewDidFinishLoad];
+    [self ms_webViewDidFinishLoad];
 }
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error {
-    [self callback_webViewDidFailLoadWithError:error];
+    [self ms_webViewDidFailLoadWithError:error];
 }
 
 - (void)webView:(WKWebView *)webView didFailNavigation:(WKNavigation *)navigation withError:(NSError *)error {
-    [self callback_webViewDidFailLoadWithError:error];
+    [self ms_webViewDidFailLoadWithError:error];
 }
 
-#pragma mark - CALLBACK MSKWebView Delegate
+#pragma mark - MSKWebView Delegate
 
-- (void)callback_webViewDidFinishLoad {
+- (void)ms_webViewDidFinishLoad {
     self.estimatedProgress = 1.0f;
     
+    NSString *host = self.currentRequest.URL.host;
+    self.backgroundLabel.text = [NSString stringWithFormat:@"%@\"%@\"%@.", NSLocalizedString(@"web page",@""), host, NSLocalizedString(@"provided",@"")];
     if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.delegate webViewDidFinishLoad:self];
     }
 }
 
-- (void)callback_webViewDidStartLoad {
+- (void)ms_webViewDidStartLoad {
+    self.backgroundLabel.text = NSLocalizedString(@"loading", @"Loading");
     if ([self.delegate respondsToSelector:@selector(webViewDidStartLoad:)]) {
         [self.delegate webViewDidStartLoad:self];
     }
 }
 
-- (void)callback_webViewDidFailLoadWithError:(NSError *)error {
+- (void)ms_webViewDidFailLoadWithError:(NSError *)error {
     if ([self.delegate respondsToSelector:@selector(webView:didFailLoadWithError:)]) {
         [self.delegate webView:self didFailLoadWithError:error];
     }
 }
 
-- (BOOL)callback_webViewShouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(NSInteger)navigationType {
+- (BOOL)ms_webViewShouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(NSInteger)navigationType {
     BOOL resultBOOL = YES;
     NSURLComponents *components = [[NSURLComponents alloc] initWithString:request.URL.absoluteString];
     if ([self.delegate respondsToSelector:@selector(webView:shouldStartLoadWithRequest:navigationType:)]) {

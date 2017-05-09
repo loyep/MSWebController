@@ -76,7 +76,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) BOOL canGoForward;
 
 @property (nonatomic, assign) BOOL hideProgress;
+
 @property (nonatomic, readonly) UIProgressView *progressView;
+
+@property (nonatomic, readonly) UILabel *backgroundLabel;
+
+@property (nonatomic, assign) BOOL showsBackgroundLabel;
 
 - (id _Nullable)goBack;
 

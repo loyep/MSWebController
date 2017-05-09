@@ -18,12 +18,16 @@
 
 - (void)loadView {
     [super loadView];
+    [self initialize];
     [self.view addSubview:self.webView];
+    id topLayoutGuide = self.topLayoutGuide;
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_webView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_webView)]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide][_webView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_webView, topLayoutGuide)]];
 }
 
 - (MSWebView *)webView {
     if (!_webView) {
-        _webView = [[MSWebView alloc] initWithFrame:self.view.bounds usingUIWebView:self.useUIWebView];
+        _webView = [[MSWebView alloc] initWithFrame:CGRectZero usingUIWebView:self.useUIWebView];
         _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
     }
     return _webView;
@@ -40,16 +44,13 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
     [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://tmall.com"]]];
 }
 
 - (void)viewDidLayoutSubviews {
     [super viewDidLayoutSubviews];
-    self.webView.frame = self.view.bounds;
-    
-    UIEdgeInsets insets = UIEdgeInsetsMake(0, 0, 0, 0);
-    self.webView.scrollView.contentInset = insets;
-    self.webView.scrollView.scrollIndicatorInsets = insets;
 }
 
 - (void)didReceiveMemoryWarning {
