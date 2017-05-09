@@ -50,7 +50,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic, readonly) JSContext *jsContext;
 
 ///WKWebView 跟网页进行交互的方法。
-- (void)addScriptMessageHandler:(id <WKScriptMessageHandler>)scriptMessageHandler name:(NSString * _Nullable)name;
+- (void)addScriptMessageHandler:(id <WKScriptMessageHandler>)scriptMessageHandler name:(NSString *_Nullable)name;
 
 ///back 层数
 - (NSInteger)countOfHistory;

@@ -23,10 +23,10 @@ typedef void (^MS_NJKWebViewProgressBlock)(float progress);
 
 @protocol MS_NJKWebViewProgressDelegate;
 
-@interface MS_NJKWebViewProgress : NSObject<UIWebViewDelegate>
+@interface MS_NJKWebViewProgress : NSObject <UIWebViewDelegate>
 
-@property (nonatomic, njk_weak) id<MS_NJKWebViewProgressDelegate>progressDelegate;
-@property (nonatomic, njk_weak) id<UIWebViewDelegate>webViewProxyDelegate;
+@property (nonatomic, njk_weak) id <MS_NJKWebViewProgressDelegate> progressDelegate;
+@property (nonatomic, njk_weak) id <UIWebViewDelegate> webViewProxyDelegate;
 @property (nonatomic, copy) MS_NJKWebViewProgressBlock progressBlock;
 @property (nonatomic, readonly) float progress; // 0.0..1.0
 

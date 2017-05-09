@@ -101,7 +101,7 @@ static BOOL canUseWkWebView = NO;
     // Add label and constraints.
     UIView *contentView = self.scrollView.subviews.firstObject;
     [contentView addSubview:self.backgroundLabel];
-    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_backgroundLabel(<=width)]" options:0 metrics:@{@"width":@([UIScreen mainScreen].bounds.size.width)} views:NSDictionaryOfVariableBindings(_backgroundLabel)]];
+    [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_backgroundLabel(<=width)]" options:0 metrics:@{@"width": @([UIScreen mainScreen].bounds.size.width)} views:NSDictionaryOfVariableBindings(_backgroundLabel)]];
     [contentView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
     [contentView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeTop multiplier:1.0 constant:-20]];
     
@@ -153,9 +153,13 @@ static BOOL canUseWkWebView = NO;
     [self.progressView setProgress:estimatedProgress animated:estimatedProgress > 0.1];
     CGFloat hideProgress = estimatedProgress >= 0.95f ? 0.0f : 1.0f;
     if (self.progressView.alpha != hideProgress) {
-        [UIView animateWithDuration:1.0f * estimatedProgress delay:0.5f options:UIViewAnimationOptionCurveEaseOut animations:^{
-            self.progressView.alpha = hideProgress;
-        } completion:nil];
+        [UIView animateWithDuration:1.0f * estimatedProgress
+                              delay:0.5f
+                            options:UIViewAnimationOptionCurveEaseOut
+                         animations:^{
+                             self.progressView.alpha = hideProgress;
+                         }
+                         completion:nil];
     }
 }
 
@@ -185,8 +189,8 @@ static BOOL canUseWkWebView = NO;
     }
 }
 
--(void)pushCurrentSnapshotViewWithRequest:(NSURLRequest*)request{
-    NSURLRequest* lastRequest = (NSURLRequest*)[[self.snapshots lastObject] objectForKey:@"request"];
+- (void)pushCurrentSnapshotViewWithRequest:(NSURLRequest *)request {
+    NSURLRequest *lastRequest = (NSURLRequest *) [[self.snapshots lastObject] objectForKey:@"request"];
     
     // 如果url是很奇怪的就不push
     if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
@@ -198,11 +202,11 @@ static BOOL canUseWkWebView = NO;
         return;
     }
     
-    UIView* currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
+    UIView *currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
     [self.snapshots addObject:
      @{
-       @"request":request,
-       @"snapShotView":currentSnapshotView}
+       @"request": request,
+       @"snapShotView": currentSnapshotView}
      ];
 }
 
@@ -210,7 +214,7 @@ static BOOL canUseWkWebView = NO;
     if (self.isSwipingBack) {
         return;
     }
-    if (!((UIWebView *) self.realWebView).canGoBack) {
+    if (!self.canGoBack) {
         return;
     }
     
@@ -218,7 +222,7 @@ static BOOL canUseWkWebView = NO;
     //create a center of scrren
     CGPoint center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
     
-    self.currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
+    self.currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:NO];
     
     //add shadows just like UINavigationController
     self.currentSnapshotView.layer.shadowColor = [UIColor blackColor].CGColor;
@@ -275,38 +279,42 @@ static BOOL canUseWkWebView = NO;
     
     if (self.currentSnapshotView.center.x >= boundsWidth) {
         //When pop success.
-        [UIView animateWithDuration:0.2 animations:^{
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-            
-            self.currentSnapshotView.center = CGPointMake(boundsWidth * 3 / 2, boundsHeight / 2);
-            self.previousSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
-            self.swipingBackgoundView.alpha = 0;
-        }                completion:^(BOOL finished) {
-            [self.previousSnapshotView removeFromSuperview];
-            [self.swipingBackgoundView removeFromSuperview];
-            [self.currentSnapshotView removeFromSuperview];
-            [(UIWebView *) self.realWebView goBack];
-            [self.snapshots removeLastObject];
-            self.userInteractionEnabled = YES;
-            
-            self.isSwipingBack = NO;
-        }];
+        [UIView animateWithDuration:0.2
+                         animations:^{
+                             [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                             
+                             self.currentSnapshotView.center = CGPointMake(boundsWidth * 3 / 2, boundsHeight / 2);
+                             self.previousSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
+                             self.swipingBackgoundView.alpha = 0;
+                         }
+                         completion:^(BOOL finished) {
+                             [self.previousSnapshotView removeFromSuperview];
+                             [self.swipingBackgoundView removeFromSuperview];
+                             [self.currentSnapshotView removeFromSuperview];
+                             [(UIWebView *) self.realWebView goBack];
+                             [self.snapshots removeLastObject];
+                             self.userInteractionEnabled = YES;
+                             
+                             self.isSwipingBack = NO;
+                         }];
     } else {
         //If pop fail.
-        [UIView animateWithDuration:0.2 animations:^{
-            [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-            
-            self.currentSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
-            self.previousSnapshotView.center = CGPointMake(boundsWidth / 2 - 60, boundsHeight / 2);
-            self.previousSnapshotView.alpha = 1;
-        }                completion:^(BOOL finished) {
-            [self.previousSnapshotView removeFromSuperview];
-            [self.swipingBackgoundView removeFromSuperview];
-            [self.currentSnapshotView removeFromSuperview];
-            self.userInteractionEnabled = YES;
-            
-            self.isSwipingBack = NO;
-        }];
+        [UIView animateWithDuration:0.2
+                         animations:^{
+                             [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                             
+                             self.currentSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
+                             self.previousSnapshotView.center = CGPointMake(boundsWidth / 2 - 60, boundsHeight / 2);
+                             self.previousSnapshotView.alpha = 1;
+                         }
+                         completion:^(BOOL finished) {
+                             [self.previousSnapshotView removeFromSuperview];
+                             [self.swipingBackgoundView removeFromSuperview];
+                             [self.currentSnapshotView removeFromSuperview];
+                             self.userInteractionEnabled = YES;
+                             
+                             self.isSwipingBack = NO;
+                         }];
     }
 }
 
@@ -316,7 +324,7 @@ static BOOL canUseWkWebView = NO;
     if (_usingUIWebView) {
         self.swipePanGesture.enabled = self.allowsBackForwardNavigationGestures;
     } else {
-        [(WKWebView *)self.realWebView setAllowsBackForwardNavigationGestures:self.allowsBackForwardNavigationGestures];
+        [(WKWebView *) self.realWebView setAllowsBackForwardNavigationGestures:self.allowsBackForwardNavigationGestures];
     }
 }
 
@@ -347,10 +355,7 @@ static BOOL canUseWkWebView = NO;
     webView.allowsBackForwardNavigationGestures = self.allowsBackForwardNavigationGestures;
     SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
     if ([webView respondsToSelector:linkPreviewSelector]) {
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
-        [webView performSelector:linkPreviewSelector withObject:@(YES)];
-#pragma clang diagnostic pop
+        webView.allowsLinkPreview = YES;
     }
     
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
@@ -494,16 +499,21 @@ static BOOL canUseWkWebView = NO;
     NSString *host = webView.URL.host;
     // Initialize alert view controller.
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:host ?: NSLocalizedString(@"messages", nil) message:message preferredStyle:UIAlertControllerStyleAlert];
+    
     // Initialize cancel action.
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        [alert dismissViewControllerAnimated:YES completion:NULL];
-        completionHandler(NO);
-    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction *action) {
+                                                             [alert dismissViewControllerAnimated:YES completion:NULL];
+                                                             completionHandler(NO);
+                                                         }];
     // Initialize ok action.
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [alert dismissViewControllerAnimated:YES completion:NULL];
-        completionHandler(YES);
-    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm")
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *action) {
+                                                         [alert dismissViewControllerAnimated:YES completion:NULL];
+                                                         completionHandler(YES);
+                                                     }];
     // Add actions.
     [alert addAction:cancelAction];
     [alert addAction:okAction];
@@ -513,26 +523,33 @@ static BOOL canUseWkWebView = NO;
     // Get the host of url.
     NSString *host = webView.URL.host;
     // Initialize alert view controller.
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:prompt ?: NSLocalizedString(@"messages", nil) message:host preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:prompt ?: NSLocalizedString(@"messages", nil)
+                                                                   message:host
+                                                            preferredStyle:UIAlertControllerStyleAlert];
+    
     // Add text field.
     [alert addTextFieldWithConfigurationHandler:^(UITextField *_Nonnull textField) {
         textField.placeholder = defaultText ?: NSLocalizedString(@"input", nil);
         textField.font = [UIFont systemFontOfSize:12];
     }];
     // Initialize cancel action.
-    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction *action) {
-        [alert dismissViewControllerAnimated:YES completion:NULL];
-        // Get inputed string.
-        NSString *string = [alert.textFields firstObject].text;
-        completionHandler(string ?: defaultText);
-    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"cancel", @"cancel")
+                                                           style:UIAlertActionStyleCancel
+                                                         handler:^(UIAlertAction *action) {
+                                                             [alert dismissViewControllerAnimated:YES completion:NULL];
+                                                             // Get inputed string.
+                                                             NSString *string = [alert.textFields firstObject].text;
+                                                             completionHandler(string ?: defaultText);
+                                                         }];
     // Initialize ok action.
-    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [alert dismissViewControllerAnimated:YES completion:NULL];
-        // Get inputed string.
-        NSString *string = [alert.textFields firstObject].text;
-        completionHandler(string ?: defaultText);
-    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"confirm", @"confirm")
+                                                       style:UIAlertActionStyleDefault
+                                                     handler:^(UIAlertAction *action) {
+                                                         [alert dismissViewControllerAnimated:YES completion:NULL];
+                                                         // Get inputed string.
+                                                         NSString *string = [alert.textFields firstObject].text;
+                                                         completionHandler(string ?: defaultText);
+                                                     }];
     // Add actions.
     [alert addAction:cancelAction];
     [alert addAction:okAction];
@@ -584,7 +601,7 @@ static BOOL canUseWkWebView = NO;
     self.estimatedProgress = 1.0f;
     
     NSString *host = self.currentRequest.URL.host;
-    self.backgroundLabel.text = [NSString stringWithFormat:@"%@\"%@\"%@.", NSLocalizedString(@"web page",@""), host, NSLocalizedString(@"provided",@"")];
+    self.backgroundLabel.text = [NSString stringWithFormat:@"%@\"%@\"%@.", NSLocalizedString(@"web page", @""), host, NSLocalizedString(@"provided", @"")];
     if ([self.delegate respondsToSelector:@selector(webViewDidFinishLoad:)]) {
         [self.delegate webViewDidFinishLoad:self];
     }
@@ -713,6 +730,10 @@ static BOOL canUseWkWebView = NO;
 
 - (id)goBack {
     if (_usingUIWebView) {
+        if ([self.snapshots count] > 0) {
+            [self.snapshots removeLastObject];
+        }
+        
         [(UIWebView *) self.realWebView goBack];
         return nil;
     } else {
@@ -851,12 +872,8 @@ static BOOL canUseWkWebView = NO;
     if (_usingUIWebView) {
         UIWebView *webView = self.realWebView;
         
-        int count = [[webView stringByEvaluatingJavaScriptFromString:@"window.history.length"] intValue];
-        if (count) {
-            return count;
-        } else {
-            return 1;
-        }
+        NSInteger count = [[webView stringByEvaluatingJavaScriptFromString:@"window.history.length"] integerValue];
+        return count ?: 1;
     } else {
         WKWebView *webView = self.realWebView;
         return webView.backForwardList.backList.count;
@@ -876,6 +893,13 @@ static BOOL canUseWkWebView = NO;
         if (_usingUIWebView) {
             UIWebView *webView = self.realWebView;
             [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.history.go(-%ld)", (long) step]];
+            if (self.snapshots.count >= step) {
+                NSUInteger snapshotsCount = self.snapshots.count;
+                NSIndexSet *indexSet = [self.snapshots indexesOfObjectsPassingTest:^BOOL(NSString *_Nonnull var, NSUInteger idx, BOOL *_Nonnull stop) {
+                    return idx >= (snapshotsCount - step);
+                }];
+                [self.snapshots removeObjectsAtIndexes:indexSet];
+            }
         } else {
             WKWebView *webView = self.realWebView;
             WKBackForwardListItem *backItem = webView.backForwardList.backList[step];
