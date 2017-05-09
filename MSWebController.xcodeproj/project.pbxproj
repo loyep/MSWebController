@@ -17,6 +17,13 @@
 		CFCC8A071EBF47D500DFB42A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A061EBF47D500DFB42A /* JavaScriptCore.framework */; };
 		CFCC8A0D1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = CFCC8A091EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h */; };
 		CFCC8A0E1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A0A1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m */; };
+		CFDD876C1EC2118500AEEA47 /* MSWebActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = CFDD876A1EC2118500AEEA47 /* MSWebActivity.h */; };
+		CFDD876D1EC2118500AEEA47 /* MSWebActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDD876B1EC2118500AEEA47 /* MSWebActivity.m */; };
+		CFDD87701EC211B100AEEA47 /* MSWebActivitySafari.h in Headers */ = {isa = PBXBuildFile; fileRef = CFDD876E1EC211B100AEEA47 /* MSWebActivitySafari.h */; };
+		CFDD87711EC211B100AEEA47 /* MSWebActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDD876F1EC211B100AEEA47 /* MSWebActivitySafari.m */; };
+		CFDD87741EC211DD00AEEA47 /* MSWebActivityChrome.h in Headers */ = {isa = PBXBuildFile; fileRef = CFDD87721EC211DD00AEEA47 /* MSWebActivityChrome.h */; };
+		CFDD87751EC211DD00AEEA47 /* MSWebActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDD87731EC211DD00AEEA47 /* MSWebActivityChrome.m */; };
+		CFDD87771EC2121200AEEA47 /* MSWebController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CFDD87761EC2121200AEEA47 /* MSWebController.bundle */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +50,13 @@
 		CFCC8A061EBF47D500DFB42A /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		CFCC8A091EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgress.h; sourceTree = "<group>"; };
 		CFCC8A0A1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
+		CFDD876A1EC2118500AEEA47 /* MSWebActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivity.h; sourceTree = "<group>"; };
+		CFDD876B1EC2118500AEEA47 /* MSWebActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivity.m; sourceTree = "<group>"; };
+		CFDD876E1EC211B100AEEA47 /* MSWebActivitySafari.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivitySafari.h; sourceTree = "<group>"; };
+		CFDD876F1EC211B100AEEA47 /* MSWebActivitySafari.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivitySafari.m; sourceTree = "<group>"; };
+		CFDD87721EC211DD00AEEA47 /* MSWebActivityChrome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivityChrome.h; sourceTree = "<group>"; };
+		CFDD87731EC211DD00AEEA47 /* MSWebActivityChrome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivityChrome.m; sourceTree = "<group>"; };
+		CFDD87761EC2121200AEEA47 /* MSWebController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MSWebController.bundle; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,6 +107,13 @@
 				CFCC89FC1EBF1F4100DFB42A /* MSWebController.m */,
 				CFCC89FF1EBF287000DFB42A /* MSWebView.h */,
 				CFCC8A001EBF287000DFB42A /* MSWebView.m */,
+				CFDD876A1EC2118500AEEA47 /* MSWebActivity.h */,
+				CFDD876B1EC2118500AEEA47 /* MSWebActivity.m */,
+				CFDD876E1EC211B100AEEA47 /* MSWebActivitySafari.h */,
+				CFDD876F1EC211B100AEEA47 /* MSWebActivitySafari.m */,
+				CFDD87721EC211DD00AEEA47 /* MSWebActivityChrome.h */,
+				CFDD87731EC211DD00AEEA47 /* MSWebActivityChrome.m */,
+				CFDD87761EC2121200AEEA47 /* MSWebController.bundle */,
 				CFCC8A081EBF4E8B00DFB42A /* NJKWebViewProgress */,
 			);
 			path = Sources;
@@ -140,6 +161,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFDD87741EC211DD00AEEA47 /* MSWebActivityChrome.h in Headers */,
+				CFDD876C1EC2118500AEEA47 /* MSWebActivity.h in Headers */,
+				CFDD87701EC211B100AEEA47 /* MSWebActivitySafari.h in Headers */,
 				CFCC8A0D1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h in Headers */,
 				CFCC8A011EBF287000DFB42A /* MSWebView.h in Headers */,
 				CFCC89FD1EBF1F4100DFB42A /* MSWebController.h in Headers */,
@@ -227,6 +251,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFDD87771EC2121200AEEA47 /* MSWebController.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -245,6 +270,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				CFCC89FE1EBF1F4100DFB42A /* MSWebController.m in Sources */,
+				CFDD87711EC211B100AEEA47 /* MSWebActivitySafari.m in Sources */,
+				CFDD876D1EC2118500AEEA47 /* MSWebActivity.m in Sources */,
+				CFDD87751EC211DD00AEEA47 /* MSWebActivityChrome.m in Sources */,
 				CFCC8A0E1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m in Sources */,
 				CFCC8A021EBF287000DFB42A /* MSWebView.m in Sources */,
 			);

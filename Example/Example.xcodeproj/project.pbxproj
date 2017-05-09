@@ -22,7 +22,10 @@
 		CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */; };
 		CFCC8A341EBF74AB00DFB42A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A331EBF74AB00DFB42A /* WebKit.framework */; };
 		CFCC8A361EBF74DF00DFB42A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */; };
-		CFCC8A391EBF874100DFB42A /* MSWebActivityController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A381EBF874100DFB42A /* MSWebActivityController.m */; };
+		CFCC8A391EBF874100DFB42A /* MSWebActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A381EBF874100DFB42A /* MSWebActivity.m */; };
+		CFDD877D1EC2170900AEEA47 /* MSWebActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDD87791EC2170900AEEA47 /* MSWebActivityChrome.m */; };
+		CFDD877E1EC2170900AEEA47 /* MSWebActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDD877B1EC2170900AEEA47 /* MSWebActivitySafari.m */; };
+		CFDD877F1EC2170900AEEA47 /* MSWebController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CFDD877C1EC2170900AEEA47 /* MSWebController.bundle */; };
 		F0E81F3B6ED9A4B61046648A /* Pods_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A533021B86C8F119A8434BFA /* Pods_ExampleUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -75,8 +78,13 @@
 		CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
 		CFCC8A331EBF74AB00DFB42A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		CFCC8A371EBF874100DFB42A /* MSWebActivityController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivityController.h; sourceTree = "<group>"; };
-		CFCC8A381EBF874100DFB42A /* MSWebActivityController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivityController.m; sourceTree = "<group>"; };
+		CFCC8A371EBF874100DFB42A /* MSWebActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivity.h; sourceTree = "<group>"; };
+		CFCC8A381EBF874100DFB42A /* MSWebActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivity.m; sourceTree = "<group>"; };
+		CFDD87781EC2170900AEEA47 /* MSWebActivityChrome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivityChrome.h; sourceTree = "<group>"; };
+		CFDD87791EC2170900AEEA47 /* MSWebActivityChrome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivityChrome.m; sourceTree = "<group>"; };
+		CFDD877A1EC2170900AEEA47 /* MSWebActivitySafari.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivitySafari.h; sourceTree = "<group>"; };
+		CFDD877B1EC2170900AEEA47 /* MSWebActivitySafari.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivitySafari.m; sourceTree = "<group>"; };
+		CFDD877C1EC2170900AEEA47 /* MSWebController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MSWebController.bundle; sourceTree = "<group>"; };
 		D40782981139D2598C0B9FC6 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleTests/Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE2EBD327772BB1EABF549FF /* Pods_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -204,12 +212,17 @@
 		CFCC8A221EBF716700DFB42A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				CFDD87781EC2170900AEEA47 /* MSWebActivityChrome.h */,
+				CFDD87791EC2170900AEEA47 /* MSWebActivityChrome.m */,
+				CFDD877A1EC2170900AEEA47 /* MSWebActivitySafari.h */,
+				CFDD877B1EC2170900AEEA47 /* MSWebActivitySafari.m */,
+				CFDD877C1EC2170900AEEA47 /* MSWebController.bundle */,
 				CFCC8A231EBF716700DFB42A /* MSWebController.h */,
 				CFCC8A241EBF716700DFB42A /* MSWebController.m */,
 				CFCC8A251EBF716700DFB42A /* MSWebView.h */,
 				CFCC8A261EBF716700DFB42A /* MSWebView.m */,
-				CFCC8A371EBF874100DFB42A /* MSWebActivityController.h */,
-				CFCC8A381EBF874100DFB42A /* MSWebActivityController.m */,
+				CFCC8A371EBF874100DFB42A /* MSWebActivity.h */,
+				CFCC8A381EBF874100DFB42A /* MSWebActivity.m */,
 				CFCC8A271EBF716700DFB42A /* NJKWebViewProgress */,
 			);
 			name = Sources;
@@ -340,6 +353,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CFDD877F1EC2170900AEEA47 /* MSWebController.bundle in Resources */,
 				CF3779911EBD5F5E0038F868 /* LaunchScreen.storyboard in Resources */,
 				CF37798E1EBD5F5E0038F868 /* Assets.xcassets in Resources */,
 				CF37798C1EBD5F5E0038F868 /* Main.storyboard in Resources */,
@@ -506,10 +520,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF3779891EBD5F5E0038F868 /* ViewController.m in Sources */,
+				CFDD877D1EC2170900AEEA47 /* MSWebActivityChrome.m in Sources */,
 				CF3779861EBD5F5E0038F868 /* AppDelegate.m in Sources */,
 				CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */,
+				CFDD877E1EC2170900AEEA47 /* MSWebActivitySafari.m in Sources */,
 				CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */,
-				CFCC8A391EBF874100DFB42A /* MSWebActivityController.m in Sources */,
+				CFCC8A391EBF874100DFB42A /* MSWebActivity.m in Sources */,
 				CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */,
 				CF3779831EBD5F5E0038F868 /* main.m in Sources */,
 			);
