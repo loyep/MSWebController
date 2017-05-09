@@ -923,31 +923,21 @@ static BOOL canUseWkWebView = NO;
 #pragma mark - forwardInvocation
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
-    if ([super respondsToSelector:aSelector]) return YES;
+    if ([self.realWebView respondsToSelector:aSelector]) return YES;
     if ([self.delegate respondsToSelector:aSelector]) return YES;
-    return [self.realWebView respondsToSelector:aSelector];
+    return [super respondsToSelector:aSelector];
 }
 
-- (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
-    NSMethodSignature *methodSign = [super methodSignatureForSelector:selector];
-    if (methodSign) {
-        return methodSign;
+- (id)forwardingTargetForSelector:(SEL)aSelector {
+    if ([super respondsToSelector:aSelector]) {
+        return self;
+    } else if ([self.realWebView respondsToSelector:aSelector]) {
+        return self.realWebView;
+    } else if ([self.delegate respondsToSelector:aSelector]) {
+        return self.delegate;
     }
-
-    if ([self.realWebView respondsToSelector:selector]) {
-        methodSign = [self.realWebView methodSignatureForSelector:selector];
-    } else {
-        methodSign = [(id) self.delegate methodSignatureForSelector:selector];
-    }
-    return methodSign;
-}
-
-- (void)forwardInvocation:(NSInvocation *)invocation {
-    if ([self.realWebView respondsToSelector:invocation.selector]) {
-        [invocation invokeWithTarget:self.realWebView];
-    } else {
-        [invocation invokeWithTarget:self.delegate];
-    }
+    
+    return self;
 }
 
 #pragma mark - clean
