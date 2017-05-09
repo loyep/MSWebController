@@ -48,6 +48,8 @@ static BOOL canUseWkWebView = NO;
     canUseWkWebView = (NSClassFromString(@"WKWebView") != nil);
 }
 
+#pragma mark - initialize
+
 - (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
     if (self) {
@@ -129,6 +131,93 @@ static BOOL canUseWkWebView = NO;
     return _backgroundLabel;
 }
 
+- (void)setAllowsBackForwardNavigationGestures:(BOOL)allowsBackForwardNavigationGestures {
+    _allowsBackForwardNavigationGestures = allowsBackForwardNavigationGestures;
+    
+    if (_usingUIWebView) {
+        self.swipePanGesture.enabled = self.allowsBackForwardNavigationGestures;
+    } else {
+        [(WKWebView *) self.realWebView setAllowsBackForwardNavigationGestures:self.allowsBackForwardNavigationGestures];
+    }
+}
+
+#pragma mark - initWKWebView
+
+- (void)initWKWebView {
+    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
+    configuration.preferences.minimumFontSize = 9.0;
+    
+    if ([configuration respondsToSelector:@selector(setApplicationNameForUserAgent:)]) {
+        [configuration setApplicationNameForUserAgent:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]];
+    }
+    if ([configuration respondsToSelector:@selector(setAllowsInlineMediaPlayback:)]) {
+        [configuration setAllowsInlineMediaPlayback:YES];
+    }
+    
+    configuration.userContentController = [[WKUserContentController alloc] init];
+    
+    WKPreferences *preferences = [[WKPreferences alloc] init];
+    preferences.javaScriptCanOpenWindowsAutomatically = YES;
+    configuration.preferences = preferences;
+    
+    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:configuration];
+    webView.UIDelegate = self;
+    webView.navigationDelegate = self;
+    
+    webView.backgroundColor = [UIColor clearColor];
+    webView.opaque = NO;
+    
+    webView.allowsBackForwardNavigationGestures = self.allowsBackForwardNavigationGestures;
+    SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
+    if ([webView respondsToSelector:linkPreviewSelector]) {
+        webView.allowsLinkPreview = YES;
+    }
+    
+    [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
+    [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+    _realWebView = webView;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"estimatedProgress"]) {
+        self.estimatedProgress = [change[NSKeyValueChangeNewKey] doubleValue];
+    } else if ([keyPath isEqualToString:@"title"]) {
+        self.title = change[NSKeyValueChangeNewKey];
+    } else {
+        [self willChangeValueForKey:keyPath];
+        [self didChangeValueForKey:keyPath];
+    }
+}
+
+#pragma mark - initUIWebView
+
+- (void)initUIWebView {
+    self.snapshots = [NSMutableArray array];
+    
+    UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
+    webView.backgroundColor = [UIColor clearColor];
+    webView.allowsInlineMediaPlayback = YES;
+    webView.mediaPlaybackRequiresUserAction = NO;
+    [webView addGestureRecognizer:self.swipePanGesture];
+    
+    webView.opaque = NO;
+    for (UIView *subview in [webView.scrollView subviews]) {
+        if ([subview isKindOfClass:[UIImageView class]]) {
+            ((UIImageView *) subview).image = nil;
+            subview.backgroundColor = [UIColor clearColor];
+        }
+    }
+    
+    self.njkWebViewProgress = [[MS_NJKWebViewProgress alloc] init];
+    webView.delegate = self.njkWebViewProgress;
+    self.njkWebViewProgress.webViewProxyDelegate = self;
+    self.njkWebViewProgress.progressDelegate = self;
+    
+    _realWebView = webView;
+}
+
+#pragma mark delegate
+
 - (void)setDelegate:(id <MSWebViewDelegate>)delegate {
     _delegate = delegate;
     if (_usingUIWebView) {
@@ -143,6 +232,8 @@ static BOOL canUseWkWebView = NO;
         webView.navigationDelegate = self;
     }
 }
+
+#pragma mark - progress
 
 - (void)setEstimatedProgress:(CGFloat)estimatedProgress {
     if (_estimatedProgress == estimatedProgress) {
@@ -316,87 +407,6 @@ static BOOL canUseWkWebView = NO;
                              self.isSwipingBack = NO;
                          }];
     }
-}
-
-- (void)setAllowsBackForwardNavigationGestures:(BOOL)allowsBackForwardNavigationGestures {
-    _allowsBackForwardNavigationGestures = allowsBackForwardNavigationGestures;
-    
-    if (_usingUIWebView) {
-        self.swipePanGesture.enabled = self.allowsBackForwardNavigationGestures;
-    } else {
-        [(WKWebView *) self.realWebView setAllowsBackForwardNavigationGestures:self.allowsBackForwardNavigationGestures];
-    }
-}
-
-- (void)initWKWebView {
-    WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
-    configuration.preferences.minimumFontSize = 9.0;
-    
-    if ([configuration respondsToSelector:@selector(setApplicationNameForUserAgent:)]) {
-        [configuration setApplicationNameForUserAgent:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]];
-    }
-    if ([configuration respondsToSelector:@selector(setAllowsInlineMediaPlayback:)]) {
-        [configuration setAllowsInlineMediaPlayback:YES];
-    }
-    
-    configuration.userContentController = [[WKUserContentController alloc] init];
-    
-    WKPreferences *preferences = [[WKPreferences alloc] init];
-    preferences.javaScriptCanOpenWindowsAutomatically = YES;
-    configuration.preferences = preferences;
-    
-    WKWebView *webView = [[WKWebView alloc] initWithFrame:self.bounds configuration:configuration];
-    webView.UIDelegate = self;
-    webView.navigationDelegate = self;
-    
-    webView.backgroundColor = [UIColor clearColor];
-    webView.opaque = NO;
-    
-    webView.allowsBackForwardNavigationGestures = self.allowsBackForwardNavigationGestures;
-    SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
-    if ([webView respondsToSelector:linkPreviewSelector]) {
-        webView.allowsLinkPreview = YES;
-    }
-    
-    [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
-    [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
-    _realWebView = webView;
-}
-
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if ([keyPath isEqualToString:@"estimatedProgress"]) {
-        self.estimatedProgress = [change[NSKeyValueChangeNewKey] doubleValue];
-    } else if ([keyPath isEqualToString:@"title"]) {
-        self.title = change[NSKeyValueChangeNewKey];
-    } else {
-        [self willChangeValueForKey:keyPath];
-        [self didChangeValueForKey:keyPath];
-    }
-}
-
-- (void)initUIWebView {
-    self.snapshots = [NSMutableArray array];
-    
-    UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
-    webView.backgroundColor = [UIColor clearColor];
-    webView.allowsInlineMediaPlayback = YES;
-    webView.mediaPlaybackRequiresUserAction = NO;
-    [webView addGestureRecognizer:self.swipePanGesture];
-    
-    webView.opaque = NO;
-    for (UIView *subview in [webView.scrollView subviews]) {
-        if ([subview isKindOfClass:[UIImageView class]]) {
-            ((UIImageView *) subview).image = nil;
-            subview.backgroundColor = [UIColor clearColor];
-        }
-    }
-    
-    self.njkWebViewProgress = [[MS_NJKWebViewProgress alloc] init];
-    webView.delegate = self.njkWebViewProgress;
-    self.njkWebViewProgress.webViewProxyDelegate = self;
-    self.njkWebViewProgress.progressDelegate = self;
-    
-    _realWebView = webView;
 }
 
 #pragma mark - js Core
@@ -910,27 +920,24 @@ static BOOL canUseWkWebView = NO;
     }
 }
 
-#pragma mark -  如果没有找到方法 去realWebView 中调用
+#pragma mark - forwardInvocation
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
-    BOOL hasResponds = [super respondsToSelector:aSelector];
-    if (hasResponds == NO) {
-        hasResponds = [self.delegate respondsToSelector:aSelector];
-    }
-    if (hasResponds == NO) {
-        hasResponds = [self.realWebView respondsToSelector:aSelector];
-    }
-    return hasResponds;
+    if ([super respondsToSelector:aSelector]) return YES;
+    if ([self.delegate respondsToSelector:aSelector]) return YES;
+    return [self.realWebView respondsToSelector:aSelector];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)selector {
     NSMethodSignature *methodSign = [super methodSignatureForSelector:selector];
-    if (methodSign == nil) {
-        if ([self.realWebView respondsToSelector:selector]) {
-            methodSign = [self.realWebView methodSignatureForSelector:selector];
-        } else {
-            methodSign = [(id) self.delegate methodSignatureForSelector:selector];
-        }
+    if (methodSign) {
+        return methodSign;
+    }
+
+    if ([self.realWebView respondsToSelector:selector]) {
+        methodSign = [self.realWebView methodSignatureForSelector:selector];
+    } else {
+        methodSign = [(id) self.delegate methodSignatureForSelector:selector];
     }
     return methodSign;
 }
@@ -943,7 +950,7 @@ static BOOL canUseWkWebView = NO;
     }
 }
 
-#pragma mark - 清理
+#pragma mark - clean
 
 - (void)dealloc {
     if (_usingUIWebView) {
