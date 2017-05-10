@@ -1,0 +1,6 @@
+framework module MSWebController {
+  umbrella header "MSWebController-umbrella.h"
+
+  export *
+  module * { export * }
+}

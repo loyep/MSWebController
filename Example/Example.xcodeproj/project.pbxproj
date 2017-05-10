@@ -17,15 +17,8 @@
 		CF3779911EBD5F5E0038F868 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = CF37798F1EBD5F5E0038F868 /* LaunchScreen.storyboard */; };
 		CF37799C1EBD5F5F0038F868 /* ExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF37799B1EBD5F5F0038F868 /* ExampleTests.m */; };
 		CF3779A71EBD5F5F0038F868 /* ExampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3779A61EBD5F5F0038F868 /* ExampleUITests.m */; };
-		CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A241EBF716700DFB42A /* MSWebController.m */; };
-		CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A261EBF716700DFB42A /* MSWebView.m */; };
-		CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */; };
 		CFCC8A341EBF74AB00DFB42A /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A331EBF74AB00DFB42A /* WebKit.framework */; };
 		CFCC8A361EBF74DF00DFB42A /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */; };
-		CFCC8A391EBF874100DFB42A /* MSWebActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = CFCC8A381EBF874100DFB42A /* MSWebActivity.m */; };
-		CFDD877D1EC2170900AEEA47 /* MSWebActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDD87791EC2170900AEEA47 /* MSWebActivityChrome.m */; };
-		CFDD877E1EC2170900AEEA47 /* MSWebActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = CFDD877B1EC2170900AEEA47 /* MSWebActivitySafari.m */; };
-		CFDD877F1EC2170900AEEA47 /* MSWebController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = CFDD877C1EC2170900AEEA47 /* MSWebController.bundle */; };
 		F0E81F3B6ED9A4B61046648A /* Pods_ExampleUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A533021B86C8F119A8434BFA /* Pods_ExampleUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -70,21 +63,8 @@
 		CF3779A21EBD5F5F0038F868 /* ExampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ExampleUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF3779A61EBD5F5F0038F868 /* ExampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ExampleUITests.m; sourceTree = "<group>"; };
 		CF3779A81EBD5F5F0038F868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CFCC8A231EBF716700DFB42A /* MSWebController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebController.h; sourceTree = "<group>"; };
-		CFCC8A241EBF716700DFB42A /* MSWebController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebController.m; sourceTree = "<group>"; };
-		CFCC8A251EBF716700DFB42A /* MSWebView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebView.h; sourceTree = "<group>"; };
-		CFCC8A261EBF716700DFB42A /* MSWebView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebView.m; sourceTree = "<group>"; };
-		CFCC8A281EBF716700DFB42A /* MS_NJKWebViewProgress.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgress.h; sourceTree = "<group>"; };
-		CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
 		CFCC8A331EBF74AB00DFB42A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = System/Library/Frameworks/WebKit.framework; sourceTree = SDKROOT; };
 		CFCC8A351EBF74DF00DFB42A /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
-		CFCC8A371EBF874100DFB42A /* MSWebActivity.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivity.h; sourceTree = "<group>"; };
-		CFCC8A381EBF874100DFB42A /* MSWebActivity.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivity.m; sourceTree = "<group>"; };
-		CFDD87781EC2170900AEEA47 /* MSWebActivityChrome.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivityChrome.h; sourceTree = "<group>"; };
-		CFDD87791EC2170900AEEA47 /* MSWebActivityChrome.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivityChrome.m; sourceTree = "<group>"; };
-		CFDD877A1EC2170900AEEA47 /* MSWebActivitySafari.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebActivitySafari.h; sourceTree = "<group>"; };
-		CFDD877B1EC2170900AEEA47 /* MSWebActivitySafari.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebActivitySafari.m; sourceTree = "<group>"; };
-		CFDD877C1EC2170900AEEA47 /* MSWebController.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MSWebController.bundle; sourceTree = "<group>"; };
 		D40782981139D2598C0B9FC6 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ExampleTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-ExampleTests/Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		EE2EBD327772BB1EABF549FF /* Pods_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_ExampleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -150,9 +130,9 @@
 				CF3779801EBD5F5E0038F868 /* Example */,
 				CF37799A1EBD5F5F0038F868 /* ExampleTests */,
 				CF3779A51EBD5F5F0038F868 /* ExampleUITests */,
-				CF37797F1EBD5F5E0038F868 /* Products */,
-				C4D8070868B2A0C31E833B52 /* Pods */,
 				951BA72685AE75A1631996B3 /* Frameworks */,
+				C4D8070868B2A0C31E833B52 /* Pods */,
+				CF37797F1EBD5F5E0038F868 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
@@ -169,16 +149,15 @@
 		CF3779801EBD5F5E0038F868 /* Example */ = {
 			isa = PBXGroup;
 			children = (
-				CFCC8A221EBF716700DFB42A /* Sources */,
+				CF3779811EBD5F5E0038F868 /* Supporting Files */,
 				CF3779841EBD5F5E0038F868 /* AppDelegate.h */,
 				CF3779851EBD5F5E0038F868 /* AppDelegate.m */,
+				CF37798D1EBD5F5E0038F868 /* Assets.xcassets */,
+				CF3779921EBD5F5E0038F868 /* Info.plist */,
+				CF37798F1EBD5F5E0038F868 /* LaunchScreen.storyboard */,
+				CF37798A1EBD5F5E0038F868 /* Main.storyboard */,
 				CF3779871EBD5F5E0038F868 /* ViewController.h */,
 				CF3779881EBD5F5E0038F868 /* ViewController.m */,
-				CF37798A1EBD5F5E0038F868 /* Main.storyboard */,
-				CF37798D1EBD5F5E0038F868 /* Assets.xcassets */,
-				CF37798F1EBD5F5E0038F868 /* LaunchScreen.storyboard */,
-				CF3779921EBD5F5E0038F868 /* Info.plist */,
-				CF3779811EBD5F5E0038F868 /* Supporting Files */,
 			);
 			path = Example;
 			sourceTree = "<group>";
@@ -188,7 +167,7 @@
 			children = (
 				CF3779821EBD5F5E0038F868 /* main.m */,
 			);
-			name = "Supporting Files";
+			path = "Supporting Files";
 			sourceTree = "<group>";
 		};
 		CF37799A1EBD5F5F0038F868 /* ExampleTests */ = {
@@ -207,35 +186,6 @@
 				CF3779A81EBD5F5F0038F868 /* Info.plist */,
 			);
 			path = ExampleUITests;
-			sourceTree = "<group>";
-		};
-		CFCC8A221EBF716700DFB42A /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				CFDD87781EC2170900AEEA47 /* MSWebActivityChrome.h */,
-				CFDD87791EC2170900AEEA47 /* MSWebActivityChrome.m */,
-				CFDD877A1EC2170900AEEA47 /* MSWebActivitySafari.h */,
-				CFDD877B1EC2170900AEEA47 /* MSWebActivitySafari.m */,
-				CFDD877C1EC2170900AEEA47 /* MSWebController.bundle */,
-				CFCC8A231EBF716700DFB42A /* MSWebController.h */,
-				CFCC8A241EBF716700DFB42A /* MSWebController.m */,
-				CFCC8A251EBF716700DFB42A /* MSWebView.h */,
-				CFCC8A261EBF716700DFB42A /* MSWebView.m */,
-				CFCC8A371EBF874100DFB42A /* MSWebActivity.h */,
-				CFCC8A381EBF874100DFB42A /* MSWebActivity.m */,
-				CFCC8A271EBF716700DFB42A /* NJKWebViewProgress */,
-			);
-			name = Sources;
-			path = ../../Sources;
-			sourceTree = "<group>";
-		};
-		CFCC8A271EBF716700DFB42A /* NJKWebViewProgress */ = {
-			isa = PBXGroup;
-			children = (
-				CFCC8A281EBF716700DFB42A /* MS_NJKWebViewProgress.h */,
-				CFCC8A291EBF716700DFB42A /* MS_NJKWebViewProgress.m */,
-			);
-			path = NJKWebViewProgress;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,7 +303,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CFDD877F1EC2170900AEEA47 /* MSWebController.bundle in Resources */,
 				CF3779911EBD5F5E0038F868 /* LaunchScreen.storyboard in Resources */,
 				CF37798E1EBD5F5E0038F868 /* Assets.xcassets in Resources */,
 				CF37798C1EBD5F5E0038F868 /* Main.storyboard in Resources */,
@@ -520,13 +469,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				CF3779891EBD5F5E0038F868 /* ViewController.m in Sources */,
-				CFDD877D1EC2170900AEEA47 /* MSWebActivityChrome.m in Sources */,
 				CF3779861EBD5F5E0038F868 /* AppDelegate.m in Sources */,
-				CFCC8A2E1EBF716700DFB42A /* MSWebController.m in Sources */,
-				CFDD877E1EC2170900AEEA47 /* MSWebActivitySafari.m in Sources */,
-				CFCC8A2F1EBF716700DFB42A /* MSWebView.m in Sources */,
-				CFCC8A391EBF874100DFB42A /* MSWebActivity.m in Sources */,
-				CFCC8A301EBF716700DFB42A /* MS_NJKWebViewProgress.m in Sources */,
 				CF3779831EBD5F5E0038F868 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -569,6 +512,7 @@
 				CF37798B1EBD5F5E0038F868 /* Base */,
 			);
 			name = Main.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 		CF37798F1EBD5F5E0038F868 /* LaunchScreen.storyboard */ = {
@@ -577,6 +521,7 @@
 				CF3779901EBD5F5E0038F868 /* Base */,
 			);
 			name = LaunchScreen.storyboard;
+			path = .;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */

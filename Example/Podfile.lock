@@ -1,7 +1,5 @@
 PODS:
-  - MSWebController (1.0.0):
-    - MSWebController/Core (= 1.0.0)
-  - MSWebController/Core (1.0.0)
+  - MSWebController (1.0.0)
 
 DEPENDENCIES:
   - MSWebController (from `../`)
@@ -11,7 +9,7 @@ EXTERNAL SOURCES:
     :path: "../"
 
 SPEC CHECKSUMS:
-  MSWebController: 99cf608ce7d45e1af8a653bdd869bebf84af5146
+  MSWebController: a90f2fb518b396efabf758a53de313b50f5c575e
 
 PODFILE CHECKSUM: 2760ebc944e64106ad3e4cadd7da66dcf163fb4b
 

@@ -9,7 +9,7 @@
     "Maxwell": "maxwell.me@live.com"
   },
   "platforms": {
-    "ios": "8.0",
+    "ios": "7.0",
     "osx": "10.10",
     "watchos": "2.0",
     "tvos": "9.0"
@@ -18,13 +18,15 @@
     "git": "https://github.com/MaxseyLau/MSWebController.git",
     "tag": "1.0.0"
   },
-  "default_subspecs": "Core",
   "public_header_files": "Sources/MSWebController.h",
-  "subspecs": [
-    {
-      "name": "Core",
-      "source_files": "Sources/Core/",
-      "frameworks": "WebKit"
-    }
-  ]
+  "resources": [
+    "Sources/*.bundle"
+  ],
+  "source_files": "Sources/**/*.{h,m}",
+  "frameworks": [
+    "UIKit",
+    "Foundation",
+    "WebKit"
+  ],
+  "requires_arc": true
 }
