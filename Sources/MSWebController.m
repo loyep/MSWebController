@@ -53,27 +53,13 @@
     _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
-- (NSBundle *)currentBundle {
-    return [NSBundle bundleWithURL:[[NSBundle bundleForClass:[MSWebController class]] URLForResource:@"MSWebController" withExtension:@"bundle"]];
-}
-
-- (UIImage *)ms_imageNamed:(NSString *)name inBundle:(NSBundle *)bundle {
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
-    return [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
-#elif __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_8_0
-    return [UIImage imageWithContentsOfFile:[bundle pathForResource:name ofType:@"png"]];
-#else
-    if ([UIImage respondsToSelector:@selector(imageNamed:inBundle:compatibleWithTraitCollection:)]) {
-        return [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
-    } else {
-        return [UIImage imageWithContentsOfFile:[bundle pathForResource:name ofType:@"png"]];
-    }
-#endif
+- (UIImage *)ms_imageNamed:(NSString *)name {
+   return [UIImage imageWithContentsOfFile:[[NSBundle bundleForClass:NSClassFromString(@"MSWebController")] pathForResource:name ofType:@"png"]];
 }
 
 - (UIBarButtonItem *)backBarButtonItem {
     if (!_backBarButtonItem) {
-        _backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[self ms_imageNamed:@"MSWebViewControllerBack" inBundle:[self currentBundle]]
+        _backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[self ms_imageNamed:@"MSWebViewControllerBack"]
                                                               style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(goBackTapped:)];
@@ -86,7 +72,7 @@
 
 - (UIBarButtonItem *)forwardBarButtonItem {
     if (!_forwardBarButtonItem) {
-        _forwardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[self ms_imageNamed:@"MSWebViewControllerNext" inBundle:[self currentBundle]]
+        _forwardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[self ms_imageNamed:@"MSWebViewControllerNext"]
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(goForwardTapped:)];
@@ -240,6 +226,16 @@
 - (void)webViewDidFinishLoad:(MSWebView *)webView {
     [self endNetworkActivity];
     [self updateToolbarItems];
+    
+    NSString *title = webView.title;
+    if (title.length > 10) {
+        title = [[title substringToIndex:9] stringByAppendingString:@"…"];
+    }
+    
+    self.title = title;
+    if (self.navigationItem.title == nil) {
+        self.navigationItem.title = title;
+    }
 }
 
 - (void)webView:(MSWebView *)webView didFailLoadWithError:(NSError *)error {

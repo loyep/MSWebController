@@ -28,4 +28,12 @@
     [self activityDidFinish:completed];
 }
 
+- (UIImage *)activityImage {
+    NSString *imageName = @"MSWebViewControllerActivitySafari";
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        imageName = [imageName stringByAppendingString:@"-iPad"];
+    }
+    return [UIImage imageWithContentsOfFile:[[NSBundle bundleForClass:NSClassFromString(@"MSWebController")] pathForResource:imageName ofType:@"png"]];
+}
+
 @end

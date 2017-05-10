@@ -9,6 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "MSWebView.h"
 
+//#define MSWebController() [NSBundle bundleWithURL:[[NSBundle bundleForClass:[MSWebController class]] URLForResource:@"MSWebController" withExtension:@"bundle"]]
+
 @interface MSWebController : UIViewController <MSWebViewDelegate>
 
 @property (nonatomic, strong, readonly) MSWebView *webView;
