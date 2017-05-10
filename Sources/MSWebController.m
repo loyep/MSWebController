@@ -53,13 +53,9 @@
     _webView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 }
 
-- (UIImage *)ms_imageNamed:(NSString *)name {
-   return [UIImage imageWithContentsOfFile:[[NSBundle bundleForClass:NSClassFromString(@"MSWebController")] pathForResource:name ofType:@"png"]];
-}
-
 - (UIBarButtonItem *)backBarButtonItem {
     if (!_backBarButtonItem) {
-        _backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[self ms_imageNamed:@"MSWebViewControllerBack"]
+        _backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[MSWebActivity ms_imageNamed:@"MSWebViewControllerBack"]
                                                               style:UIBarButtonItemStylePlain
                                                              target:self
                                                              action:@selector(goBackTapped:)];
@@ -72,7 +68,7 @@
 
 - (UIBarButtonItem *)forwardBarButtonItem {
     if (!_forwardBarButtonItem) {
-        _forwardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[self ms_imageNamed:@"MSWebViewControllerNext"]
+        _forwardBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[MSWebActivity ms_imageNamed:@"MSWebViewControllerNext"]
                                                                  style:UIBarButtonItemStylePlain
                                                                 target:self
                                                                 action:@selector(goForwardTapped:)];

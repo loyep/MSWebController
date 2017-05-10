@@ -15,4 +15,6 @@
 /// Scheme prefix value.
 @property (nonatomic, strong) NSString *scheme;
 
++ (UIImage *)ms_imageNamed:(NSString *)name;
+
 @end

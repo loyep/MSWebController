@@ -15,10 +15,11 @@
 }
 
 - (UIImage *)activityImage {
-    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-        return [UIImage imageNamed:[NSString stringWithFormat:@"MSWebController.bundle/%@",[self.activityType stringByAppendingString:@"-iPad"]]];
-    else
-        return [UIImage imageNamed:[NSString stringWithFormat:@"MSWebController.bundle/%@",self.activityType]];
+    NSString *imageName = self.activityType;
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        imageName = [self.activityType stringByAppendingString:@"-iPad"];
+    }
+    return [MSWebActivity ms_imageNamed:imageName];
 }
 
 - (void)prepareWithActivityItems:(NSArray *)activityItems {
@@ -27,6 +28,24 @@
             self.URL = activityItem;
         }
     }
+}
+
++ (UIImage *)ms_imageNamed:(NSString *)name {
+    NSBundle *bundle = [NSBundle bundleWithURL:[[NSBundle bundleForClass:NSClassFromString(@"MSWebController")] URLForResource:@"MSWebController" withExtension:@"bundle"]];
+    UIImage *image;
+    
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_8_0
+    image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
+#elif __IPHONE_OS_VERSION_MAX_ALLOWED < __IPHONE_8_0
+    image = [UIImage imageWithContentsOfFile:[bundle pathForResource:name ofType:@"png"]];
+#else
+    if ([UIImage respondsToSelector:@selector(imageNamed:inBundle:compatibleWithTraitCollection:)]) {
+        image = [UIImage imageNamed:name inBundle:bundle compatibleWithTraitCollection:nil];
+    } else {
+        image = [UIImage imageWithContentsOfFile:[bundle pathForResource:name ofType:@"png"]];
+    }
+#endif
+    return image;
 }
 
 @end

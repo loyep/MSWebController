@@ -10,4 +10,5 @@
 
 @interface MSWebActivitySafari : MSWebActivity
 
+
 @end
