@@ -13,12 +13,14 @@
 
 static BOOL canUseWkWebView = NO;
 
+static CGFloat swipeDistance = 100;
+
 @interface MSWebView () <UIWebViewDelegate, WKNavigationDelegate, WKUIDelegate, MS_NJKWebViewProgressDelegate>
 
 @property (nonatomic, assign) CGFloat estimatedProgress;
 @property (nonatomic, strong) NSURLRequest *originRequest;
 @property (nonatomic, strong) NSURLRequest *currentRequest;
-@property (nonatomic, copy) NSString *title;
+@property (nonatomic, copy, readwrite) NSString *title;
 @property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
 @property (nonatomic, strong, readwrite) UIProgressView *progressView;
 
@@ -29,8 +31,8 @@ static BOOL canUseWkWebView = NO;
 
 @property (nonatomic, strong, readwrite) UILabel *backgroundLabel;
 
-@property (nonatomic, strong) UIView *swipeBackArrow;
-@property (nonatomic, strong) UIView *swipeForwardArrow;
+@property (nonatomic, strong) UIImageView *swipeBackArrow;
+@property (nonatomic, strong) UIImageView *swipeForwardArrow;
 
 @end
 
@@ -82,7 +84,6 @@ static BOOL canUseWkWebView = NO;
     
     SEL allowsLinkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
     if ([self.realWebView respondsToSelector:allowsLinkPreviewSelector]) {
-        //        self.realWebView.allowsLinkPreview = YES;
         [self.realWebView performSelector:allowsLinkPreviewSelector withObject:@(YES)];
     }
     
@@ -261,20 +262,22 @@ static BOOL canUseWkWebView = NO;
     return _swipePanGesture;
 }
 
-- (UIView *)swipeBackArrow {
+- (UIImageView *)swipeBackArrow {
     if (!_swipeBackArrow) {
         _swipeBackArrow = [[UIImageView alloc] initWithImage:[MSWebActivity ms_imageNamed:@"MSWebViewControllerBack"]];
-        _swipeBackArrow.backgroundColor = [UIColor redColor];
-        _swipeBackArrow.frame = CGRectMake(0, 0, 50, 50);
+        _swipeBackArrow.backgroundColor = [UIColor lightGrayColor];
+        CGSize imageSize = _swipeBackArrow.image.size;
+        _swipeBackArrow.frame = CGRectMake(0, 0, imageSize.width * 2, imageSize.height * 2);
     }
     return _swipeBackArrow;
 }
 
-- (UIView *)swipeForwardArrow {
+- (UIImageView *)swipeForwardArrow {
     if (!_swipeForwardArrow) {
         _swipeForwardArrow = [[UIImageView alloc] initWithImage:[MSWebActivity ms_imageNamed:@"MSWebViewControllerNext"]];
-        _swipeForwardArrow.backgroundColor = [UIColor yellowColor];
-        _swipeForwardArrow.frame = CGRectMake(0, 0, 50, 50);
+        _swipeForwardArrow.backgroundColor = [UIColor lightGrayColor];
+        CGSize imageSize = _swipeForwardArrow.image.size;
+        _swipeForwardArrow.frame = CGRectMake(0, 0, imageSize.width * 2, imageSize.height * 2);
     }
     return _swipeForwardArrow;
 }
@@ -303,56 +306,71 @@ static BOOL canUseWkWebView = NO;
     
     self.isSwipingBack = YES;
     
-//    if (isBack && !self.canGoBack) {
-//        return;
-//    }
-//    
-//    if (!isBack && !self.canGoForward) {
-//        return;
-//    }
+    BOOL canGoBack = self.canGoBack;
+    if (isBack && !canGoBack) {
+        return;
+    }
     
-    self.swipeBackArrow.center = CGPointMake(- CGRectGetWidth(self.swipeBackArrow.frame) / 2, self.bounds.size.height / 2);
-    self.swipeForwardArrow.center = CGPointMake(self.bounds.size.width + CGRectGetWidth(self.swipeForwardArrow.frame) / 2, self.bounds.size.height / 2);
+    BOOL canGoForward = self.canGoForward;
+    if (!isBack && !canGoForward) {
+        return;
+    }
     
-    [self addSubview:self.swipeBackArrow];
-    [self addSubview:self.swipeForwardArrow];
+    CGRect backFrame = self.swipeBackArrow.frame;
+    backFrame.origin.x = -backFrame.size.width;
+    backFrame.origin.y = (self.bounds.size.height - backFrame.size.height) / 2;
     
+    CGRect forwardFrame = self.swipeForwardArrow.frame;
+    forwardFrame.origin.x = self.bounds.size.width;
+    forwardFrame.origin.y = (self.bounds.size.height - forwardFrame.size.height) / 2;
     
+    self.swipeBackArrow.frame = backFrame;
+    self.swipeForwardArrow.frame = forwardFrame;
+    
+    self.swipeForwardArrow.alpha = 1;
+    self.swipeBackArrow.alpha = 1;
+    
+    if (canGoForward) {
+        [self addSubview:self.swipeForwardArrow];
+    }
+    
+    if (canGoBack) {
+        [self addSubview:self.swipeBackArrow];
+    }
 }
 
 - (void)swipeWithPanGestureDistance:(CGFloat)distance {
-    NSLog(@"%lf", distance);
     
-    //When pop success.
-    [UIView animateWithDuration:0.2
-                     animations:^{
-                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                         self.swipeForwardArrow.transform = CGAffineTransformMakeTranslation(distance, 0);
-                         self.swipeBackArrow.transform = CGAffineTransformMakeTranslation(distance, 0);
-                     }
-                     completion:^(BOOL finished) {
-//                         [self goBack];
-                         self.userInteractionEnabled = YES;
-                         self.isSwipingBack = NO;
-                     }];
+    CGRect forwardFrame = self.swipeForwardArrow.frame;
+    forwardFrame.origin.x = MAX(distance * forwardFrame.size.width / swipeDistance, - forwardFrame.size.width)  + self.bounds.size.width;
+    
+    CGRect backFrame = self.swipeBackArrow.frame;
+    backFrame.origin.x =  MIN(distance * backFrame.size.width / swipeDistance, backFrame.size.width) - backFrame.size.width;
+    
+    self.swipeForwardArrow.frame = forwardFrame;
+    self.swipeBackArrow.frame = backFrame;
 }
 
 - (void)endSwipeAnimation {
-    self.isSwipingBack = NO;
-}
-
-- (void)startBackSnapshotView {
-    if (!self.canGoBack) {
+    if (!self.isSwipingBack) {
         return;
     }
     
-}
-
-- (void)startForwardSnapshotView {
-    if (!self.canGoForward) {
-        return;
-    }
-    
+    self.userInteractionEnabled = NO;
+    [UIView animateWithDuration:0.2 animations:^{
+        self.swipeForwardArrow.alpha = 0;
+        self.swipeBackArrow.alpha = 0;
+    } completion:^(BOOL finished) {
+        self.userInteractionEnabled = YES;
+        [self.swipeBackArrow removeFromSuperview];
+        [self.swipeForwardArrow removeFromSuperview];
+        if (CGRectGetMinX(self.swipeBackArrow.frame) == 0 && self.canGoBack) {
+            [(UIWebView *)self.realWebView goBack];
+        } else if (CGRectGetMaxX(self.swipeForwardArrow.frame) == self.bounds.size.width && self.canGoForward) {
+            [(UIWebView *)self.realWebView goForward];
+        }
+        self.isSwipingBack = NO;
+    }];
     
 }
 
@@ -380,6 +398,7 @@ static BOOL canUseWkWebView = NO;
     if (self.originRequest == nil) {
         self.originRequest = webView.request;
     }
+    
     [self ms_webViewDidFinishLoad];
 }
 
@@ -395,15 +414,15 @@ static BOOL canUseWkWebView = NO;
     BOOL resultBOOL = [self ms_webViewShouldStartLoadWithRequest:request navigationType:navigationType];
     if (resultBOOL) {
         switch (navigationType) {
-            case UIWebViewNavigationTypeLinkClicked:
-            case UIWebViewNavigationTypeFormSubmitted:
-            case UIWebViewNavigationTypeOther: {
-                
-            }
+                case UIWebViewNavigationTypeLinkClicked:
+                case UIWebViewNavigationTypeFormSubmitted:
+                case UIWebViewNavigationTypeOther: {
+                    
+                }
                 break;
-            case UIWebViewNavigationTypeBackForward:
-            case UIWebViewNavigationTypeReload:
-            case UIWebViewNavigationTypeFormResubmitted:
+                case UIWebViewNavigationTypeBackForward:
+                case UIWebViewNavigationTypeReload:
+                case UIWebViewNavigationTypeFormResubmitted:
             default: {
                 break;
             }
@@ -819,7 +838,7 @@ static BOOL canUseWkWebView = NO;
 
 - (void)gobackWithStep:(NSInteger)step {
     if (self.canGoBack == NO)
-        return;
+    return;
     
     if (step > 0) {
         NSInteger historyCount = self.countOfHistory;

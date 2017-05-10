@@ -167,7 +167,7 @@
     
     self.webView.delegate = self;
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://tmall.com"]]];
+    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://baidu.com"]]];
 }
 
 - (void)viewDidLayoutSubviews {
