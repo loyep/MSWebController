@@ -13,9 +13,8 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
   s.source       = { :git => "https://github.com/MaxseyLau/MSWebController.git", :tag => s.version }
-  s.public_header_files = "Sources/MSWebController.h"
-  s.resources = ["Sources/*.bundle"]
-
+  # s.public_header_files = "Sources/MSWebController.h"
+  s.resources = ["Sources/**/*.{bundle}"]
   s.source_files  = "Sources/**/*.{h,m}"
   s.framework  = "UIKit", "Foundation", "WebKit"
   s.requires_arc = true

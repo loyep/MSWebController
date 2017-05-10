@@ -22,13 +22,15 @@ static BOOL canUseWkWebView = NO;
 @property (nonatomic, strong, readwrite) UIProgressView *progressView;
 
 /// Array that hold snapshots of pages.
-@property (strong, nonatomic) NSMutableArray *snapshots;
+@property (nonatomic, strong) NSMutableArray *snapshots;
+@property (nonatomic, assign) NSUInteger snapshotIndex;
+
 /// Current snapshotview displaying on screen when start swiping.
-@property (strong, nonatomic) UIView *currentSnapshotView;
+@property (nonatomic, strong) UIView *currentSnapshotView;
 /// Previous snapshotview.
-@property (strong, nonatomic) UIView *previousSnapshotView;
+@property (nonatomic, strong) UIView *previousSnapshotView;
 /// Background alpha black view.
-@property (strong, nonatomic) UIView *swipingBackgoundView;
+@property (nonatomic, strong) UIView *swipingBackgoundView;
 /// Left pan ges.
 @property (nonatomic, strong) UIPanGestureRecognizer *swipePanGesture;
 
@@ -83,6 +85,13 @@ static BOOL canUseWkWebView = NO;
         [self initUIWebView];
         _usingUIWebView = YES;
     }
+    
+    SEL allowsLinkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
+    if ([self.realWebView respondsToSelector:allowsLinkPreviewSelector]) {
+        //        self.realWebView.allowsLinkPreview = YES;
+        [self.realWebView performSelector:allowsLinkPreviewSelector withObject:@(YES)];
+    }
+    
     [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
     self.allowsBackForwardNavigationGestures = YES;
     self.showsBackgroundLabel = YES;
@@ -168,10 +177,6 @@ static BOOL canUseWkWebView = NO;
     webView.opaque = NO;
     
     webView.allowsBackForwardNavigationGestures = self.allowsBackForwardNavigationGestures;
-    SEL linkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
-    if ([webView respondsToSelector:linkPreviewSelector]) {
-        webView.allowsLinkPreview = YES;
-    }
     
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
@@ -193,6 +198,7 @@ static BOOL canUseWkWebView = NO;
 
 - (void)initUIWebView {
     self.snapshots = [NSMutableArray array];
+    self.snapshotIndex = 0;
     
     UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
     webView.backgroundColor = [UIColor clearColor];
@@ -264,6 +270,14 @@ static BOOL canUseWkWebView = NO;
     return _swipePanGesture;
 }
 
+- (UIView*)swipingBackgoundView {
+    if (!_swipingBackgoundView) {
+        _swipingBackgoundView = [[UIView alloc] initWithFrame:self.bounds];
+        _swipingBackgoundView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+    }
+    return _swipingBackgoundView;
+}
+
 - (void)swipePanGestureHandler:(UIPanGestureRecognizer *)panGesture {
     CGPoint translation = [panGesture translationInView:self.realWebView];
     CGPoint location = [panGesture locationInView:self.realWebView];
@@ -294,11 +308,11 @@ static BOOL canUseWkWebView = NO;
     }
     
     UIView *currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
-    [self.snapshots addObject:
-     @{
-       @"request": request,
-       @"snapShotView": currentSnapshotView}
-     ];
+    [self.snapshots addObject:@{
+                                @"request": request,
+                                @"snapShotView": currentSnapshotView
+                                }];
+    self.snapshotIndex++;
 }
 
 - (void)startPopSnapshotView {
@@ -324,7 +338,7 @@ static BOOL canUseWkWebView = NO;
     //move to center of screen
     self.currentSnapshotView.center = center;
     
-    self.previousSnapshotView = (UIView *) [[self.snapshots lastObject] objectForKey:@"snapShotView"];
+    self.previousSnapshotView = (UIView *) [[self.snapshots objectAtIndex:self.snapshotIndex - 1] objectForKey:@"snapShotView"];
     center.x -= 60;
     self.previousSnapshotView.center = center;
     self.previousSnapshotView.alpha = 1;
@@ -382,7 +396,7 @@ static BOOL canUseWkWebView = NO;
                              [self.previousSnapshotView removeFromSuperview];
                              [self.swipingBackgoundView removeFromSuperview];
                              [self.currentSnapshotView removeFromSuperview];
-                             [(UIWebView *) self.realWebView goBack];
+                             [self goBack];
                              [self.snapshots removeLastObject];
                              self.userInteractionEnabled = YES;
                              
@@ -569,14 +583,13 @@ static BOOL canUseWkWebView = NO;
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     BOOL resultBOOL = [self ms_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
-    BOOL isLoadingDisableScheme = [self isLoadingWKWebViewDisableScheme:navigationAction.request.URL];
     
     // Disable all the '_blank' target in page's target.
     if (!navigationAction.targetFrame.isMainFrame) {
         [webView evaluateJavaScript:@"var a = document.getElementsByTagName('a');for(var i=0;i<a.length;i++){a[i].setAttribute('target','');}" completionHandler:nil];
     }
     
-    if (!resultBOOL || isLoadingDisableScheme) {
+    if (!resultBOOL) {
         // For can deal something.
         decisionHandler(WKNavigationActionPolicyCancel);
     } else {
@@ -664,21 +677,6 @@ static BOOL canUseWkWebView = NO;
 
 #pragma mark - 基础方法
 
-///判断当前加载的url是否是WKWebView不能打开的协议类型
-- (BOOL)isLoadingWKWebViewDisableScheme:(NSURL *)url {
-    BOOL retValue = NO;
-    
-    //判断是否正在加载WKWebview不能识别的协议类型：phone numbers, email address, maps, etc.
-    if ([url.scheme isEqual:@"tel"]) {
-        UIApplication *app = [UIApplication sharedApplication];
-        if ([app canOpenURL:url]) {
-            [app openURL:url];
-            retValue = YES;
-        }
-    }
-    
-    return retValue;
-}
 
 - (UIScrollView *)scrollView {
     return [(id) self.realWebView scrollView];
@@ -740,10 +738,6 @@ static BOOL canUseWkWebView = NO;
 
 - (id)goBack {
     if (_usingUIWebView) {
-        if ([self.snapshots count] > 0) {
-            [self.snapshots removeLastObject];
-        }
-        
         [(UIWebView *) self.realWebView goBack];
         return nil;
     } else {
@@ -903,13 +897,6 @@ static BOOL canUseWkWebView = NO;
         if (_usingUIWebView) {
             UIWebView *webView = self.realWebView;
             [webView stringByEvaluatingJavaScriptFromString:[NSString stringWithFormat:@"window.history.go(-%ld)", (long) step]];
-            if (self.snapshots.count >= step) {
-                NSUInteger snapshotsCount = self.snapshots.count;
-                NSIndexSet *indexSet = [self.snapshots indexesOfObjectsPassingTest:^BOOL(NSString *_Nonnull var, NSUInteger idx, BOOL *_Nonnull stop) {
-                    return idx >= (snapshotsCount - step);
-                }];
-                [self.snapshots removeObjectsAtIndexes:indexSet];
-            }
         } else {
             WKWebView *webView = self.realWebView;
             WKBackForwardListItem *backItem = webView.backForwardList.backList[step];
@@ -954,6 +941,8 @@ static BOOL canUseWkWebView = NO;
         [webView removeObserver:self forKeyPath:@"estimatedProgress"];
         [webView removeObserver:self forKeyPath:@"title"];
     }
+    
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
     [_realWebView removeObserver:self forKeyPath:@"loading"];
     [_realWebView scrollView].delegate = nil;
     [_realWebView stopLoading];

@@ -10,7 +10,12 @@
 #endif
 #endif
 
+#import "MSWebActivity.h"
+#import "MSWebActivityChrome.h"
+#import "MSWebActivitySafari.h"
 #import "MSWebController.h"
+#import "MSWebView.h"
+#import "MS_NJKWebViewProgress.h"
 
 FOUNDATION_EXPORT double MSWebControllerVersionNumber;
 FOUNDATION_EXPORT const unsigned char MSWebControllerVersionString[];

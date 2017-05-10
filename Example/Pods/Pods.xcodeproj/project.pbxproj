@@ -9,17 +9,16 @@
 /* Begin PBXBuildFile section */
 		0170D362849E918F2481D115997C9669 /* Pods-ExampleTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E47265EB6FA6DD4F40CD496F613370B /* Pods-ExampleTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02FC8F31D7C93146E252193879237173 /* Pods-ExampleUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A01DA5EE78439C3D5078724BA45513D5 /* Pods-ExampleUITests-dummy.m */; };
-		0D006C76D826C1FDE248212E79665E01 /* MSWebActivityChrome.h in Headers */ = {isa = PBXBuildFile; fileRef = A4412A5CEC4E6CE3733B1E529DB46B2E /* MSWebActivityChrome.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		1331BED31D17F02A85B3AB18C2BB2723 /* MSWebController.h in Headers */ = {isa = PBXBuildFile; fileRef = E543B63ABA0B120091B6EAA5C4852FBC /* MSWebController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		13CE8CBC7F164B38AFC707ABFC1FDF25 /* Pods-ExampleUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A59E7231873C248546DF7541EF613BE /* Pods-ExampleUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		14B02ECB24F08AFFD236E56090BB339E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FAF4F70740F05FA34D54F1982E18E7A /* WebKit.framework */; };
 		150B94F686081306B221DB215E9D4B07 /* Pods-Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C18D00EE1A286D362D3FFCE4B28449A /* Pods-Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		24BF7A1AF48DCF7CC764AA3B5FA2A3B0 /* MSWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = E63CF6395CDAB643B69A50D3C3073D5A /* MSWebView.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		424313FA2A5E72FF90C8410ECA902D51 /* Pods-ExampleTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D66B277E581ACCADAC536AF2C2FB2E8E /* Pods-ExampleTests-dummy.m */; };
 		456CFB25C189AEED5058B86216E8F420 /* MSWebActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FBB18A7596F956FCEE5B0F32CFCF34 /* MSWebActivityChrome.m */; };
 		472B3FB950447A31D51486AD5AA48947 /* Pods-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FED35CACB70238519C94E6D828288C /* Pods-Example-dummy.m */; };
 		4AEB311D5CF5524B2AA02D6E22A78E4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
-		6C70F2151482F47200B3CE6EC3C1A242 /* MS_NJKWebViewProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CACF9840C66D2675CE141CBB38519BC /* MS_NJKWebViewProgress.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		5F2BDB8322BC0FE22D44EE043E7CEBBB /* MSWebActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 45A4DE8458CF8F9A44E1AA8D3B4C963F /* MSWebActivity.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		723B2397DF1A880C3159025A88C182AB /* MSWebActivitySafari.h in Headers */ = {isa = PBXBuildFile; fileRef = 317A6A7567D7E055A1E1B43BE3A0DF85 /* MSWebActivitySafari.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7A372B2CFD0DEEB3E4839DF541072454 /* MSWebController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95293D59E81E05D603FCBAAA9B564A4B /* MSWebController.m */; };
 		81B4A6B45EBD9C345696E4A2491F161C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
 		9E74BF0DEDFBF9F8BB7F5D9359C7E9CE /* MSWebController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DBFE89423B0EB2559865B2B850A8C70F /* MSWebController-dummy.m */; };
@@ -27,12 +26,13 @@
 		B43930523FD5E533F417651E5F2A482B /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A022D9D514C4E1C1EBA08525491BE09 /* MS_NJKWebViewProgress.m */; };
 		BB286FB2CFA7D2C5F5E4659EC8BB0126 /* MSWebActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DF865650DC2C052245F40BC9E459F3 /* MSWebActivity.m */; };
 		C3499824A442B13D480DD6F1389A2B76 /* MSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = E1F56FCBF250047096BCA5CC095483D0 /* MSWebView.m */; };
-		C3E2110477A16FEE7238AD7C13F930A4 /* MSWebActivitySafari.h in Headers */ = {isa = PBXBuildFile; fileRef = 317A6A7567D7E055A1E1B43BE3A0DF85 /* MSWebActivitySafari.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		D5883828DC62440164DBBBB504E3DE9C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5147AE3C7F8B063B02257EFF0EFD800 /* UIKit.framework */; };
 		D91B4D3179D7D8E00E07335E93B2C6FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
+		D9A255287B98855A6B058D49F3F8D99C /* MS_NJKWebViewProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CACF9840C66D2675CE141CBB38519BC /* MS_NJKWebViewProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		DA563569EF2E8A6379E398CB19CA29B8 /* MSWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = E63CF6395CDAB643B69A50D3C3073D5A /* MSWebView.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		E0F12A277B9D39E88FEB7D63D1D56A4B /* MSWebController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B1F2F7F0C4540D0F4F8641D74023DDD1 /* MSWebController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EBD660D8ACB26551D576E26B1A3C59D2 /* MSWebController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 993AA695F9BFAA022C4B7A3E3D442567 /* MSWebController.bundle */; };
-		FAC2C7569C49D927303D377193002840 /* MSWebActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 45A4DE8458CF8F9A44E1AA8D3B4C963F /* MSWebActivity.h */; settings = {ATTRIBUTES = (Project, ); }; };
+		EFFB2CB979B0DC57D4F062D6F045EF9E /* MSWebActivityChrome.h in Headers */ = {isa = PBXBuildFile; fileRef = A4412A5CEC4E6CE3733B1E529DB46B2E /* MSWebActivityChrome.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		FDC5F85F17472DBAC700194DA85994D4 /* MSWebActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A0A23B0BA65AF3D01F4652B0D5F3F6 /* MSWebActivitySafari.m */; };
 /* End PBXBuildFile section */
 
@@ -334,13 +334,13 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6C70F2151482F47200B3CE6EC3C1A242 /* MS_NJKWebViewProgress.h in Headers */,
-				FAC2C7569C49D927303D377193002840 /* MSWebActivity.h in Headers */,
-				0D006C76D826C1FDE248212E79665E01 /* MSWebActivityChrome.h in Headers */,
-				C3E2110477A16FEE7238AD7C13F930A4 /* MSWebActivitySafari.h in Headers */,
+				D9A255287B98855A6B058D49F3F8D99C /* MS_NJKWebViewProgress.h in Headers */,
+				5F2BDB8322BC0FE22D44EE043E7CEBBB /* MSWebActivity.h in Headers */,
+				EFFB2CB979B0DC57D4F062D6F045EF9E /* MSWebActivityChrome.h in Headers */,
+				723B2397DF1A880C3159025A88C182AB /* MSWebActivitySafari.h in Headers */,
 				E0F12A277B9D39E88FEB7D63D1D56A4B /* MSWebController-umbrella.h in Headers */,
 				1331BED31D17F02A85B3AB18C2BB2723 /* MSWebController.h in Headers */,
-				24BF7A1AF48DCF7CC764AA3B5FA2A3B0 /* MSWebView.h in Headers */,
+				DA563569EF2E8A6379E398CB19CA29B8 /* MSWebView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
