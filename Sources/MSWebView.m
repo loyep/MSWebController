@@ -9,6 +9,7 @@
 #import "MSWebView.h"
 #import "MS_NJKWebViewProgress.h"
 #import <JavaScriptCore/JavaScriptCore.h>
+#import "MSWebActivity.h"
 
 static BOOL canUseWkWebView = NO;
 
@@ -21,22 +22,15 @@ static BOOL canUseWkWebView = NO;
 @property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
 @property (nonatomic, strong, readwrite) UIProgressView *progressView;
 
-/// Array that hold snapshots of pages.
-@property (nonatomic, strong) NSMutableArray *snapshots;
-@property (nonatomic, assign) NSUInteger snapshotIndex;
-
-/// Current snapshotview displaying on screen when start swiping.
-@property (nonatomic, strong) UIView *currentSnapshotView;
-/// Previous snapshotview.
-@property (nonatomic, strong) UIView *previousSnapshotView;
-/// Background alpha black view.
-@property (nonatomic, strong) UIView *swipingBackgoundView;
 /// Left pan ges.
 @property (nonatomic, strong) UIPanGestureRecognizer *swipePanGesture;
 
 @property (nonatomic, assign) BOOL isSwipingBack;
 
 @property (nonatomic, strong, readwrite) UILabel *backgroundLabel;
+
+@property (nonatomic, strong) UIView *swipeBackArrow;
+@property (nonatomic, strong) UIView *swipeForwardArrow;
 
 @end
 
@@ -197,14 +191,11 @@ static BOOL canUseWkWebView = NO;
 #pragma mark - initUIWebView
 
 - (void)initUIWebView {
-    self.snapshots = [NSMutableArray array];
-    self.snapshotIndex = 0;
-    
     UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
     webView.backgroundColor = [UIColor clearColor];
     webView.allowsInlineMediaPlayback = YES;
     webView.mediaPlaybackRequiresUserAction = NO;
-    [webView addGestureRecognizer:self.swipePanGesture];
+    [self addGestureRecognizer:self.swipePanGesture];
     
     webView.opaque = NO;
     for (UIView *subview in [webView.scrollView subviews]) {
@@ -270,157 +261,99 @@ static BOOL canUseWkWebView = NO;
     return _swipePanGesture;
 }
 
-- (UIView*)swipingBackgoundView {
-    if (!_swipingBackgoundView) {
-        _swipingBackgoundView = [[UIView alloc] initWithFrame:self.bounds];
-        _swipingBackgoundView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.3];
+- (UIView *)swipeBackArrow {
+    if (!_swipeBackArrow) {
+        _swipeBackArrow = [[UIImageView alloc] initWithImage:[MSWebActivity ms_imageNamed:@"MSWebViewControllerBack"]];
+        _swipeBackArrow.backgroundColor = [UIColor redColor];
+        _swipeBackArrow.frame = CGRectMake(0, 0, 50, 50);
     }
-    return _swipingBackgoundView;
+    return _swipeBackArrow;
+}
+
+- (UIView *)swipeForwardArrow {
+    if (!_swipeForwardArrow) {
+        _swipeForwardArrow = [[UIImageView alloc] initWithImage:[MSWebActivity ms_imageNamed:@"MSWebViewControllerNext"]];
+        _swipeForwardArrow.backgroundColor = [UIColor yellowColor];
+        _swipeForwardArrow.frame = CGRectMake(0, 0, 50, 50);
+    }
+    return _swipeForwardArrow;
 }
 
 - (void)swipePanGestureHandler:(UIPanGestureRecognizer *)panGesture {
-    CGPoint translation = [panGesture translationInView:self.realWebView];
-    CGPoint location = [panGesture locationInView:self.realWebView];
+    CGPoint translation = [panGesture translationInView:self];
     
     if (panGesture.state == UIGestureRecognizerStateBegan) {
         // Begin gesture pop animation
-        if (location.x <= 50 && translation.x >= 0) {
-            [self startPopSnapshotView];
+        if (translation.x >= 0) {
+            [self startSwipeAnimation:YES];
+        } else if (translation.x < 0) {
+            [self startSwipeAnimation:NO];
         }
     } else if (panGesture.state == UIGestureRecognizerStateCancelled || panGesture.state == UIGestureRecognizerStateEnded) {
-        [self endPopSnapShotView];
+        [self endSwipeAnimation];
     } else if (panGesture.state == UIGestureRecognizerStateChanged) {
-        [self popSnapShotViewWithPanGestureDistance:translation.x];
+        [self swipeWithPanGestureDistance:translation.x];
     }
 }
 
-- (void)pushCurrentSnapshotViewWithRequest:(NSURLRequest *)request {
-    NSURLRequest *lastRequest = (NSURLRequest *) [[self.snapshots lastObject] objectForKey:@"request"];
-    
-    // 如果url是很奇怪的就不push
-    if ([request.URL.absoluteString isEqualToString:@"about:blank"]) {
-        return;
-    }
-    
-    //如果url一样就不进行push
-    if ([lastRequest.URL.absoluteString isEqualToString:request.URL.absoluteString]) {
-        return;
-    }
-    
-    UIView *currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:YES];
-    [self.snapshots addObject:@{
-                                @"request": request,
-                                @"snapShotView": currentSnapshotView
-                                }];
-    self.snapshotIndex++;
-}
-
-- (void)startPopSnapshotView {
+- (void)startSwipeAnimation:(BOOL)isBack {
     if (self.isSwipingBack) {
-        return;
-    }
-    if (!self.canGoBack) {
         return;
     }
     
     self.isSwipingBack = YES;
-    //create a center of scrren
-    CGPoint center = CGPointMake(self.bounds.size.width / 2, self.bounds.size.height / 2);
     
-    self.currentSnapshotView = [self.realWebView snapshotViewAfterScreenUpdates:NO];
+//    if (isBack && !self.canGoBack) {
+//        return;
+//    }
+//    
+//    if (!isBack && !self.canGoForward) {
+//        return;
+//    }
     
-    //add shadows just like UINavigationController
-    self.currentSnapshotView.layer.shadowColor = [UIColor blackColor].CGColor;
-    self.currentSnapshotView.layer.shadowOffset = CGSizeMake(3, 3);
-    self.currentSnapshotView.layer.shadowRadius = 5;
-    self.currentSnapshotView.layer.shadowOpacity = 0.75;
+    self.swipeBackArrow.center = CGPointMake(- CGRectGetWidth(self.swipeBackArrow.frame) / 2, self.bounds.size.height / 2);
+    self.swipeForwardArrow.center = CGPointMake(self.bounds.size.width + CGRectGetWidth(self.swipeForwardArrow.frame) / 2, self.bounds.size.height / 2);
     
-    //move to center of screen
-    self.currentSnapshotView.center = center;
+    [self addSubview:self.swipeBackArrow];
+    [self addSubview:self.swipeForwardArrow];
     
-    self.previousSnapshotView = (UIView *) [[self.snapshots objectAtIndex:self.snapshotIndex - 1] objectForKey:@"snapShotView"];
-    center.x -= 60;
-    self.previousSnapshotView.center = center;
-    self.previousSnapshotView.alpha = 1;
-    self.backgroundColor = [UIColor colorWithRed:0.180 green:0.192 blue:0.196 alpha:1.00];
     
-    [self addSubview:self.previousSnapshotView];
-    [self addSubview:self.swipingBackgoundView];
-    [self addSubview:self.currentSnapshotView];
 }
 
-- (void)popSnapShotViewWithPanGestureDistance:(CGFloat)distance {
-    if (!self.isSwipingBack) {
-        return;
-    }
+- (void)swipeWithPanGestureDistance:(CGFloat)distance {
+    NSLog(@"%lf", distance);
     
-    if (distance <= 0) {
-        return;
-    }
-    
-    CGFloat boundsWidth = CGRectGetWidth(self.bounds);
-    CGFloat boundsHeight = CGRectGetHeight(self.bounds);
-    
-    CGPoint currentSnapshotViewCenter = CGPointMake(boundsWidth / 2, boundsHeight / 2);
-    currentSnapshotViewCenter.x += distance;
-    CGPoint previousSnapshotViewCenter = CGPointMake(boundsWidth / 2, boundsHeight / 2);
-    previousSnapshotViewCenter.x -= (boundsWidth - distance) * 60 / boundsWidth;
-    
-    self.currentSnapshotView.center = currentSnapshotViewCenter;
-    self.previousSnapshotView.center = previousSnapshotViewCenter;
-    self.swipingBackgoundView.alpha = (boundsWidth - distance) / boundsWidth;
+    //When pop success.
+    [UIView animateWithDuration:0.2
+                     animations:^{
+                         [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
+                         self.swipeForwardArrow.transform = CGAffineTransformMakeTranslation(distance, 0);
+                         self.swipeBackArrow.transform = CGAffineTransformMakeTranslation(distance, 0);
+                     }
+                     completion:^(BOOL finished) {
+//                         [self goBack];
+                         self.userInteractionEnabled = YES;
+                         self.isSwipingBack = NO;
+                     }];
 }
 
-- (void)endPopSnapShotView {
-    if (!self.isSwipingBack) {
+- (void)endSwipeAnimation {
+    self.isSwipingBack = NO;
+}
+
+- (void)startBackSnapshotView {
+    if (!self.canGoBack) {
         return;
     }
     
-    //prevent the user touch for now
-    self.userInteractionEnabled = NO;
-    
-    CGFloat boundsWidth = CGRectGetWidth(self.bounds);
-    CGFloat boundsHeight = CGRectGetHeight(self.bounds);
-    
-    if (self.currentSnapshotView.center.x >= boundsWidth) {
-        //When pop success.
-        [UIView animateWithDuration:0.2
-                         animations:^{
-                             [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                             
-                             self.currentSnapshotView.center = CGPointMake(boundsWidth * 3 / 2, boundsHeight / 2);
-                             self.previousSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
-                             self.swipingBackgoundView.alpha = 0;
-                         }
-                         completion:^(BOOL finished) {
-                             [self.previousSnapshotView removeFromSuperview];
-                             [self.swipingBackgoundView removeFromSuperview];
-                             [self.currentSnapshotView removeFromSuperview];
-                             [self goBack];
-                             [self.snapshots removeLastObject];
-                             self.userInteractionEnabled = YES;
-                             
-                             self.isSwipingBack = NO;
-                         }];
-    } else {
-        //If pop fail.
-        [UIView animateWithDuration:0.2
-                         animations:^{
-                             [UIView setAnimationCurve:UIViewAnimationCurveEaseInOut];
-                             
-                             self.currentSnapshotView.center = CGPointMake(boundsWidth / 2, boundsHeight / 2);
-                             self.previousSnapshotView.center = CGPointMake(boundsWidth / 2 - 60, boundsHeight / 2);
-                             self.previousSnapshotView.alpha = 1;
-                         }
-                         completion:^(BOOL finished) {
-                             [self.previousSnapshotView removeFromSuperview];
-                             [self.swipingBackgoundView removeFromSuperview];
-                             [self.currentSnapshotView removeFromSuperview];
-                             self.userInteractionEnabled = YES;
-                             
-                             self.isSwipingBack = NO;
-                         }];
+}
+
+- (void)startForwardSnapshotView {
+    if (!self.canGoForward) {
+        return;
     }
+    
+    
 }
 
 #pragma mark - js Core
@@ -465,7 +398,7 @@ static BOOL canUseWkWebView = NO;
             case UIWebViewNavigationTypeLinkClicked:
             case UIWebViewNavigationTypeFormSubmitted:
             case UIWebViewNavigationTypeOther: {
-                [self pushCurrentSnapshotViewWithRequest:request];
+                
             }
                 break;
             case UIWebViewNavigationTypeBackForward:
