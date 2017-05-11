@@ -13,6 +13,7 @@
 #import "MSWebHTTPCookieStorage.h"
 
 static BOOL canUseWkWebView = NO;
+static BOOL canUseWKWebsiteDataStore = NO;
 
 static CGFloat swipeDistance = 100;
 
@@ -50,6 +51,7 @@ static CGFloat swipeDistance = 100;
 
 + (void)load {
     canUseWkWebView = (NSClassFromString(@"WKWebView") != nil);
+    canUseWKWebsiteDataStore = (NSClassFromString(@"WKWebsiteDataStore") != nil);
 }
 
 #pragma mark - initialize
@@ -157,8 +159,7 @@ static CGFloat swipeDistance = 100;
 #pragma mark - initWKWebView
 
 - (void)initWKWebView {
-    WKUserContentController* userContentController = [WKUserContentController new];
-    
+    WKUserContentController* userContentController = [[WKUserContentController alloc] init];
     NSMutableString *cookies = [NSMutableString string];
     WKUserScript * cookieScript = [[WKUserScript alloc] initWithSource:[cookies copy]
                                                          injectionTime:WKUserScriptInjectionTimeAtDocumentStart
@@ -197,7 +198,10 @@ static CGFloat swipeDistance = 100;
     
     SEL allowsLinkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
     if ([webView respondsToSelector:allowsLinkPreviewSelector]) {
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-performSelector-leaks"
         [webView performSelector:allowsLinkPreviewSelector withObject:@(YES)];
+#pragma clang diagnostic pop
     }
     _realWebView = webView;
 }
@@ -253,10 +257,10 @@ static CGFloat swipeDistance = 100;
     self.njkWebViewProgress.webViewProxyDelegate = self;
     self.njkWebViewProgress.progressDelegate = self;
     
-//    @try {
-//        id preferences = [[webView valueForKeyPath:@"_internal.browserView._webView"] valueForKey:@"preferences"];
-//        [preferences performSelector:@selector(_postCacheModelChangedNotification)];
-//    } @catch (NSException *exception) { }
+    //    @try {
+    //        id preferences = [[webView valueForKeyPath:@"_internal.browserView._webView"] valueForKey:@"preferences"];
+    //        [preferences performSelector:@selector(_postCacheModelChangedNotification)];
+    //    } @catch (NSException *exception) { }
     
     _realWebView = webView;
 }
@@ -576,6 +580,14 @@ static CGFloat swipeDistance = 100;
 }
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
+    NSHTTPURLResponse *response = (NSHTTPURLResponse *)navigationResponse.response;
+    NSArray *cookies =[NSHTTPCookie cookiesWithResponseHeaderFields:[response allHeaderFields] forURL:response.URL];
+    //读取wkwebview中的cookie 方法1
+    for (NSHTTPCookie *cookie in cookies) {
+        [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
+    }
+    
+    NSLog(@"wkwebview cookie:%@", [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies);
     decisionHandler(WKNavigationResponsePolicyAllow);
 }
 
@@ -609,6 +621,42 @@ static CGFloat swipeDistance = 100;
 }
 
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
+    
+    // store cookies
+    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+    // js functions
+    NSString *JSFuncString =
+    @"function setCookie(name,value,expires)\
+    {\
+    var oDate=new Date();\
+    oDate.setDate(oDate.getDate()+expires);\
+    document.cookie=name+'='+value+';expires='+oDate;\
+    }\
+    function getCookie(name)\
+    {\
+    var arr = document.cookie.match(new RegExp('(^| )'+name+'=([^;]*)(;|$)'));\
+    if(arr != null) return unescape(arr[2]); return null;\
+    }\
+    function delCookie(name)\
+    {\
+    var exp = new Date();\
+    exp.setTime(exp.getTime() - 1);\
+    var cval=getCookie(name);\
+    if(cval!=null) document.cookie= name + '='+cval+';expires='+exp.toGMTString();\
+    }";
+    
+    // Piece together JS strings
+    NSMutableString *JSCookieString = JSFuncString.mutableCopy;
+    for (NSHTTPCookie *cookie in cookieStorage.cookies) {
+        NSString *excuteJSString = [NSString stringWithFormat:@"setCookie('%@', '%@', 1);", cookie.name, cookie.value];
+        [JSCookieString appendString:excuteJSString];
+    }
+    // execute js
+    [webView evaluateJavaScript:JSCookieString completionHandler:nil];
+    
+    if (canUseWKWebsiteDataStore) {
+        
+    }
     [self ms_webViewDidFinishLoad];
 }
 
