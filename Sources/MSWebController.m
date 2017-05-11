@@ -19,6 +19,7 @@
 @property (nonatomic, strong) UIBarButtonItem *refreshBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *stopBarButtonItem;
 @property (nonatomic, strong) UIBarButtonItem *actionBarButtonItem;
+@property (nonatomic, strong, readwrite) NSURLRequest *originalRequest;
 
 @end
 
@@ -44,8 +45,26 @@
     self.extendedLayoutIncludesOpaqueBars = YES;
     [self.view addSubview:self.webView];
     id topLayoutGuide = self.topLayoutGuide;
+    id bottomLayoutGuide = self.bottomLayoutGuide;
     [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[_webView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_webView)]];
-    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:[topLayoutGuide][_webView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_webView, topLayoutGuide)]];
+    [self.view addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[topLayoutGuide][_webView][bottomLayoutGuide]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_webView, topLayoutGuide,bottomLayoutGuide)]];
+}
+
+- (void)setShowToolBar:(BOOL)showToolBar {
+    if (_showToolBar == showToolBar) {
+        return;
+    }
+    _showToolBar = showToolBar;
+    
+    if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
+        if (!showToolBar) {
+            self.navigationItem.rightBarButtonItems = @[];
+        } else {
+            [self updateToolbarItems];
+        }
+    } else {
+        [self.navigationController setToolbarHidden:!showToolBar animated:NO];
+    }
 }
 
 - (void)loadWebView {
@@ -99,6 +118,10 @@
 }
 
 - (void)updateToolbarItems {
+    if (!self.showToolBar) {
+        return;
+    }
+    
     self.backBarButtonItem.enabled = self.webView.canGoBack;
     self.forwardBarButtonItem.enabled = self.webView.canGoForward;
     
@@ -154,11 +177,16 @@
 }
 
 - (void)initialize {
+    self.showToolBar = YES;
     self.networkActivityIndicatorVisible = YES;
 }
 
 - (void)loadRequest:(NSURLRequest *)request {
-    [self.webView loadRequest:request];
+    if (!_webView) {
+        self.originalRequest = request;
+    } else {
+        [self.webView loadRequest:request];
+    }
 }
 
 - (void)viewDidLoad {
@@ -167,7 +195,8 @@
     
     self.webView.delegate = self;
     self.view.backgroundColor = [UIColor whiteColor];
-    [self.webView loadRequest:[NSURLRequest requestWithURL:[NSURL URLWithString:@"https://baidu.com"]]];
+    NSParameterAssert(self.originalRequest);
+    [self.webView loadRequest:self.originalRequest];
 }
 
 - (void)viewDidLayoutSubviews {
@@ -183,9 +212,9 @@
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
     if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPhone) {
-        [self.navigationController setToolbarHidden:NO animated:animated];
+        [self.navigationController setToolbarHidden:!self.showToolBar animated:animated];
     } else if (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad) {
-        [self.navigationController setToolbarHidden:YES animated:animated];
+        [self.navigationController setToolbarHidden:self.showToolBar animated:animated];
     }
 }
 
@@ -204,6 +233,9 @@
 
 - (void)endNetworkActivity {
     if ([UIApplication sharedApplication].networkActivityIndicatorVisible) {
+        if (self.networkActivityIndicatorVisible) {
+            
+        }
         [UIApplication sharedApplication].networkActivityIndicatorVisible = NO;
     }
 }

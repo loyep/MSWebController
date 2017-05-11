@@ -10,19 +10,25 @@
 #import "MS_NJKWebViewProgress.h"
 #import <JavaScriptCore/JavaScriptCore.h>
 #import "MSWebActivity.h"
+#import "MSWebHTTPCookieStorage.h"
 
 static BOOL canUseWkWebView = NO;
 
 static CGFloat swipeDistance = 100;
 
-@interface MSWebView () <UIWebViewDelegate, WKNavigationDelegate, WKUIDelegate, MS_NJKWebViewProgressDelegate>
+@interface MSWebView () <UIWebViewDelegate, WKNavigationDelegate, WKUIDelegate, MS_NJKWebViewProgressDelegate, NSURLSessionDelegate>
 
 @property (nonatomic, assign) CGFloat estimatedProgress;
 @property (nonatomic, strong) NSURLRequest *originRequest;
 @property (nonatomic, strong) NSURLRequest *currentRequest;
 @property (nonatomic, copy, readwrite) NSString *title;
 @property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
+
+@property (nonatomic, strong) NSURLSession *requestSession;
+
 @property (nonatomic, strong, readwrite) UIProgressView *progressView;
+
+@property (nonatomic, copy) NSURL *loadingURL;
 
 /// Left pan ges.
 @property (nonatomic, strong) UIPanGestureRecognizer *swipePanGesture;
@@ -73,6 +79,14 @@ static CGFloat swipeDistance = 100;
     return self;
 }
 
+- (NSURLSession *)requestSession {
+    if (!_requestSession) {
+        NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
+        _requestSession = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
+    }
+    return _requestSession;
+}
+
 - (void)initialize {
     if (canUseWkWebView && self.usingUIWebView == NO) {
         [self initWKWebView];
@@ -82,12 +96,7 @@ static CGFloat swipeDistance = 100;
         _usingUIWebView = YES;
     }
     
-    SEL allowsLinkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
-    if ([self.realWebView respondsToSelector:allowsLinkPreviewSelector]) {
-        [self.realWebView performSelector:allowsLinkPreviewSelector withObject:@(YES)];
-    }
-    
-    [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
+    //    [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
     self.allowsBackForwardNavigationGestures = YES;
     self.showsBackgroundLabel = YES;
     self.scalesPageToFit = YES;
@@ -148,8 +157,18 @@ static CGFloat swipeDistance = 100;
 #pragma mark - initWKWebView
 
 - (void)initWKWebView {
+    WKUserContentController* userContentController = [WKUserContentController new];
+    
+    NSMutableString *cookies = [NSMutableString string];
+    WKUserScript * cookieScript = [[WKUserScript alloc] initWithSource:[cookies copy]
+                                                         injectionTime:WKUserScriptInjectionTimeAtDocumentStart
+                                                      forMainFrameOnly:NO];
+    [userContentController addUserScript:cookieScript];
+    
     WKWebViewConfiguration *configuration = [[WKWebViewConfiguration alloc] init];
     configuration.preferences.minimumFontSize = 9.0;
+    configuration.userContentController = userContentController;
+    configuration.processPool = [MSWebHTTPCookieStorage sharedStorage].processPool;
     
     if ([configuration respondsToSelector:@selector(setApplicationNameForUserAgent:)]) {
         [configuration setApplicationNameForUserAgent:[[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"]];
@@ -175,6 +194,11 @@ static CGFloat swipeDistance = 100;
     
     [webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:nil];
     [webView addObserver:self forKeyPath:@"title" options:NSKeyValueObservingOptionNew context:nil];
+    
+    SEL allowsLinkPreviewSelector = NSSelectorFromString(@"setAllowsLinkPreview:");
+    if ([webView respondsToSelector:allowsLinkPreviewSelector]) {
+        [webView performSelector:allowsLinkPreviewSelector withObject:@(YES)];
+    }
     _realWebView = webView;
 }
 
@@ -187,6 +211,24 @@ static CGFloat swipeDistance = 100;
         [self willChangeValueForKey:keyPath];
         [self didChangeValueForKey:keyPath];
     }
+}
+
+- (NSURLRequest *)sendRequest:(NSURLRequest *)request {
+    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0); //创建信号量
+    NSMutableURLRequest *newRequest = [request mutableCopy];
+    [newRequest setTimeoutInterval:5];
+    
+    NSURLSession *session = [NSURLSession sharedSession];
+    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
+        if (![newRequest.URL.absoluteString isEqualToString:response.URL.absoluteString]) {
+            newRequest.URL = response.URL;
+        }
+        dispatch_semaphore_signal(semaphore);   //发送信号
+    }];
+    
+    [task resume];
+    dispatch_semaphore_wait(semaphore,DISPATCH_TIME_FOREVER);  //等待
+    return newRequest;
 }
 
 #pragma mark - initUIWebView
@@ -211,6 +253,11 @@ static CGFloat swipeDistance = 100;
     self.njkWebViewProgress.webViewProxyDelegate = self;
     self.njkWebViewProgress.progressDelegate = self;
     
+//    @try {
+//        id preferences = [[webView valueForKeyPath:@"_internal.browserView._webView"] valueForKey:@"preferences"];
+//        [preferences performSelector:@selector(_postCacheModelChangedNotification)];
+//    } @catch (NSException *exception) { }
+    
     _realWebView = webView;
 }
 
@@ -220,12 +267,9 @@ static CGFloat swipeDistance = 100;
     _delegate = delegate;
     if (_usingUIWebView) {
         UIWebView *webView = self.realWebView;
-        webView.delegate = nil;
-        webView.delegate = self;
+        webView.delegate = self.njkWebViewProgress;
     } else {
         WKWebView *webView = self.realWebView;
-        webView.UIDelegate = nil;
-        webView.navigationDelegate = nil;
         webView.UIDelegate = self;
         webView.navigationDelegate = self;
     }
@@ -414,15 +458,15 @@ static CGFloat swipeDistance = 100;
     BOOL resultBOOL = [self ms_webViewShouldStartLoadWithRequest:request navigationType:navigationType];
     if (resultBOOL) {
         switch (navigationType) {
-                case UIWebViewNavigationTypeLinkClicked:
-                case UIWebViewNavigationTypeFormSubmitted:
-                case UIWebViewNavigationTypeOther: {
-                    
-                }
+            case UIWebViewNavigationTypeLinkClicked:
+            case UIWebViewNavigationTypeFormSubmitted:
+            case UIWebViewNavigationTypeOther: {
+                
+            }
                 break;
-                case UIWebViewNavigationTypeBackForward:
-                case UIWebViewNavigationTypeReload:
-                case UIWebViewNavigationTypeFormResubmitted:
+            case UIWebViewNavigationTypeBackForward:
+            case UIWebViewNavigationTypeReload:
+            case UIWebViewNavigationTypeFormResubmitted:
             default: {
                 break;
             }
@@ -531,6 +575,11 @@ static CGFloat swipeDistance = 100;
     [alert addAction:okAction];
 }
 
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationResponse:(WKNavigationResponse *)navigationResponse decisionHandler:(void (^)(WKNavigationResponsePolicy))decisionHandler {
+    decisionHandler(WKNavigationResponsePolicyAllow);
+}
+
+
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
@@ -548,6 +597,7 @@ static CGFloat swipeDistance = 100;
         // Call the decision handler to allow to load web page.
         self.currentRequest = navigationAction.request;
         if (navigationAction.targetFrame == nil) {
+            //        if (navigationAction.navigationType == WKNavigationTypeLinkActivated || navigationAction.navigationType == WKNavigationTypeOther) {
             [webView loadRequest:navigationAction.request];
         }
         decisionHandler(WKNavigationActionPolicyAllow);
@@ -573,6 +623,10 @@ static CGFloat swipeDistance = 100;
 #pragma mark - MSKWebView Delegate
 
 - (void)ms_webViewDidFinishLoad {
+    if ([self isLoading]) {
+        return;
+    }
+    
     self.estimatedProgress = 1.0f;
     
     NSString *host = self.currentRequest.URL.host;
@@ -838,7 +892,7 @@ static CGFloat swipeDistance = 100;
 
 - (void)gobackWithStep:(NSInteger)step {
     if (self.canGoBack == NO)
-    return;
+        return;
     
     if (step > 0) {
         NSInteger historyCount = self.countOfHistory;
@@ -862,21 +916,28 @@ static CGFloat swipeDistance = 100;
 #pragma mark - forwardInvocation
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
-    if ([self.realWebView respondsToSelector:aSelector]) return YES;
-    if ([self.delegate respondsToSelector:aSelector]) return YES;
-    return [super respondsToSelector:aSelector];
+    BOOL hasResponds = [super respondsToSelector:aSelector] || [self.delegate respondsToSelector:aSelector] || [self.realWebView respondsToSelector:aSelector];
+    return hasResponds;
 }
 
-- (id)forwardingTargetForSelector:(SEL)aSelector {
-    if ([super respondsToSelector:aSelector]) {
-        return self;
-    } else if ([self.realWebView respondsToSelector:aSelector]) {
-        return self.realWebView;
-    } else if ([self.delegate respondsToSelector:aSelector]) {
-        return self.delegate;
+- (NSMethodSignature*)methodSignatureForSelector:(SEL)selector {
+    NSMethodSignature* methodSign = [super methodSignatureForSelector:selector];
+    if (methodSign == nil) {
+        if ([self.realWebView respondsToSelector:selector]) {
+            methodSign = [self.realWebView methodSignatureForSelector:selector];
+        } else {
+            methodSign = [(id)self.delegate methodSignatureForSelector:selector];
+        }
     }
-    
-    return self;
+    return methodSign;
+}
+
+- (void)forwardInvocation:(NSInvocation*)invocation {
+    if ([self.realWebView respondsToSelector:invocation.selector]) {
+        [invocation invokeWithTarget:self.realWebView];
+    } else {
+        [invocation invokeWithTarget:self.delegate];
+    }
 }
 
 #pragma mark - clean
@@ -895,7 +956,6 @@ static CGFloat swipeDistance = 100;
     }
     
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
-    [_realWebView removeObserver:self forKeyPath:@"loading"];
     [_realWebView scrollView].delegate = nil;
     [_realWebView stopLoading];
     [(UIWebView *) _realWebView loadHTMLString:@"" baseURL:nil];

@@ -9,31 +9,33 @@
 /* Begin PBXBuildFile section */
 		0170D362849E918F2481D115997C9669 /* Pods-ExampleTests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 0E47265EB6FA6DD4F40CD496F613370B /* Pods-ExampleTests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02FC8F31D7C93146E252193879237173 /* Pods-ExampleUITests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = A01DA5EE78439C3D5078724BA45513D5 /* Pods-ExampleUITests-dummy.m */; };
-		1331BED31D17F02A85B3AB18C2BB2723 /* MSWebController.h in Headers */ = {isa = PBXBuildFile; fileRef = E543B63ABA0B120091B6EAA5C4852FBC /* MSWebController.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		13CE8CBC7F164B38AFC707ABFC1FDF25 /* Pods-ExampleUITests-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A59E7231873C248546DF7541EF613BE /* Pods-ExampleUITests-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		14B02ECB24F08AFFD236E56090BB339E /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FAF4F70740F05FA34D54F1982E18E7A /* WebKit.framework */; };
 		150B94F686081306B221DB215E9D4B07 /* Pods-Example-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 8C18D00EE1A286D362D3FFCE4B28449A /* Pods-Example-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		159C46B9F5C92E94F88F0354D67D3DEB /* MSWebActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = 07E1EC2164EC706D40524CD0838AC3C6 /* MSWebActivityChrome.m */; };
+		16ACADE62A6D87EF333C3A4B6F3C189C /* MSWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = 869A9258AF6875545415F71EE6F640EC /* MSWebView.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1BC7E665632DF751C401CC580003E44B /* MSWebController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 702C8DA07E7FC6A2E424C48E4E6C6DB0 /* MSWebController-dummy.m */; };
+		1F0A0CA3706ED30D04F3080D22BA9AFA /* MSWebController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F9FBBFE1D0EBF94B35053769240975F6 /* MSWebController.bundle */; };
+		2DB87E2692546DE14E4333A394BBB1BC /* MSWebActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 2E04E39B3C70A0E8FEA2C509F157793A /* MSWebActivity.m */; };
+		323D9E6741B16ED28D71A447A06A2506 /* MSWebActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = A2AEE1B8E8EE48A70CEDDDB22FC36F00 /* MSWebActivitySafari.m */; };
+		33DA17243CA4D5099C6CD46BD018A721 /* MSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = 4737EB0496D5B927C6431DCFC9D6DC7A /* MSWebView.m */; };
+		3E935AB93051AC0718664EF42FA6BE8F /* MSWebActivityChrome.h in Headers */ = {isa = PBXBuildFile; fileRef = 44BE1D068D510546591C14CCEDEC0878 /* MSWebActivityChrome.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		424313FA2A5E72FF90C8410ECA902D51 /* Pods-ExampleTests-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = D66B277E581ACCADAC536AF2C2FB2E8E /* Pods-ExampleTests-dummy.m */; };
-		456CFB25C189AEED5058B86216E8F420 /* MSWebActivityChrome.m in Sources */ = {isa = PBXBuildFile; fileRef = 61FBB18A7596F956FCEE5B0F32CFCF34 /* MSWebActivityChrome.m */; };
 		472B3FB950447A31D51486AD5AA48947 /* Pods-Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = F7FED35CACB70238519C94E6D828288C /* Pods-Example-dummy.m */; };
-		4AEB311D5CF5524B2AA02D6E22A78E4A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
-		5F2BDB8322BC0FE22D44EE043E7CEBBB /* MSWebActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 45A4DE8458CF8F9A44E1AA8D3B4C963F /* MSWebActivity.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		723B2397DF1A880C3159025A88C182AB /* MSWebActivitySafari.h in Headers */ = {isa = PBXBuildFile; fileRef = 317A6A7567D7E055A1E1B43BE3A0DF85 /* MSWebActivitySafari.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		7A372B2CFD0DEEB3E4839DF541072454 /* MSWebController.m in Sources */ = {isa = PBXBuildFile; fileRef = 95293D59E81E05D603FCBAAA9B564A4B /* MSWebController.m */; };
+		52CD60F3B59F887A0872D1F1E6A7FBD6 /* MSWebActivity.h in Headers */ = {isa = PBXBuildFile; fileRef = 3C3BEB410F22C6A4D343BA663F360A38 /* MSWebActivity.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		81B4A6B45EBD9C345696E4A2491F161C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
-		9E74BF0DEDFBF9F8BB7F5D9359C7E9CE /* MSWebController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = DBFE89423B0EB2559865B2B850A8C70F /* MSWebController-dummy.m */; };
+		926853E27FC8164F4C06BA4263B6DE49 /* MS_NJKWebViewProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 6C685EFFBCE6FAA40830ADB878C3CF5C /* MS_NJKWebViewProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B06DD875E68D9361AC8BE8A7A3290A66 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
-		B43930523FD5E533F417651E5F2A482B /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 6A022D9D514C4E1C1EBA08525491BE09 /* MS_NJKWebViewProgress.m */; };
-		BB286FB2CFA7D2C5F5E4659EC8BB0126 /* MSWebActivity.m in Sources */ = {isa = PBXBuildFile; fileRef = 57DF865650DC2C052245F40BC9E459F3 /* MSWebActivity.m */; };
-		C3499824A442B13D480DD6F1389A2B76 /* MSWebView.m in Sources */ = {isa = PBXBuildFile; fileRef = E1F56FCBF250047096BCA5CC095483D0 /* MSWebView.m */; };
-		D5883828DC62440164DBBBB504E3DE9C /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5147AE3C7F8B063B02257EFF0EFD800 /* UIKit.framework */; };
+		C4A993667D7734106EEF9D03EC7867DF /* MS_NJKWebViewProgress.m in Sources */ = {isa = PBXBuildFile; fileRef = 95B3305EB8FEEDE8F4CEAE51B3CA2A5D /* MS_NJKWebViewProgress.m */; };
+		C9FF5ACAFFF91EEC08208F5CA174A633 /* MSWebHTTPCookieStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 77BDAAF9774223FBD2DD6C071F517E6B /* MSWebHTTPCookieStorage.m */; };
+		CB025A59369EC90D85F03AEDA50C801F /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
+		CD5946DA12E0EB8F22986C81229161C4 /* MSWebController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E988DAAD4578565A376C4A2D6E4BE0BE /* MSWebController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D452271D7786B8CFA73A3B25DA60173C /* MSWebController.m in Sources */ = {isa = PBXBuildFile; fileRef = 452100A320BA751CF6077458005F70EF /* MSWebController.m */; };
 		D91B4D3179D7D8E00E07335E93B2C6FB /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */; };
-		D9A255287B98855A6B058D49F3F8D99C /* MS_NJKWebViewProgress.h in Headers */ = {isa = PBXBuildFile; fileRef = 8CACF9840C66D2675CE141CBB38519BC /* MS_NJKWebViewProgress.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		DA563569EF2E8A6379E398CB19CA29B8 /* MSWebView.h in Headers */ = {isa = PBXBuildFile; fileRef = E63CF6395CDAB643B69A50D3C3073D5A /* MSWebView.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		E0F12A277B9D39E88FEB7D63D1D56A4B /* MSWebController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = B1F2F7F0C4540D0F4F8641D74023DDD1 /* MSWebController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EBD660D8ACB26551D576E26B1A3C59D2 /* MSWebController.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 993AA695F9BFAA022C4B7A3E3D442567 /* MSWebController.bundle */; };
-		EFFB2CB979B0DC57D4F062D6F045EF9E /* MSWebActivityChrome.h in Headers */ = {isa = PBXBuildFile; fileRef = A4412A5CEC4E6CE3733B1E529DB46B2E /* MSWebActivityChrome.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		FDC5F85F17472DBAC700194DA85994D4 /* MSWebActivitySafari.m in Sources */ = {isa = PBXBuildFile; fileRef = B4A0A23B0BA65AF3D01F4652B0D5F3F6 /* MSWebActivitySafari.m */; };
+		DD2C94F67F40A63BF64E7CE3476C92F6 /* MSWebController.h in Headers */ = {isa = PBXBuildFile; fileRef = FFE0122E7A6EF7A46DDBE635D632322C /* MSWebController.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		E23B0599F88BD8FA7C573EC178F890D3 /* WebKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1FAF4F70740F05FA34D54F1982E18E7A /* WebKit.framework */; };
+		EA73883562FB1B1757F0746DF380F194 /* MSWebActivitySafari.h in Headers */ = {isa = PBXBuildFile; fileRef = 9555BD7C6359ADF0D84B4C821A6A13D9 /* MSWebActivitySafari.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		ED0E3110A78ACE90AD62DA9E5526741B /* MSWebHTTPCookieStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = E2B636F8FAA36DFABF23F7938915D4D3 /* MSWebHTTPCookieStorage.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		FDB97D9AE9400498A1DE00BF659899C2 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F5147AE3C7F8B063B02257EFF0EFD800 /* UIKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -41,87 +43,89 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 738422EC9764DA353D92690065A1A1DA;
+			remoteGlobalIDString = 2B50C9EFAFC849AAB3A4C25D7984A79E;
 			remoteInfo = MSWebController;
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		0316CBC49E19667C8FC91A3F47C1A7E7 /* Pods_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Example.framework; path = "Pods-Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		07E1EC2164EC706D40524CD0838AC3C6 /* MSWebActivityChrome.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebActivityChrome.m; sourceTree = "<group>"; };
 		0E47265EB6FA6DD4F40CD496F613370B /* Pods-ExampleTests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ExampleTests-umbrella.h"; sourceTree = "<group>"; };
 		0F8D18467982723D0F655F367F9FEE53 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		0FF8FFF12C4B5E89962246DAFD54B18E /* MSWebController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MSWebController-prefix.pch"; sourceTree = "<group>"; };
 		123AFCD997708967B068BFFAAAD458AA /* Pods-Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Example.modulemap"; sourceTree = "<group>"; };
 		129F822B0E9F28AF90FEA5465593A604 /* Pods-ExampleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleTests.release.xcconfig"; sourceTree = "<group>"; };
 		14B69BBCD903081A01A699CD1673DE07 /* Pods-ExampleTests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ExampleTests-acknowledgements.plist"; sourceTree = "<group>"; };
 		1CEC4D75ECA6563D3F2B41F876B83BDC /* Pods-Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.debug.xcconfig"; sourceTree = "<group>"; };
 		1FAF4F70740F05FA34D54F1982E18E7A /* WebKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WebKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/WebKit.framework; sourceTree = DEVELOPER_DIR; };
+		221B5FE3C6E0757B7314AC24D15E955D /* MSWebController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MSWebController-prefix.pch"; sourceTree = "<group>"; };
 		2BB6FB3F7D1CA5DD6E3412C874B52D34 /* Pods-ExampleUITests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-ExampleUITests.modulemap"; sourceTree = "<group>"; };
 		2DB22B83C935C8CAEF13B658053CB69E /* Pods_ExampleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ExampleTests.framework; path = "Pods-ExampleTests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
-		317A6A7567D7E055A1E1B43BE3A0DF85 /* MSWebActivitySafari.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebActivitySafari.h; sourceTree = "<group>"; };
+		2E04E39B3C70A0E8FEA2C509F157793A /* MSWebActivity.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebActivity.m; sourceTree = "<group>"; };
 		3A59E7231873C248546DF7541EF613BE /* Pods-ExampleUITests-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-ExampleUITests-umbrella.h"; sourceTree = "<group>"; };
+		3C3BEB410F22C6A4D343BA663F360A38 /* MSWebActivity.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebActivity.h; sourceTree = "<group>"; };
+		40AED8C180948CEE31B50BBB08F2DB8B /* MSWebController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = MSWebController.modulemap; sourceTree = "<group>"; };
 		42B1187D245E965E468F78B94A45DC81 /* Pods-ExampleUITests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ExampleUITests-frameworks.sh"; sourceTree = "<group>"; };
-		45A4DE8458CF8F9A44E1AA8D3B4C963F /* MSWebActivity.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebActivity.h; sourceTree = "<group>"; };
+		44BE1D068D510546591C14CCEDEC0878 /* MSWebActivityChrome.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebActivityChrome.h; sourceTree = "<group>"; };
+		452100A320BA751CF6077458005F70EF /* MSWebController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebController.m; sourceTree = "<group>"; };
+		4737EB0496D5B927C6431DCFC9D6DC7A /* MSWebView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebView.m; sourceTree = "<group>"; };
 		4FC17AC9FDAD70746C704A4A40F3C34A /* Pods-Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Example-frameworks.sh"; sourceTree = "<group>"; };
 		5022179D9AEBF4FB31479748982AA1E7 /* Pods-ExampleUITests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ExampleUITests-resources.sh"; sourceTree = "<group>"; };
 		5495FFE06EAF97ED060762F18022E9BB /* Pods-Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Example.release.xcconfig"; sourceTree = "<group>"; };
-		57DF865650DC2C052245F40BC9E459F3 /* MSWebActivity.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebActivity.m; sourceTree = "<group>"; };
 		6097FA4D4E6B177FC4A85E0F5C14B754 /* Pods-ExampleTests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ExampleTests-acknowledgements.markdown"; sourceTree = "<group>"; };
 		60C1F2558C33674E30C3C7E077BBC606 /* Pods-Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Example-resources.sh"; sourceTree = "<group>"; };
-		61FBB18A7596F956FCEE5B0F32CFCF34 /* MSWebActivityChrome.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebActivityChrome.m; sourceTree = "<group>"; };
-		6A022D9D514C4E1C1EBA08525491BE09 /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
+		6C685EFFBCE6FAA40830ADB878C3CF5C /* MS_NJKWebViewProgress.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgress.h; sourceTree = "<group>"; };
+		702C8DA07E7FC6A2E424C48E4E6C6DB0 /* MSWebController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MSWebController-dummy.m"; sourceTree = "<group>"; };
 		72442580FBD1FDAB015827CEB3AA475F /* Pods-ExampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		7B26EA631E7A59FF6CBFB3E0B7F08259 /* MSWebController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = MSWebController.modulemap; sourceTree = "<group>"; };
+		77BDAAF9774223FBD2DD6C071F517E6B /* MSWebHTTPCookieStorage.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebHTTPCookieStorage.m; sourceTree = "<group>"; };
 		81607F20092CACC1394D3DCB7D6993B0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		869A9258AF6875545415F71EE6F640EC /* MSWebView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebView.h; sourceTree = "<group>"; };
 		8B6350F0C528B9D23082C28E5A4E032C /* Pods-ExampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		8C18D00EE1A286D362D3FFCE4B28449A /* Pods-Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Example-umbrella.h"; sourceTree = "<group>"; };
-		8CACF9840C66D2675CE141CBB38519BC /* MS_NJKWebViewProgress.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MS_NJKWebViewProgress.h; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
-		95293D59E81E05D603FCBAAA9B564A4B /* MSWebController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebController.m; sourceTree = "<group>"; };
-		993AA695F9BFAA022C4B7A3E3D442567 /* MSWebController.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = MSWebController.bundle; sourceTree = "<group>"; };
+		9555BD7C6359ADF0D84B4C821A6A13D9 /* MSWebActivitySafari.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebActivitySafari.h; sourceTree = "<group>"; };
+		95B3305EB8FEEDE8F4CEAE51B3CA2A5D /* MS_NJKWebViewProgress.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MS_NJKWebViewProgress.m; sourceTree = "<group>"; };
 		A01DA5EE78439C3D5078724BA45513D5 /* Pods-ExampleUITests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ExampleUITests-dummy.m"; sourceTree = "<group>"; };
 		A1A1442B3E92D2BBA9CC96F50CB2215D /* Pods-Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Example-acknowledgements.markdown"; sourceTree = "<group>"; };
-		A4412A5CEC4E6CE3733B1E529DB46B2E /* MSWebActivityChrome.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebActivityChrome.h; sourceTree = "<group>"; };
+		A2AEE1B8E8EE48A70CEDDDB22FC36F00 /* MSWebActivitySafari.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebActivitySafari.m; sourceTree = "<group>"; };
 		AB2E388589BC5846631640E247A62C3A /* Pods_ExampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_ExampleUITests.framework; path = "Pods-ExampleUITests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE76859A72C0C4FA4D848A35098C0186 /* MSWebController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = MSWebController.framework; path = MSWebController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B1F2F7F0C4540D0F4F8641D74023DDD1 /* MSWebController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MSWebController-umbrella.h"; sourceTree = "<group>"; };
-		B40AD35D8F63F977ED32F68DFBBBA0E8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B4A0A23B0BA65AF3D01F4652B0D5F3F6 /* MSWebActivitySafari.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebActivitySafari.m; sourceTree = "<group>"; };
 		B90113490902940BCC0DAA245BBC5F51 /* Pods-ExampleUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-ExampleUITests.release.xcconfig"; sourceTree = "<group>"; };
 		C084E61E539C92D677AF7463F28562FB /* Pods-ExampleTests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-ExampleTests.modulemap"; sourceTree = "<group>"; };
 		C14F585D55D8F48BEE2E757CF3548934 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		C54454B1EAF0BC6B300760D41B0D83AC /* MSWebController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MSWebController.xcconfig; sourceTree = "<group>"; };
 		D4B4DA19F20B6EAE568F5C3ACBCB4609 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D4CFCB6F0289E7ED51C08337DBB0B539 /* MSWebController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = MSWebController.xcconfig; sourceTree = "<group>"; };
 		D4D4F198FD28BC1C89ED9CD21E4F5A0F /* Pods-Example-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Example-acknowledgements.plist"; sourceTree = "<group>"; };
 		D628618CD0EFF403DE21EC5E37292CD2 /* Pods-ExampleTests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ExampleTests-resources.sh"; sourceTree = "<group>"; };
 		D66B277E581ACCADAC536AF2C2FB2E8E /* Pods-ExampleTests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-ExampleTests-dummy.m"; sourceTree = "<group>"; };
 		DA988F74DDE82FA26DBF31F55E009FE2 /* Pods-ExampleUITests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-ExampleUITests-acknowledgements.markdown"; sourceTree = "<group>"; };
-		DBFE89423B0EB2559865B2B850A8C70F /* MSWebController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "MSWebController-dummy.m"; sourceTree = "<group>"; };
-		E1F56FCBF250047096BCA5CC095483D0 /* MSWebView.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = MSWebView.m; sourceTree = "<group>"; };
-		E543B63ABA0B120091B6EAA5C4852FBC /* MSWebController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebController.h; sourceTree = "<group>"; };
-		E63CF6395CDAB643B69A50D3C3073D5A /* MSWebView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebView.h; sourceTree = "<group>"; };
+		DC71AC51F61F92AF2A15CFDAA4B4106F /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		E2B636F8FAA36DFABF23F7938915D4D3 /* MSWebHTTPCookieStorage.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebHTTPCookieStorage.h; sourceTree = "<group>"; };
+		E988DAAD4578565A376C4A2D6E4BE0BE /* MSWebController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "MSWebController-umbrella.h"; sourceTree = "<group>"; };
 		F2115B22D10BE2BE4B8B5B296D357EED /* Pods-ExampleUITests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-ExampleUITests-acknowledgements.plist"; sourceTree = "<group>"; };
 		F5147AE3C7F8B063B02257EFF0EFD800 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		F6070578FB2F0F256AA9D559091BB912 /* Pods-ExampleTests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-ExampleTests-frameworks.sh"; sourceTree = "<group>"; };
 		F7FED35CACB70238519C94E6D828288C /* Pods-Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Example-dummy.m"; sourceTree = "<group>"; };
+		F9FBBFE1D0EBF94B35053769240975F6 /* MSWebController.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = MSWebController.bundle; sourceTree = "<group>"; };
+		FFE0122E7A6EF7A46DDBE635D632322C /* MSWebController.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MSWebController.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		2941447AAADFD58CB698FE51B505F5DB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				CB025A59369EC90D85F03AEDA50C801F /* Foundation.framework in Frameworks */,
+				FDB97D9AE9400498A1DE00BF659899C2 /* UIKit.framework in Frameworks */,
+				E23B0599F88BD8FA7C573EC178F890D3 /* WebKit.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		8869AD72149C03D83D7FF3098E8675A5 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				B06DD875E68D9361AC8BE8A7A3290A66 /* Foundation.framework in Frameworks */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		AA814B4A2D74914F3CDD0959310E2111 /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				4AEB311D5CF5524B2AA02D6E22A78E4A /* Foundation.framework in Frameworks */,
-				D5883828DC62440164DBBBB504E3DE9C /* UIKit.framework in Frameworks */,
-				14B02ECB24F08AFFD236E56090BB339E /* WebKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -152,26 +156,58 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		1F7F75A04A4F8E7CD0EE1C4535F2C99D /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				3C3BEB410F22C6A4D343BA663F360A38 /* MSWebActivity.h */,
+				2E04E39B3C70A0E8FEA2C509F157793A /* MSWebActivity.m */,
+				44BE1D068D510546591C14CCEDEC0878 /* MSWebActivityChrome.h */,
+				07E1EC2164EC706D40524CD0838AC3C6 /* MSWebActivityChrome.m */,
+				9555BD7C6359ADF0D84B4C821A6A13D9 /* MSWebActivitySafari.h */,
+				A2AEE1B8E8EE48A70CEDDDB22FC36F00 /* MSWebActivitySafari.m */,
+				FFE0122E7A6EF7A46DDBE635D632322C /* MSWebController.h */,
+				452100A320BA751CF6077458005F70EF /* MSWebController.m */,
+				E2B636F8FAA36DFABF23F7938915D4D3 /* MSWebHTTPCookieStorage.h */,
+				77BDAAF9774223FBD2DD6C071F517E6B /* MSWebHTTPCookieStorage.m */,
+				869A9258AF6875545415F71EE6F640EC /* MSWebView.h */,
+				4737EB0496D5B927C6431DCFC9D6DC7A /* MSWebView.m */,
+				CD790B531D2232B37A68FF22040A01BB /* NJKWebViewProgress */,
+			);
+			name = Sources;
+			path = Sources;
+			sourceTree = "<group>";
+		};
+		1FF21016CC592B05F746FE2E9B8E7FCC /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				DC71AC51F61F92AF2A15CFDAA4B4106F /* Info.plist */,
+				40AED8C180948CEE31B50BBB08F2DB8B /* MSWebController.modulemap */,
+				D4CFCB6F0289E7ED51C08337DBB0B539 /* MSWebController.xcconfig */,
+				702C8DA07E7FC6A2E424C48E4E6C6DB0 /* MSWebController-dummy.m */,
+				221B5FE3C6E0757B7314AC24D15E955D /* MSWebController-prefix.pch */,
+				E988DAAD4578565A376C4A2D6E4BE0BE /* MSWebController-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "Example/Pods/Target Support Files/MSWebController";
+			sourceTree = "<group>";
+		};
 		24DEDA8D78B976401E5168AFB3FDBF42 /* Development Pods */ = {
 			isa = PBXGroup;
 			children = (
-				8C51081FEC89BA983493BFE2470E6043 /* MSWebController */,
+				4E05FA8CA962AE84DA3E9C9ABE793BA8 /* MSWebController */,
 			);
 			name = "Development Pods";
 			sourceTree = "<group>";
 		};
-		3C670260A140A8BDB71106D4CB1E0CA1 /* Support Files */ = {
+		4E05FA8CA962AE84DA3E9C9ABE793BA8 /* MSWebController */ = {
 			isa = PBXGroup;
 			children = (
-				B40AD35D8F63F977ED32F68DFBBBA0E8 /* Info.plist */,
-				7B26EA631E7A59FF6CBFB3E0B7F08259 /* MSWebController.modulemap */,
-				C54454B1EAF0BC6B300760D41B0D83AC /* MSWebController.xcconfig */,
-				DBFE89423B0EB2559865B2B850A8C70F /* MSWebController-dummy.m */,
-				0FF8FFF12C4B5E89962246DAFD54B18E /* MSWebController-prefix.pch */,
-				B1F2F7F0C4540D0F4F8641D74023DDD1 /* MSWebController-umbrella.h */,
+				F899F148BD5C76423B1F32A03D5B87F7 /* Resources */,
+				1F7F75A04A4F8E7CD0EE1C4535F2C99D /* Sources */,
+				1FF21016CC592B05F746FE2E9B8E7FCC /* Support Files */,
 			);
-			name = "Support Files";
-			path = "Example/Pods/Target Support Files/MSWebController";
+			name = MSWebController;
+			path = ../..;
 			sourceTree = "<group>";
 		};
 		57557C86D7700C692E4635633BEB1108 /* Targets Support Files */ = {
@@ -200,6 +236,15 @@
 			);
 			name = "Pods-ExampleUITests";
 			path = "Target Support Files/Pods-ExampleUITests";
+			sourceTree = "<group>";
+		};
+		639D308EAC69788E1BFC17406420E455 /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				F9FBBFE1D0EBF94B35053769240975F6 /* MSWebController.bundle */,
+			);
+			name = Sources;
+			path = Sources;
 			sourceTree = "<group>";
 		};
 		6AF0599C93D036772EF68208472B4158 /* Pods-ExampleTests */ = {
@@ -259,25 +304,6 @@
 			);
 			sourceTree = "<group>";
 		};
-		8C51081FEC89BA983493BFE2470E6043 /* MSWebController */ = {
-			isa = PBXGroup;
-			children = (
-				A847D8B949D7C6C81407B668BEC03C86 /* Resources */,
-				CDAABA702678DD4F71D6A64BD1EBEA54 /* Sources */,
-				3C670260A140A8BDB71106D4CB1E0CA1 /* Support Files */,
-			);
-			name = MSWebController;
-			path = ../..;
-			sourceTree = "<group>";
-		};
-		A847D8B949D7C6C81407B668BEC03C86 /* Resources */ = {
-			isa = PBXGroup;
-			children = (
-				CE5A679DA24962F71154BEC329A8424D /* Sources */,
-			);
-			name = Resources;
-			sourceTree = "<group>";
-		};
 		A978CC9014887E4F54D33E96294EC273 /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -289,58 +315,39 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		CDAABA702678DD4F71D6A64BD1EBEA54 /* Sources */ = {
+		CD790B531D2232B37A68FF22040A01BB /* NJKWebViewProgress */ = {
 			isa = PBXGroup;
 			children = (
-				45A4DE8458CF8F9A44E1AA8D3B4C963F /* MSWebActivity.h */,
-				57DF865650DC2C052245F40BC9E459F3 /* MSWebActivity.m */,
-				A4412A5CEC4E6CE3733B1E529DB46B2E /* MSWebActivityChrome.h */,
-				61FBB18A7596F956FCEE5B0F32CFCF34 /* MSWebActivityChrome.m */,
-				317A6A7567D7E055A1E1B43BE3A0DF85 /* MSWebActivitySafari.h */,
-				B4A0A23B0BA65AF3D01F4652B0D5F3F6 /* MSWebActivitySafari.m */,
-				E543B63ABA0B120091B6EAA5C4852FBC /* MSWebController.h */,
-				95293D59E81E05D603FCBAAA9B564A4B /* MSWebController.m */,
-				E63CF6395CDAB643B69A50D3C3073D5A /* MSWebView.h */,
-				E1F56FCBF250047096BCA5CC095483D0 /* MSWebView.m */,
-				DADE9A93E2CDA2CCCF36463E3E24DC86 /* NJKWebViewProgress */,
-			);
-			name = Sources;
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		CE5A679DA24962F71154BEC329A8424D /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-				993AA695F9BFAA022C4B7A3E3D442567 /* MSWebController.bundle */,
-			);
-			name = Sources;
-			path = Sources;
-			sourceTree = "<group>";
-		};
-		DADE9A93E2CDA2CCCF36463E3E24DC86 /* NJKWebViewProgress */ = {
-			isa = PBXGroup;
-			children = (
-				8CACF9840C66D2675CE141CBB38519BC /* MS_NJKWebViewProgress.h */,
-				6A022D9D514C4E1C1EBA08525491BE09 /* MS_NJKWebViewProgress.m */,
+				6C685EFFBCE6FAA40830ADB878C3CF5C /* MS_NJKWebViewProgress.h */,
+				95B3305EB8FEEDE8F4CEAE51B3CA2A5D /* MS_NJKWebViewProgress.m */,
 			);
 			name = NJKWebViewProgress;
 			path = NJKWebViewProgress;
 			sourceTree = "<group>";
 		};
+		F899F148BD5C76423B1F32A03D5B87F7 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				639D308EAC69788E1BFC17406420E455 /* Sources */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		345CA56272DFB6898228112FAC43CC6B /* Headers */ = {
+		20D65F3092B2724AEE8912B88F5AC15F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D9A255287B98855A6B058D49F3F8D99C /* MS_NJKWebViewProgress.h in Headers */,
-				5F2BDB8322BC0FE22D44EE043E7CEBBB /* MSWebActivity.h in Headers */,
-				EFFB2CB979B0DC57D4F062D6F045EF9E /* MSWebActivityChrome.h in Headers */,
-				723B2397DF1A880C3159025A88C182AB /* MSWebActivitySafari.h in Headers */,
-				E0F12A277B9D39E88FEB7D63D1D56A4B /* MSWebController-umbrella.h in Headers */,
-				1331BED31D17F02A85B3AB18C2BB2723 /* MSWebController.h in Headers */,
-				DA563569EF2E8A6379E398CB19CA29B8 /* MSWebView.h in Headers */,
+				926853E27FC8164F4C06BA4263B6DE49 /* MS_NJKWebViewProgress.h in Headers */,
+				52CD60F3B59F887A0872D1F1E6A7FBD6 /* MSWebActivity.h in Headers */,
+				3E935AB93051AC0718664EF42FA6BE8F /* MSWebActivityChrome.h in Headers */,
+				EA73883562FB1B1757F0746DF380F194 /* MSWebActivitySafari.h in Headers */,
+				CD5946DA12E0EB8F22986C81229161C4 /* MSWebController-umbrella.h in Headers */,
+				DD2C94F67F40A63BF64E7CE3476C92F6 /* MSWebController.h in Headers */,
+				ED0E3110A78ACE90AD62DA9E5526741B /* MSWebHTTPCookieStorage.h in Headers */,
+				16ACADE62A6D87EF333C3A4B6F3C189C /* MSWebView.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -371,6 +378,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		2B50C9EFAFC849AAB3A4C25D7984A79E /* MSWebController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 81DAAD93B6A5577F7A8C8A1121FC1D9D /* Build configuration list for PBXNativeTarget "MSWebController" */;
+			buildPhases = (
+				C977A5A7A1C3A88703856C8ED44FF7F2 /* Sources */,
+				2941447AAADFD58CB698FE51B505F5DB /* Frameworks */,
+				20D65F3092B2724AEE8912B88F5AC15F /* Headers */,
+				B8D0663F1B3FA69E323029B78D2E3F77 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MSWebController;
+			productName = MSWebController;
+			productReference = AE76859A72C0C4FA4D848A35098C0186 /* MSWebController.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		2CF55AF6CEF7FB76A5BFEF2DC397D751 /* Pods-ExampleUITests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = CD6488379FC6660BA804F6026CB3DBB8 /* Build configuration list for PBXNativeTarget "Pods-ExampleUITests" */;
@@ -404,24 +429,6 @@
 			name = "Pods-Example";
 			productName = "Pods-Example";
 			productReference = 0316CBC49E19667C8FC91A3F47C1A7E7 /* Pods_Example.framework */;
-			productType = "com.apple.product-type.framework";
-		};
-		738422EC9764DA353D92690065A1A1DA /* MSWebController */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 749CAE1E7653A12DAC179089A3B231F9 /* Build configuration list for PBXNativeTarget "MSWebController" */;
-			buildPhases = (
-				3AB37AA87EF5FD07E67D189918402AD7 /* Sources */,
-				AA814B4A2D74914F3CDD0959310E2111 /* Frameworks */,
-				345CA56272DFB6898228112FAC43CC6B /* Headers */,
-				1CD43F1BE4774BD6267D80DEA792A236 /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-			);
-			name = MSWebController;
-			productName = MSWebController;
-			productReference = AE76859A72C0C4FA4D848A35098C0186 /* MSWebController.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 		CBB4EB89245F1CA0291FC81BF2390E2D /* Pods-ExampleTests */ = {
@@ -462,7 +469,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				738422EC9764DA353D92690065A1A1DA /* MSWebController */,
+				2B50C9EFAFC849AAB3A4C25D7984A79E /* MSWebController */,
 				3767D6D6048DE5C14A37D97D6CF793AD /* Pods-Example */,
 				CBB4EB89245F1CA0291FC81BF2390E2D /* Pods-ExampleTests */,
 				2CF55AF6CEF7FB76A5BFEF2DC397D751 /* Pods-ExampleUITests */,
@@ -471,31 +478,17 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		1CD43F1BE4774BD6267D80DEA792A236 /* Resources */ = {
+		B8D0663F1B3FA69E323029B78D2E3F77 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBD660D8ACB26551D576E26B1A3C59D2 /* MSWebController.bundle in Resources */,
+				1F0A0CA3706ED30D04F3080D22BA9AFA /* MSWebController.bundle in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		3AB37AA87EF5FD07E67D189918402AD7 /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-				B43930523FD5E533F417651E5F2A482B /* MS_NJKWebViewProgress.m in Sources */,
-				BB286FB2CFA7D2C5F5E4659EC8BB0126 /* MSWebActivity.m in Sources */,
-				456CFB25C189AEED5058B86216E8F420 /* MSWebActivityChrome.m in Sources */,
-				FDC5F85F17472DBAC700194DA85994D4 /* MSWebActivitySafari.m in Sources */,
-				9E74BF0DEDFBF9F8BB7F5D9359C7E9CE /* MSWebController-dummy.m in Sources */,
-				7A372B2CFD0DEEB3E4839DF541072454 /* MSWebController.m in Sources */,
-				C3499824A442B13D480DD6F1389A2B76 /* MSWebView.m in Sources */,
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 		5FC3868D957D0B5C68451F9F9CE62E2F /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -509,6 +502,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				02FC8F31D7C93146E252193879237173 /* Pods-ExampleUITests-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C977A5A7A1C3A88703856C8ED44FF7F2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C4A993667D7734106EEF9D03EC7867DF /* MS_NJKWebViewProgress.m in Sources */,
+				2DB87E2692546DE14E4333A394BBB1BC /* MSWebActivity.m in Sources */,
+				159C46B9F5C92E94F88F0354D67D3DEB /* MSWebActivityChrome.m in Sources */,
+				323D9E6741B16ED28D71A447A06A2506 /* MSWebActivitySafari.m in Sources */,
+				1BC7E665632DF751C401CC580003E44B /* MSWebController-dummy.m in Sources */,
+				D452271D7786B8CFA73A3B25DA60173C /* MSWebController.m in Sources */,
+				C9FF5ACAFFF91EEC08208F5CA174A633 /* MSWebHTTPCookieStorage.m in Sources */,
+				33DA17243CA4D5099C6CD46BD018A721 /* MSWebView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,7 +534,7 @@
 		31E689860E7DFA293943D796428E665D /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			name = MSWebController;
-			target = 738422EC9764DA353D92690065A1A1DA /* MSWebController */;
+			target = 2B50C9EFAFC849AAB3A4C25D7984A79E /* MSWebController */;
 			targetProxy = 648D4CAEBACC70B943145CE0DFEEB765 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -686,15 +694,15 @@
 			};
 			name = Release;
 		};
-		74D8D0CF49ACD152B16D6A6ABD81DF3D /* Debug */ = {
+		501132D5007E6AFB30E7AC45018347CF /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C54454B1EAF0BC6B300760D41B0D83AC /* MSWebController.xcconfig */;
+			baseConfigurationReference = D4CFCB6F0289E7ED51C08337DBB0B539 /* MSWebController.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -707,7 +715,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MSWebController/MSWebController.modulemap";
-				MTL_ENABLE_DEBUG_INFO = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = MSWebController;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -715,7 +723,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 		76ABEB884042B6F9F5123BA6938D7584 /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -787,15 +795,15 @@
 			};
 			name = Debug;
 		};
-		C49C82781F2D14EA3FACF100300CAD0A /* Release */ = {
+		CFB6119E7301F68538B2B295E3E0F590 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = C54454B1EAF0BC6B300760D41B0D83AC /* MSWebController.xcconfig */;
+			baseConfigurationReference = D4CFCB6F0289E7ED51C08337DBB0B539 /* MSWebController.xcconfig */;
 			buildSettings = {
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
 				CURRENT_PROJECT_VERSION = 1;
-				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -808,7 +816,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = "Target Support Files/MSWebController/MSWebController.modulemap";
-				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = MSWebController;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
@@ -816,7 +824,7 @@
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Release;
+			name = Debug;
 		};
 		D523E68EBA7B970B0F0C111996C214CC /* Release */ = {
 			isa = XCBuildConfiguration;
@@ -909,11 +917,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		749CAE1E7653A12DAC179089A3B231F9 /* Build configuration list for PBXNativeTarget "MSWebController" */ = {
+		81DAAD93B6A5577F7A8C8A1121FC1D9D /* Build configuration list for PBXNativeTarget "MSWebController" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				74D8D0CF49ACD152B16D6A6ABD81DF3D /* Debug */,
-				C49C82781F2D14EA3FACF100300CAD0A /* Release */,
+				CFB6119E7301F68538B2B295E3E0F590 /* Debug */,
+				501132D5007E6AFB30E7AC45018347CF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

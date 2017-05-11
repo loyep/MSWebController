@@ -14,6 +14,7 @@
 #import "MSWebActivityChrome.h"
 #import "MSWebActivitySafari.h"
 #import "MSWebController.h"
+#import "MSWebHTTPCookieStorage.h"
 #import "MSWebView.h"
 #import "MS_NJKWebViewProgress.h"
 

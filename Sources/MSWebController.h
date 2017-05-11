@@ -15,9 +15,13 @@
 
 @property (nonatomic, strong, readonly) MSWebView *webView;
 
+@property (nonatomic, strong, readonly) NSURLRequest *originalRequest;
+
 @property (nonatomic, assign) BOOL useUIWebView;
 
 @property (nonatomic, assign) BOOL networkActivityIndicatorVisible;
+
+@property (nonatomic, assign) BOOL showToolBar;
 
 - (void)loadRequest:(NSURLRequest *)request;
 
