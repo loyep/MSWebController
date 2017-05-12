@@ -6,16 +6,12 @@ Pod::Spec.new do |s|
   MSWebController.
   EOS
   s.homepage     = "https://github.com/MaxseyLau/MSWebController"
-  s.license      = "MIT"
-  s.author             = { "Maxwell" => "maxwell.me@live.com" }
-  s.ios.deployment_target = '7.0'
-  s.osx.deployment_target = '10.10'
-  s.watchos.deployment_target = '2.0'
-  s.tvos.deployment_target = '9.0'
-  s.source       = { :git => "https://github.com/MaxseyLau/MSWebController.git", :tag => s.version }
+  s.license      = { :type => 'MIT', :file => 'LICENSE' }
+  s.author       = { "Maxwell" => "maxwell.me@live.com" }
+  s.platform     = :ios, '7.0'
+  s.source       = { :git => "https://github.com/MaxseyLau/MSWebController.git", :tag => s.version.to_s }
   s.resources = ["Sources/**/*.{bundle}"]
   s.source_files  = "Sources/**/*.{h,m}"
-  s.framework  = "UIKit", "Foundation", "WebKit"
+  s.framework  = "WebKit"
   s.requires_arc = true
-  
 end
