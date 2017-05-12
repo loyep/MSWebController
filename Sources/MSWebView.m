@@ -15,30 +15,61 @@
 static BOOL canUseWkWebView = NO;
 static BOOL canUseWKWebsiteDataStore = NO;
 
+const NSString *JSFuncString =
+@"function setCookie(name,value,expires)\
+{\
+var oDate=new Date();\
+oDate.setDate(oDate.getDate()+expires);\
+document.cookie=name+'='+value+';expires='+oDate;\
+}\
+function getCookie(name)\
+{\
+var arr = document.cookie.match(new RegExp('(^| )'+name+'=([^;]*)(;|$)'));\
+if(arr != null) return unescape(arr[2]); return null;\
+}\
+function delCookie(name)\
+{\
+var exp = new Date();\
+exp.setTime(exp.getTime() - 1);\
+var cval=getCookie(name);\
+if(cval!=null) document.cookie= name + '='+cval+';expires='+exp.toGMTString();\
+}";
+
+NS_INLINE NSString *MSGenerateJSSentence(NSArray <NSHTTPCookie *>* cookies) {
+    // Piece together JS strings
+    NSMutableString *JSCookieString = [JSFuncString mutableCopy];
+    for (NSHTTPCookie *cookie in cookies) {
+        NSString *excuteJSString = [NSString stringWithFormat:@"setCookie('%@', '%@', 1);", cookie.name, cookie.value];
+        [JSCookieString appendString:excuteJSString];
+    }
+    return JSCookieString;
+}
+
 static CGFloat swipeDistance = 100;
 
 @interface MSWebView () <UIWebViewDelegate, WKNavigationDelegate, WKUIDelegate, MS_NJKWebViewProgressDelegate, NSURLSessionDelegate>
 
 @property (nonatomic, assign) CGFloat estimatedProgress;
-@property (nonatomic, strong) NSURLRequest *originRequest;
-@property (nonatomic, strong) NSURLRequest *currentRequest;
-@property (nonatomic, copy, readwrite) NSString *title;
-@property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
-
-@property (nonatomic, strong) NSURLSession *requestSession;
 
 @property (nonatomic, strong, readwrite) UIProgressView *progressView;
 
-@property (nonatomic, copy) NSURL *loadingURL;
+@property (nonatomic, strong, readwrite) NSURLRequest *originRequest;
+
+@property (nonatomic, strong, readwrite) NSURLRequest *currentRequest;
+
+@property (nonatomic, copy, readwrite) NSString *title;
+
+@property (nonatomic, strong) MS_NJKWebViewProgress *njkWebViewProgress;
 
 /// Left pan ges.
-@property (nonatomic, strong) UIPanGestureRecognizer *swipePanGesture;
+@property (nonatomic, strong, readwrite) UIPanGestureRecognizer *swipePanGesture;
 
 @property (nonatomic, assign) BOOL isSwipingBack;
 
 @property (nonatomic, strong, readwrite) UILabel *backgroundLabel;
 
 @property (nonatomic, strong) UIImageView *swipeBackArrow;
+
 @property (nonatomic, strong) UIImageView *swipeForwardArrow;
 
 @end
@@ -48,13 +79,14 @@ static CGFloat swipeDistance = 100;
 @synthesize usingUIWebView = _usingUIWebView;
 @synthesize realWebView = _realWebView;
 @synthesize scalesPageToFit = _scalesPageToFit;
+@synthesize originRequest = _originRequest;
 
 + (void)load {
     canUseWkWebView = (NSClassFromString(@"WKWebView") != nil);
     canUseWKWebsiteDataStore = (NSClassFromString(@"WKWebsiteDataStore") != nil);
 }
 
-#pragma mark - initialize
+// MARK: initialize
 
 - (instancetype)initWithCoder:(NSCoder *)coder {
     self = [super initWithCoder:coder];
@@ -81,14 +113,6 @@ static CGFloat swipeDistance = 100;
     return self;
 }
 
-- (NSURLSession *)requestSession {
-    if (!_requestSession) {
-        NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
-        _requestSession = [NSURLSession sessionWithConfiguration:sessionConfig delegate:self delegateQueue:nil];
-    }
-    return _requestSession;
-}
-
 - (void)initialize {
     if (canUseWkWebView && self.usingUIWebView == NO) {
         [self initWKWebView];
@@ -98,7 +122,6 @@ static CGFloat swipeDistance = 100;
         _usingUIWebView = YES;
     }
     
-    //    [self.realWebView addObserver:self forKeyPath:@"loading" options:NSKeyValueObservingOptionNew context:nil];
     self.allowsBackForwardNavigationGestures = YES;
     self.showsBackgroundLabel = YES;
     self.scalesPageToFit = YES;
@@ -156,7 +179,7 @@ static CGFloat swipeDistance = 100;
     }
 }
 
-#pragma mark - initWKWebView
+// MARK: initWKWebView
 
 - (void)initWKWebView {
     WKUserContentController* userContentController = [[WKUserContentController alloc] init];
@@ -217,25 +240,7 @@ static CGFloat swipeDistance = 100;
     }
 }
 
-- (NSURLRequest *)sendRequest:(NSURLRequest *)request {
-    dispatch_semaphore_t semaphore = dispatch_semaphore_create(0); //创建信号量
-    NSMutableURLRequest *newRequest = [request mutableCopy];
-    [newRequest setTimeoutInterval:5];
-    
-    NSURLSession *session = [NSURLSession sharedSession];
-    NSURLSessionDataTask *task = [session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
-        if (![newRequest.URL.absoluteString isEqualToString:response.URL.absoluteString]) {
-            newRequest.URL = response.URL;
-        }
-        dispatch_semaphore_signal(semaphore);   //发送信号
-    }];
-    
-    [task resume];
-    dispatch_semaphore_wait(semaphore,DISPATCH_TIME_FOREVER);  //等待
-    return newRequest;
-}
-
-#pragma mark - initUIWebView
+// MARK: initUIWebView
 
 - (void)initUIWebView {
     UIWebView *webView = [[UIWebView alloc] initWithFrame:self.bounds];
@@ -257,15 +262,10 @@ static CGFloat swipeDistance = 100;
     self.njkWebViewProgress.webViewProxyDelegate = self;
     self.njkWebViewProgress.progressDelegate = self;
     
-    //    @try {
-    //        id preferences = [[webView valueForKeyPath:@"_internal.browserView._webView"] valueForKey:@"preferences"];
-    //        [preferences performSelector:@selector(_postCacheModelChangedNotification)];
-    //    } @catch (NSException *exception) { }
-    
     _realWebView = webView;
 }
 
-#pragma mark delegate
+// MARK: delegate
 
 - (void)setDelegate:(id <MSWebViewDelegate>)delegate {
     _delegate = delegate;
@@ -279,7 +279,7 @@ static CGFloat swipeDistance = 100;
     }
 }
 
-#pragma mark - progress
+// MARK: progress
 
 - (void)setEstimatedProgress:(CGFloat)estimatedProgress {
     if (_estimatedProgress == estimatedProgress) {
@@ -300,7 +300,7 @@ static CGFloat swipeDistance = 100;
     }
 }
 
-#pragma mark - UIWebView Swipe
+// MARK: UIWebView Swipe
 
 - (UIPanGestureRecognizer *)swipePanGesture {
     if (!_swipePanGesture) {
@@ -422,7 +422,7 @@ static CGFloat swipeDistance = 100;
     
 }
 
-#pragma mark - js Core
+// MARK: JS Core
 
 - (void)addScriptMessageHandler:(id <WKScriptMessageHandler>)scriptMessageHandler name:(NSString *)name {
     if (!_usingUIWebView) {
@@ -439,7 +439,7 @@ static CGFloat swipeDistance = 100;
     }
 }
 
-#pragma mark - UIWebViewDelegate
+// MARK: UIWebViewDelegate
 
 - (void)webViewDidFinishLoad:(UIWebView *)webView {
     self.title = [webView stringByEvaluatingJavaScriptFromString:@"document.title"];
@@ -483,7 +483,7 @@ static CGFloat swipeDistance = 100;
     self.estimatedProgress = progress;
 }
 
-#pragma mark - WKUIDelegate
+// MARK: WKUIDelegate
 
 - (nullable WKWebView *)webView:(WKWebView *)webView createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration forNavigationAction:(WKNavigationAction *)navigationAction windowFeatures:(WKWindowFeatures *)windowFeatures {
     WKFrameInfo *frameInfo = navigationAction.targetFrame;
@@ -587,12 +587,12 @@ static CGFloat swipeDistance = 100;
         [[NSHTTPCookieStorage sharedHTTPCookieStorage] setCookie:cookie];
     }
     
-    NSLog(@"wkwebview cookie:%@", [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies);
+    //    NSLog(@"wkwebview cookie:%@", [NSHTTPCookieStorage sharedHTTPCookieStorage].cookies);
     decisionHandler(WKNavigationResponsePolicyAllow);
 }
 
 
-#pragma mark - WKNavigationDelegate
+// MARK: WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler {
     BOOL resultBOOL = [self ms_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
@@ -623,39 +623,13 @@ static CGFloat swipeDistance = 100;
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     
     // store cookies
-    NSHTTPCookieStorage *cookieStorage = [NSHTTPCookieStorage sharedHTTPCookieStorage];
-    // js functions
-    NSString *JSFuncString =
-    @"function setCookie(name,value,expires)\
-    {\
-    var oDate=new Date();\
-    oDate.setDate(oDate.getDate()+expires);\
-    document.cookie=name+'='+value+';expires='+oDate;\
-    }\
-    function getCookie(name)\
-    {\
-    var arr = document.cookie.match(new RegExp('(^| )'+name+'=([^;]*)(;|$)'));\
-    if(arr != null) return unescape(arr[2]); return null;\
-    }\
-    function delCookie(name)\
-    {\
-    var exp = new Date();\
-    exp.setTime(exp.getTime() - 1);\
-    var cval=getCookie(name);\
-    if(cval!=null) document.cookie= name + '='+cval+';expires='+exp.toGMTString();\
-    }";
+    NSString *JSCookieString = MSGenerateJSSentence([NSHTTPCookieStorage sharedHTTPCookieStorage].cookies);
     
-    // Piece together JS strings
-    NSMutableString *JSCookieString = JSFuncString.mutableCopy;
-    for (NSHTTPCookie *cookie in cookieStorage.cookies) {
-        NSString *excuteJSString = [NSString stringWithFormat:@"setCookie('%@', '%@', 1);", cookie.name, cookie.value];
-        [JSCookieString appendString:excuteJSString];
-    }
     // execute js
     [webView evaluateJavaScript:JSCookieString completionHandler:nil];
     
     if (canUseWKWebsiteDataStore) {
-        
+        // FIXME: Later deal with WKWebCookie synchronization issues
     }
     [self ms_webViewDidFinishLoad];
 }
@@ -668,7 +642,7 @@ static CGFloat swipeDistance = 100;
     [self ms_webViewDidFailLoadWithError:error];
 }
 
-#pragma mark - MSKWebView Delegate
+// MARK: MSKWebView Delegate
 
 - (void)ms_webViewDidFinishLoad {
     if ([self isLoading]) {
@@ -729,8 +703,7 @@ static CGFloat swipeDistance = 100;
     return resultBOOL;
 }
 
-#pragma mark - 基础方法
-
+// MARK: The basic methods
 
 - (UIScrollView *)scrollView {
     return [(id) self.realWebView scrollView];
@@ -849,15 +822,12 @@ static CGFloat swipeDistance = 100;
         return result;
     } else {
         __block NSString *result = nil;
-        __block BOOL isExecuted = NO;
+        dispatch_semaphore_t semaphore = dispatch_semaphore_create(0);
         [(WKWebView *) self.realWebView evaluateJavaScript:javaScriptString completionHandler:^(id obj, NSError *error) {
             result = obj;
-            isExecuted = YES;
+            dispatch_semaphore_signal(semaphore);
         }];
-        
-        while (isExecuted == NO) {
-            [[NSRunLoop currentRunLoop] runMode:NSDefaultRunLoopMode beforeDate:[NSDate distantFuture]];
-        }
+        dispatch_semaphore_wait(semaphore,dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2.0 * NSEC_PER_SEC)));
         return result;
     }
 }
@@ -873,7 +843,7 @@ static CGFloat swipeDistance = 100;
         
         WKWebView *webView = _realWebView;
         
-        NSString *jScript = [NSString stringWithFormat:@"var head = document.getElementsByTagName('head')[0];\
+        NSString *jScript = @"var head = document.getElementsByTagName('head')[0];\
                              var hasViewPort = 0;\
                              var metas = head.getElementsByTagName('meta');\
                              for (var i = metas.length; i>=0 ; i--) {\
@@ -888,7 +858,7 @@ static CGFloat swipeDistance = 100;
                              meta.name = 'viewport'; \
                              meta.content = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'; \
                              head.appendChild(meta);\
-                             }"];
+                             }";
         
         WKUserContentController *userContentController = webView.configuration.userContentController;
         NSMutableArray<WKUserScript *> *array = [userContentController.userScripts mutableCopy];
@@ -908,7 +878,7 @@ static CGFloat swipeDistance = 100;
             if (fitWKUScript) {
                 [array removeObject:fitWKUScript];
             }
-            /// 没法修改数组 只能移除全部 再重新添加
+            // There is no way to modify the array, only remove all, and then add it again.
             [userContentController removeAllUserScripts];
             for (WKUserScript *wkUScript in array) {
                 [userContentController addUserScript:wkUScript];
@@ -929,7 +899,7 @@ static CGFloat swipeDistance = 100;
 - (NSInteger)countOfHistory {
     if (_usingUIWebView) {
         UIWebView *webView = self.realWebView;
-        
+        // FIXME: The results obtained by this method are not particularly accurate.
         NSInteger count = [[webView stringByEvaluatingJavaScriptFromString:@"window.history.length"] integerValue];
         return count ?: 1;
     } else {
@@ -961,7 +931,7 @@ static CGFloat swipeDistance = 100;
     }
 }
 
-#pragma mark - forwardInvocation
+// MARK: forwardInvocation
 
 - (BOOL)respondsToSelector:(SEL)aSelector {
     BOOL hasResponds = [super respondsToSelector:aSelector] || [self.delegate respondsToSelector:aSelector] || [self.realWebView respondsToSelector:aSelector];
@@ -988,7 +958,7 @@ static CGFloat swipeDistance = 100;
     }
 }
 
-#pragma mark - clean
+// MARK: clean
 
 - (void)dealloc {
     if (_usingUIWebView) {

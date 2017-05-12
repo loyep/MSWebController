@@ -1,9 +1,9 @@
 //
 //  MSWebHTTPCookie.h
-//  Pods
+//  MSWebController
 //
-//  Created by eony on 11/05/2017.
-//
+//  Created by Maxwell on 2017/5/7.
+//  Copyright © 2017年 Maxwell. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>

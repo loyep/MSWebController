@@ -28,51 +28,57 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
-///无缝切换UIWebView   会根据系统版本自动选择 使用WKWebView 还是UIWebView
 @interface MSWebView : UIView
 
-///使用UIWebView
+/// init
 - (instancetype)initWithFrame:(CGRect)frame usingUIWebView:(BOOL)usingUIWebView;
 
-///会转接 WKUIDelegate，WKNavigationDelegate 内部未实现的回调。
+/// Delegate.
 @property (nonatomic, weak) id <MSWebViewDelegate> delegate;
 
-///内部使用的webView
+/// realWebView
 @property (nonatomic, readonly) id realWebView;
-///是否正在使用 UIWebView
+/// Is UIWebView in use?
 @property (nonatomic, readonly) BOOL usingUIWebView;
-///预估网页加载进度
+/// Progress
 @property (nonatomic, readonly) CGFloat estimatedProgress;
 
 @property (nonatomic, readonly) NSURLRequest *originRequest;
 
-///只有ios7以上的UIWebView才能获取到，WKWebView 请使用下面的方法.
+/// UIWebView jsContext. Only usingUIWebView is YES can be used.
 @property (nonatomic, readonly) JSContext *jsContext;
 
-///WKWebView 跟网页进行交互的方法。
+/// WKWebView method of interacting with web pages.
 - (void)addScriptMessageHandler:(id <WKScriptMessageHandler>)scriptMessageHandler name:(NSString *_Nullable)name;
 
-///back 层数
+/// History length.
 - (NSInteger)countOfHistory;
 
 - (void)gobackWithStep:(NSInteger)step;
 
-///---- UI 或者 WK 的API
+/// The scroll view associated with the web view.
 @property (nonatomic, readonly) UIScrollView *scrollView;
 
-/// default YES
+/// Default YES.
 @property (nonatomic, assign) BOOL allowsBackForwardNavigationGestures;
+
+/// Pan ges for UIWebView.
+@property (nonatomic, readonly) UIPanGestureRecognizer *swipePanGesture;
 
 - (id)loadRequest:(NSURLRequest *)request;
 
 - (id)loadHTMLString:(NSString *)string baseURL:(NSURL *)baseURL;
 
-@property (nonatomic, readonly, copy) NSString *title;
+@property (nonatomic, readonly) NSString *title;
+
 @property (nonatomic, readonly) NSURLRequest *currentRequest;
+
 @property (nonatomic, readonly) NSURL *URL;
 
 @property (nonatomic, readonly, getter=isLoading) BOOL loading;
+
 @property (nonatomic, readonly) BOOL canGoBack;
+
 @property (nonatomic, readonly) BOOL canGoForward;
 
 @property (nonatomic, assign) BOOL hideProgress;
@@ -95,10 +101,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)evaluateJavaScript:(NSString *)javaScriptString completionHandler:(void (^ _Nullable)(id, NSError *))completionHandler;
 
-///不建议使用这个办法  因为会在内部等待webView 的执行结果
+/// This approach is not recommended because the results of webView execution will be waiting internally
 - (NSString *)stringByEvaluatingJavaScriptFromString:(NSString *)javaScriptString __deprecated_msg("Method deprecated. Use [evaluateJavaScript:completionHandler:]");
 
-///是否根据视图大小来缩放页面  默认为YES
+/// Default YES.
 @property (nonatomic) BOOL scalesPageToFit;
 
 @end

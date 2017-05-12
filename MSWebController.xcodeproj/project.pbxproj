@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		29C8152C1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.h in Headers */ = {isa = PBXBuildFile; fileRef = 29C8152A1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.h */; };
+		29C8152D1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 29C8152B1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.m */; };
 		CF3779EC1EBD626D0038F868 /* MSWebController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CF3779E21EBD626C0038F868 /* MSWebController.framework */; };
 		CF3779F11EBD626D0038F868 /* MSWebControllerTests.m in Sources */ = {isa = PBXBuildFile; fileRef = CF3779F01EBD626D0038F868 /* MSWebControllerTests.m */; };
 		CFCC89FD1EBF1F4100DFB42A /* MSWebController.h in Headers */ = {isa = PBXBuildFile; fileRef = CFCC89FB1EBF1F4100DFB42A /* MSWebController.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -37,6 +39,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		29C8152A1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MSWebHTTPCookieStorage.h; sourceTree = "<group>"; };
+		29C8152B1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MSWebHTTPCookieStorage.m; sourceTree = "<group>"; };
 		CF3779E21EBD626C0038F868 /* MSWebController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = MSWebController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CF3779E61EBD626C0038F868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CF3779EB1EBD626D0038F868 /* MSWebControllerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MSWebControllerTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,10 +87,10 @@
 		CF3779D81EBD626C0038F868 = {
 			isa = PBXGroup;
 			children = (
+				CFCC8A031EBF47CC00DFB42A /* Frameworks */,
 				CF3779EF1EBD626D0038F868 /* MSWebControllerTests */,
 				CF3779E31EBD626C0038F868 /* Products */,
 				CF3779E41EBD626C0038F868 /* Sources */,
-				CFCC8A031EBF47CC00DFB42A /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -102,19 +106,21 @@
 		CF3779E41EBD626C0038F868 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				CFCC8A081EBF4E8B00DFB42A /* NJKWebViewProgress */,
 				CF3779FC1EBD62B90038F868 /* Supporting Files */,
-				CFCC89FB1EBF1F4100DFB42A /* MSWebController.h */,
-				CFCC89FC1EBF1F4100DFB42A /* MSWebController.m */,
-				CFCC89FF1EBF287000DFB42A /* MSWebView.h */,
-				CFCC8A001EBF287000DFB42A /* MSWebView.m */,
 				CFDD876A1EC2118500AEEA47 /* MSWebActivity.h */,
 				CFDD876B1EC2118500AEEA47 /* MSWebActivity.m */,
-				CFDD876E1EC211B100AEEA47 /* MSWebActivitySafari.h */,
-				CFDD876F1EC211B100AEEA47 /* MSWebActivitySafari.m */,
 				CFDD87721EC211DD00AEEA47 /* MSWebActivityChrome.h */,
 				CFDD87731EC211DD00AEEA47 /* MSWebActivityChrome.m */,
+				CFDD876E1EC211B100AEEA47 /* MSWebActivitySafari.h */,
+				CFDD876F1EC211B100AEEA47 /* MSWebActivitySafari.m */,
 				CFDD87761EC2121200AEEA47 /* MSWebController.bundle */,
-				CFCC8A081EBF4E8B00DFB42A /* NJKWebViewProgress */,
+				CFCC89FB1EBF1F4100DFB42A /* MSWebController.h */,
+				CFCC89FC1EBF1F4100DFB42A /* MSWebController.m */,
+				29C8152A1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.h */,
+				29C8152B1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.m */,
+				CFCC89FF1EBF287000DFB42A /* MSWebView.h */,
+				CFCC8A001EBF287000DFB42A /* MSWebView.m */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -163,6 +169,7 @@
 			files = (
 				CFDD87741EC211DD00AEEA47 /* MSWebActivityChrome.h in Headers */,
 				CFDD876C1EC2118500AEEA47 /* MSWebActivity.h in Headers */,
+				29C8152C1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.h in Headers */,
 				CFDD87701EC211B100AEEA47 /* MSWebActivitySafari.h in Headers */,
 				CFCC8A0D1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.h in Headers */,
 				CFCC8A011EBF287000DFB42A /* MSWebView.h in Headers */,
@@ -274,6 +281,7 @@
 				CFDD876D1EC2118500AEEA47 /* MSWebActivity.m in Sources */,
 				CFDD87751EC211DD00AEEA47 /* MSWebActivityChrome.m in Sources */,
 				CFCC8A0E1EBF4E8B00DFB42A /* MS_NJKWebViewProgress.m in Sources */,
+				29C8152D1EC55DA600DFC1AC /* MSWebHTTPCookieStorage.m in Sources */,
 				CFCC8A021EBF287000DFB42A /* MSWebView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

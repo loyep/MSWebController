@@ -9,8 +9,6 @@
 #import <UIKit/UIKit.h>
 #import "MSWebView.h"
 
-//#define MSWebController() [NSBundle bundleWithURL:[[NSBundle bundleForClass:[MSWebController class]] URLForResource:@"MSWebController" withExtension:@"bundle"]]
-
 @interface MSWebController : UIViewController <MSWebViewDelegate>
 
 @property (nonatomic, strong, readonly) MSWebView *webView;
@@ -25,7 +23,7 @@
 
 - (void)loadRequest:(NSURLRequest *)request;
 
-#pragma mark - MSWebViewDelegate
+// MARK: MSWebViewDelegate
 
 - (void)webView:(MSWebView *)webView didFailLoadWithError:(NSError *)error;
 
@@ -35,7 +33,7 @@
 
 - (void)webViewDidFinishLoad:(MSWebView *)webView;
 
-#pragma mark - Target actions
+// MARK: Target actions
 
 - (void)goBackTapped:(UIBarButtonItem *)sender;
 

@@ -1,6 +1,6 @@
 //
 //  MSWebActivity.h
-//  Example
+//  MSWebController
 //
 //  Created by Maxwell on 2017/5/8.
 //  Copyright © 2017年 Maxwell. All rights reserved.
