@@ -21,6 +21,8 @@
 
 @property (nonatomic, assign) BOOL showToolBar;
 
+@property (nonatomic, assign) BOOL showNavToolBar;
+
 - (void)loadRequest:(NSURLRequest *)request;
 
 // MARK: MSWebViewDelegate

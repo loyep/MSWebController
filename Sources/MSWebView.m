@@ -139,7 +139,7 @@ static CGFloat swipeDistance = 100;
     [self addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[_realWebView]|" options:0 metrics:nil views:NSDictionaryOfVariableBindings(_realWebView)]];
     
     // Add label and constraints.
-    UIView *contentView = self.scrollView.subviews.firstObject;
+    UIView *contentView = self.scrollView;
     [contentView addSubview:self.backgroundLabel];
     [contentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:[_backgroundLabel(<=width)]" options:0 metrics:@{@"width": @([UIScreen mainScreen].bounds.size.width)} views:NSDictionaryOfVariableBindings(_backgroundLabel)]];
     [contentView addConstraint:[NSLayoutConstraint constraintWithItem:_backgroundLabel attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:contentView attribute:NSLayoutAttributeCenterX multiplier:1.0 constant:0.0]];
