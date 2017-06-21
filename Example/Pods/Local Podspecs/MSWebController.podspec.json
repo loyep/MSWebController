@@ -4,15 +4,15 @@
   "summary": "MSWebController",
   "description": "MSWebController.",
   "homepage": "https://github.com/MaxseyLau/MSWebController",
-  "license": "MIT",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
   "authors": {
     "Maxwell": "maxwell.me@live.com"
   },
   "platforms": {
-    "ios": "7.0",
-    "osx": "10.10",
-    "watchos": "2.0",
-    "tvos": "9.0"
+    "ios": "7.0"
   },
   "source": {
     "git": "https://github.com/MaxseyLau/MSWebController.git",
@@ -22,10 +22,6 @@
     "Sources/**/*.{bundle}"
   ],
   "source_files": "Sources/**/*.{h,m}",
-  "frameworks": [
-    "UIKit",
-    "Foundation",
-    "WebKit"
-  ],
+  "frameworks": "WebKit",
   "requires_arc": true
 }

@@ -598,9 +598,9 @@ static CGFloat swipeDistance = 100;
     BOOL resultBOOL = [self ms_webViewShouldStartLoadWithRequest:navigationAction.request navigationType:navigationAction.navigationType];
     
     // Disable all the '_blank' target in page's target.
-    if (!navigationAction.targetFrame.isMainFrame) {
-        [webView evaluateJavaScript:@"var a = document.getElementsByTagName('a');for(var i=0;i<a.length;i++){a[i].setAttribute('target','');}" completionHandler:nil];
-    }
+//    if (!navigationAction.targetFrame.isMainFrame) {
+//        [webView evaluateJavaScript:@"var a = document.getElementsByTagName('a');for(var i=0;i<a.length;i++){a[i].setAttribute('target','');}" completionHandler:nil];
+//    }
     
     if (!resultBOOL) {
         // For can deal something.
@@ -623,10 +623,10 @@ static CGFloat swipeDistance = 100;
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation {
     
     // store cookies
-    NSString *JSCookieString = MSGenerateJSSentence([NSHTTPCookieStorage sharedHTTPCookieStorage].cookies);
+//    NSString *JSCookieString = MSGenerateJSSentence([NSHTTPCookieStorage sharedHTTPCookieStorage].cookies);
     
     // execute js
-    [webView evaluateJavaScript:JSCookieString completionHandler:nil];
+//    [webView evaluateJavaScript:JSCookieString completionHandler:nil];
     
     if (canUseWKWebsiteDataStore) {
         // FIXME: Later deal with WKWebCookie synchronization issues
