@@ -38,8 +38,8 @@ MSWebView 是一个基于UIWebView和WKWebView的WebView，能够提供类似UIW
 
 ## 安装要求
 
-* WKWebView iOS 7+
-* UIWebView iOS 8+
+* WKWebView iOS 8+
+* UIWebView iOS 7+
 
 ## 感谢
 
